@@ -42,6 +42,7 @@ Se consultaron porque se citan a veces junto al radiofacsímil, y no son de apli
 | Recomendación UIT-R SA.1158-3 | Compartición de la banda 1670–1710 MHz entre los satélites meteorológicos y el servicio móvil por satélite. El «WEFAX» que nombra es el de satélite (1691 MHz), otro servicio |
 | Documento de la OMM «Distribución de los datos procedentes de satélites meteorológicos» (UIT, seminario de Manta) | Difusión por satélite; el WEFAX que describe es también el de satélite, ya sustituido por LRIT |
 | Recomendación UIT-T G.343 | Sistemas telefónicos de portadoras de 4 MHz en pares coaxiales |
+| Manual de la UIT-R «Utilización del espectro radioeléctrico en meteorología» | Satélites meteorológicos, radiosondas, radares y teledetección. Su apartado 2.2.2.3, «Facsímil meteorológico (WEFAX)», es el de satélite geoestacionario; no trata las emisiones de facsímil por onda corta para buques |
 
 ## Lo que no se aplica o no se cumple
 
