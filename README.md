@@ -61,7 +61,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 
 - una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; la parte de SDRplay compila, pero **no se ha usado todavía con un receptor**;
 - el turno con Navtex contra un Navtex en marcha;
-- **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta); Hamburgo y Northwood, del PDF mundial, más propenso a errores. Compruebe una hora antes de fiarse de ella.
+- **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta); Hamburgo, Northwood, Atenas y Múrmansk, del PDF mundial, más propenso a errores. Compruebe una hora antes de fiarse de ella.
 
 **Sin hacer todavía:**
 
@@ -241,7 +241,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (93 comprobaciones) |
+| `make check` | Pasa las pruebas (103 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -271,7 +271,7 @@ ss -tulpn | grep -E "8081|wefax"                          # ¿está escuchando?
 
 ### Lista de estaciones
 
-`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Hamburgo y Northwood, de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025). Cada archivo dice su origen y su fecha. Para ver qué otras estaciones hay en el mundo y cuáles han dejado de emitir, la [lista de radiofacsímil de DX Info Centre](https://www.dxinfocentre.com/rafax.htm) (W. R. Hepburn) está al día; no se copia aquí, pero las frecuencias de las estaciones se han contrastado con ella. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
+`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Hamburgo, Northwood, Atenas y Múrmansk, de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025). Cada archivo dice su origen y su fecha. Para ver qué otras estaciones hay en el mundo y cuáles han dejado de emitir, la [lista de radiofacsímil de DX Info Centre](https://www.dxinfocentre.com/rafax.htm) (W. R. Hepburn) está al día; no se copia aquí, pero las frecuencias de las estaciones se han contrastado con ella. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
 
 ### Probar sin radio
 
