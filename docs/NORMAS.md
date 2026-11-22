@@ -50,4 +50,5 @@ Se consultaron porque se citan a veces junto al radiofacsímil, y no son de apli
 - **Sensibilidad y selectividad:** dependen del receptor y de la antena; no se han medido con una señal real.
 - **Enfasado simétrico** y **onda larga:** no hechos.
 - **Satélite:** no recibe imágenes de satélite. El WEFAX analógico de los geoestacionarios (1691 MHz) se sustituyó por LRIT / HRIT, digitales; es otro sistema y otro descodificador.
+- **Posición:** la del GPS (gpsd) solo se muestra y decide el aspecto de la página; no interviene en la recepción.
 - **Seguridad de la interfaz web:** sin contraseña ni cifrado; solo para una red de confianza.

@@ -22,7 +22,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ![Cartas recibidas](docs/img/web_cartas.png)
 
-*Las tres cartas son la carta de prueba de arriba, y el estado del receptor está puesto a mano para la captura: nada de eso se recibió del aire.*
+*Las tres cartas son la carta de prueba de arriba, y el estado del receptor y la posición del GPS están puestos a mano para la captura: nada de eso se recibió del aire.*
 
 ![Horario de las próximas 24 horas](docs/img/web_horario.png)
 
@@ -54,11 +54,12 @@ Hecho y comprobado en el PC (`make check`, 91 comprobaciones):
 - el programa `wefaxreceiver` descodificando una grabación generada;
 - la interfaz web en un navegador, con una base de datos de muestra (las capturas de arriba).
 
+Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): compila, pasa `make check`, se instala, los servicios arrancan y la interfaz se abre desde la red local.
+
 **Sin probar:**
 
-- una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; **la parte de SDRplay no se ha podido compilar** donde se escribió (no hay API), solo en un equipo que la tenga;
+- una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; la parte de SDRplay compila, pero **no se ha usado todavía con un receptor**;
 - el turno con Navtex contra un Navtex en marcha;
-- los servicios y su instalador, en ningún equipo (el guion solo se ha revisado con `sh -n`);
 - **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta); Hamburgo y Northwood, del PDF mundial, más propenso a errores. Compruebe una hora antes de fiarse de ella.
 
 **Sin hacer todavía:**
@@ -86,67 +87,111 @@ Hecho y comprobado en el PC (`make check`, 91 comprobaciones):
 
 ## Instalación
 
+**1. Dependencias.** Si va a usar un SDRplay, instale antes su API.
+
 ```bash
 sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev libmicrohttpd-dev librtlsdr-dev
 ```
+
+**2. Descargar el código.** En su carpeta personal, no en `/opt/Wefax`: ahí van la interfaz instalada, las cartas y la base de datos.
 
 ```bash
 cd ~
 git clone https://github.com/EA7JRS/Wefax.git
 cd Wefax
+```
+
+**3. Compilar.**
+
+```bash
 autoreconf -i && automake --add-missing; autoreconf
-./configure && make
+./configure
+make
+```
+
+`./configure` acaba con una línea como `receivers: SDRplay yes, RTL-SDR yes`: compruebe que el suyo dice `yes`.
+
+**4. Comprobar (opcional).** Pasa las pruebas del descodificador, la cadena hasta la imagen, la base de datos y el horario; no toca la instalación.
+
+```bash
 make check
+```
+
+**5. Instalar los programas.** Van a `/usr/local/bin`; la interfaz web, las cartas y la base de datos, a `/opt/Wefax`.
+
+```bash
 sudo make install
 ```
 
-`./configure` acaba diciendo qué receptores quedan incluidos (`receivers: SDRplay yes, RTL-SDR yes`). Los programas van a `/usr/local/bin`; la interfaz, las cartas y la base de datos, a `/opt/Wefax`.
-
-Para que arranquen solos como servicios (con su usuario, no con root):
+**6. Montar los servicios.** Toma como usuario el que ejecuta `sudo`. Si trabaja como `root` directamente, indíquelo con `--usuario <nombre>` (no puede ser `root`).
 
 ```bash
 sudo sh tools/instalar-servicios.sh
 ```
 
-Si trabaja como `root` (sin `sudo`), diga qué usuario los ejecutará: `sh tools/instalar-servicios.sh --usuario <nombre>`.
+**7. Abrir el cortafuegos**, si lo hay, a la red local. Ponga el rango de su red (`10.0.0.0/8`, `172.16.0.0/12` o `192.168.0.0/16`):
 
-> Descargue el código en su carpeta personal, no en `/opt/Wefax`: ahí van la interfaz instalada, las cartas y la base de datos.
+```bash
+sudo ufw allow from 192.168.0.0/16 to any port 8081 proto tcp
+```
 
-Después abra `http://<equipo>:8081/`, elija las estaciones en **Estaciones** y encienda el receptor en **Receptor**. Hasta entonces el receptor no toca ningún equipo. El puerto se cambia en `/etc/default/wefax` (Navtex usa el 8080).
-
-> La interfaz web no tiene contraseña: déjela solo en una red de confianza, o en `127.0.0.1`.
+**8. Abrir la interfaz:** `http://<equipo>:8081/`. Elija las estaciones en la pestaña **Estaciones**, y el equipo en **Receptor**; después marque **Encendido**. Hasta entonces el receptor no toca ningún equipo.
 
 ### Actualizar
 
-```bash
-cd Wefax
-git pull
-```
+Desde la carpeta donde se clonó el código:
 
 ```bash
+git pull
 autoreconf -i && automake --add-missing; autoreconf
 ./configure && make
 sudo make install
-```
-
-```bash
 sudo systemctl restart wefax-web wefax-receiver
 ```
 
-`sudo make install` sustituye la interfaz y la lista de estaciones de `/opt/Wefax/build`; no toca las cartas ni los ajustes.
+Las cartas y los ajustes se conservan; `sudo make install` solo sustituye los programas, la interfaz y la lista de estaciones. Después, recargue la página con Ctrl+F5. Si las notas de la versión dicen que cambian los servicios, repita además el paso 6.
 
 ### Desinstalar
 
 ```bash
-sudo sh tools/instalar-servicios.sh --quitar
-sudo make uninstall
+sudo sh tools/instalar-servicios.sh --quitar     # para y retira los servicios
+sudo make uninstall                              # quita los programas de /usr/local/bin
 ```
 
-Las cartas y los ajustes quedan en `/opt/Wefax`; bórrelos a mano si ya no los quiere.
+`/opt/Wefax` (cartas y ajustes) y `/etc/default/wefax` no se borran: quítelos a mano si ya no los quiere.
+
+## Servicios
+
+| Servicio | Qué hace |
+| :--- | :--- |
+| `wefax-web` | La interfaz web y la API, en el puerto 8081 |
+| `wefax-receiver` | El receptor: siempre en marcha, pero no toca ningún equipo hasta que se enciende en la web |
+
+Ninguno se ejecuta como `root`. El puerto, la dirección de escucha y el gpsd de la interfaz web están en `/etc/default/wefax`. Navtex usa el puerto 8080 y Wefax el 8081: pueden convivir en el mismo equipo.
+
+**Receptor compartido.** Un equipo solo lo puede usar un programa a la vez. Si el receptor dice «Sin equipo», lo tiene otro programa (Navtex, SDRconnect, SDR++) o está desconectado; lo reintenta cada 15 segundos. Con [Navtex](https://github.com/EA7JRS/Navtex) puede turnarse solo: pestaña Receptor, «Compartir el equipo con Navtex».
+
+Registro en vivo: `journalctl -u wefax-receiver -f`
 
 ## Comandos
 
-### `wefaxreceiver`
+### Servicios
+
+| Comando | Qué hace |
+| :--- | :--- |
+| `systemctl is-active wefax-web wefax-receiver` | Dice si los dos están en marcha |
+| `systemctl status wefax-web` | Estado y últimas líneas de la interfaz web |
+| `sudo systemctl restart wefax-web` | Reinicia la interfaz web (tras cambiar `/etc/default/wefax` o actualizar) |
+| `sudo systemctl restart wefax-receiver` | Reinicia el receptor |
+| `sudo systemctl stop wefax-receiver` | Suelta el equipo, por ejemplo para usarlo con otro programa |
+| `journalctl -u wefax-receiver -f` | Registro en vivo del receptor: sintonía, tonos y cartas guardadas |
+| `journalctl -u wefax-web -n 50` | Últimas 50 líneas de la interfaz web |
+| `sudo sh tools/instalar-servicios.sh --usuario <nombre>` | Vuelve a montar los servicios, con ese usuario |
+| `sudo sh tools/instalar-servicios.sh --quitar` | Para y retira los servicios |
+
+### `wefaxreceiver`: el receptor
+
+El servicio lo arranca con `-q -n`. A mano sirve para probar un equipo, escuchar una frecuencia o descodificar una grabación (pare antes el servicio si usa el mismo equipo).
 
 | Opción | Qué hace |
 | :--- | :--- |
@@ -174,31 +219,53 @@ wefaxreceiver -f grabacion.wav         # descodificar una grabación
 
 **La frecuencia** es la asignada, que es el centro del canal: negro 400 Hz por debajo y blanco 400 Hz por encima. Con un receptor de banda lateral superior se sintonizaría 1,9 kHz por debajo; aquí no hace falta restar nada.
 
-### `wefaxwebserver`
+### `wefaxwebserver`: la interfaz web y la API
 
 ```bash
-wefaxwebserver [puerto] [dirección]     # de serie: 8081, todas las direcciones
+wefaxwebserver [puerto] [dirección]
 ```
 
-| Ruta | Qué da |
+| Argumento | Qué es |
 | :--- | :--- |
-| `GET /api/status` | Qué hace el receptor |
-| `GET /api/charts?since=&limit=` | Las cartas recibidas, la más nueva primero |
-| `GET /api/next` | La emisión en curso o la siguiente |
-| `GET /api/settings` | Los ajustes |
-| `GET /api/about` | La versión |
-| `GET /api/gps` | La posición que da gpsd |
-| `GET /chart/<id>.png`, `GET /live.png` | Una carta; la que se está recibiendo |
-| `POST /api/settings/<nombre>/<valor>` | Cambia un ajuste (con la cabecera `X-Wefax`) |
-| `POST /api/charts/keep/<id>/<0\|1>` | Marca una carta para conservarla |
+| `puerto` | Puerto TCP (de serie, 8081) |
+| `dirección` | Dirección IPv4 en la que escucha (de serie, todas); `127.0.0.1` para solo este equipo |
 
-### Servicios
+Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`WEB_PORT`, `WEB_ADDRESS`, `WEFAX_GPSD`); tras cambiarlos, `sudo systemctl restart wefax-web`.
+
+### Compilación
+
+| Comando | Qué hace |
+| :--- | :--- |
+| `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
+| `./configure` | Comprueba las librerías y prepara la compilación |
+| `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
+| `make check` | Pasa las pruebas (91 comprobaciones) |
+| `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
+| `sudo make uninstall` | Quita los programas |
+| `make clean` | Borra lo compilado |
+
+### Consultas rápidas
 
 ```bash
-systemctl status wefax-web wefax-receiver
-journalctl -u wefax-receiver -f
-sudo systemctl restart wefax-receiver
+curl -s http://127.0.0.1:8081/api/about                   # versión
+curl -s http://127.0.0.1:8081/api/status                  # qué hace el receptor
+curl -s http://127.0.0.1:8081/api/next                    # emisión en curso o la siguiente
+curl -s "http://127.0.0.1:8081/api/charts?limit=10"       # las diez últimas cartas, en JSON
+curl -s -o carta.png http://127.0.0.1:8081/chart/1.png    # guardar la carta número 1
+curl -s http://127.0.0.1:8081/api/gps                     # posición que da gpsd
+ss -tulpn | grep -E "8081|wefax"                          # ¿está escuchando?
 ```
+
+### Dónde está cada cosa
+
+| Ruta | Qué hay |
+| :--- | :--- |
+| `/usr/local/bin/wefaxreceiver`, `/usr/local/bin/wefaxwebserver` | Los dos programas |
+| `/opt/Wefax/Wefax.db` | Ajustes, estado y lista de cartas (SQLite) |
+| `/opt/Wefax/charts/AAAAMMDD/` | Las cartas, en PNG; `charts/live.png` es la que se está recibiendo |
+| `/opt/Wefax/build/` | La interfaz web y `estaciones.json` |
+| `/etc/default/wefax` | Puerto, dirección de escucha y gpsd de la interfaz web |
+| `/etc/systemd/system/wefax-web.service`, `wefax-receiver.service` | Los servicios |
 
 ### Lista de estaciones
 
@@ -211,6 +278,52 @@ gcc -O2 -o make_recording test/make_recording.c -lm
 ./make_recording prueba.wav 400 10 350    # 400 líneas, 10 dB de señal, receptor 350 Hz fuera
 wefaxreceiver -f prueba.wav
 ```
+
+## API
+
+Sin contraseña. Los cambios piden `POST` y la cabecera `X-Wefax` (así una página de otro sitio no puede hacerlos desde el navegador).
+
+| Ruta | Qué da |
+| :--- | :--- |
+| `GET /api/about` | La versión |
+| `GET /api/status` | Qué hace el receptor: estado, frecuencia, descodificador, próxima emisión |
+| `GET /api/next` | La emisión en curso o la siguiente de las estaciones seguidas |
+| `GET /api/charts?since=<id>&limit=<n>` | Las cartas recibidas, la más nueva primero |
+| `GET /api/settings` | Los ajustes |
+| `GET /api/gps` | La posición que da gpsd |
+| `GET /chart/<id>.png` | Una carta |
+| `GET /live.png` | La carta que se está recibiendo |
+| `GET /estaciones.json` | Estaciones, frecuencias y horarios |
+| `POST /api/settings/<nombre>/<valor>` | Cambia un ajuste (`-` como valor lo deja vacío) |
+| `POST /api/charts/keep/<id>/<0\|1>` | Marca una carta para conservarla, o le quita la marca |
+
+## Posición por GPS
+
+La interfaz web lee la posición de gpsd: de serie, el del propio equipo (`127.0.0.1:2947`), el mismo que usa Navtex. Se cambia o se quita con `WEFAX_GPSD` en `/etc/default/wefax`. El servidor solo lee; no envía nada al GPS. La posición se muestra en el recuadro «Posición GPS» y decide el aspecto «Automático» (claro de día, oscuro de noche). Con un Leo Bodnar LBE-1420, véase lo que dice el [README de Navtex](https://github.com/EA7JRS/Navtex#posición-por-gps).
+
+## Seguridad
+
+La interfaz no tiene contraseña: está pensada para la red local o la de a bordo. No la exponga a Internet.
+
+- El servidor web y el receptor no se ejecutan como `root`; el servidor web va además encerrado en su carpeta.
+- Solo se sirven los archivos de la interfaz y las cartas; no se puede pedir ninguno de fuera.
+- Los ajustes solo admiten nombres y valores conocidos, y las consultas a la base de datos no se construyen con texto recibido.
+- Los títulos y datos se escriben siempre como texto en la página.
+- Con `WEB_ADDRESS=127.0.0.1` escucha solo en el propio equipo.
+
+## Solución de problemas
+
+| Síntoma | Causa probable | Qué hacer |
+| :--- | :--- | :--- |
+| La página no carga desde otro equipo, pero `curl` en el propio equipo responde | Cortafuegos | Abra el puerto 8081 al rango de su red (paso 7) |
+| El instalador dice «Indique el usuario…» | Se ejecutó como `root` sin `sudo` | `sh tools/instalar-servicios.sh --usuario <nombre>` |
+| `git pull` dice «dubious ownership» | El código está en una carpeta de otro usuario | `git config --global --add safe.directory <carpeta>` |
+| Receptor «Sin equipo» | Desconectado, o en uso por otro programa | `lsusb`; pare el otro programa o use el turno con Navtex |
+| «No sigue ninguna estación» | No hay ninguna marcada | Pestaña Estaciones |
+| «Sintonizado» pero no llega ninguna carta | Propagación, frecuencia poco adecuada a esa hora, antena | Pruebe otra frecuencia de la estación; de día las altas, de noche las bajas |
+| Carta inclinada | Error de reloj del receptor que el enfasado no midió bien | Guarde la carta y avise: es un fallo a corregir |
+| Carta partida, con el borde en medio | Sin sincronía (emisión cogida a medias) o enfasado simétrico | Dice «sin sincronía» en sus datos; el enfasado simétrico no está hecho |
+| «gpsd no contesta» | gpsd parado, o en otro equipo | `systemctl status gpsd`; `WEFAX_GPSD` en `/etc/default/wefax` |
 
 ## Cómo es una emisión
 

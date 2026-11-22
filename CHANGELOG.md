@@ -9,7 +9,8 @@ Las entradas dicen también qué se probó y qué no.
 - Posición del GPS: la interfaz la toma de gpsd (`WEFAX_GPSD`, de serie `127.0.0.1:2947`; el mismo lector que Navtex) y la muestra en un recuadro; el aspecto automático usa el sol en esa posición.
 - Servicios de systemd (`wefax-web`, `wefax-receiver`) y `tools/instalar-servicios.sh`; el receptor no toca ningún equipo hasta que se enciende en la web.
 - `make check` carga también la lista instalada (91 comprobaciones).
-- Sin probar con un receptor ni con una señal real; los servicios y el instalador, sin ejecutar en ningún equipo.
+- README con la instalación paso a paso, servicios, comandos, API, seguridad y solución de problemas, al modo de Navtex.
+- Comprobado en un equipo real (Debian 13, API de SDRplay y librtlsdr): compila, pasa `make check`, se instala y los servicios arrancan. **Sin probar con un receptor ni con una señal real.**
 
 ## [0.1.0] - 2026-11-22
 
