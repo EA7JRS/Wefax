@@ -223,6 +223,17 @@
   }
   function vivo() { var a = estado.alive ? Number(estado.alive.at) : 0; return a && Date.now() / 1000 - a < 30; }
   function recibiendo() { return vivo() && st('decoder') === 'chart'; }
+  // Clima espacial de ahora (escalas de la NOAA que manda S.A.T.-APRS+): lo que la predicción del mes no ve
+  function pintarClimaEspacial() {
+    var a = $('aviso-espacial'), m = /^R([0-5])S([0-5])G([0-5])T(\d{9,11})$/.exec(ajuste('space.wx', '')), partes = [];
+    // vale tres horas; después, sin noticias, no se dice nada
+    if (!m || Date.now() / 1000 - Number(m[4]) > 3 * 3600 || (m[1] === '0' && m[2] === '0' && m[3] === '0')) { a.hidden = true; return; }
+    if (m[1] !== '0') partes.push(tr('Apagón de radio R') + m[1] + tr(': en el lado de día las frecuencias bajas se absorben; pruebe las más altas.'));
+    if (m[3] !== '0') partes.push(tr('Tormenta geomagnética G') + m[3] + tr(': peor recepción, sobre todo de las estaciones del norte, y frecuencias altas menos fiables.'));
+    if (m[2] !== '0') partes.push(tr('Tormenta de radiación S') + m[2] + tr(': los caminos por latitudes altas pueden cerrarse.'));
+    a.hidden = false;
+    a.textContent = tr('Clima espacial ahora (NOAA, ') + horaUtc(new Date(Number(m[4]) * 1000)) + ' UTC). ' + partes.join(' ') + ' ' + tr('La predicción de VOACAP es la mediana del mes y no lo tiene en cuenta.');
+  }
   function pintarHora() {
     var d = new Date(), u = $('hora-utc'), l = $('hora-local');
     if (u) u.textContent = dos(d.getUTCHours()) + ':' + dos(d.getUTCMinutes()) + ':' + dos(d.getUTCSeconds());
@@ -495,7 +506,7 @@
       estado = r[0]; cartas = r[1]; 
       $('error-general').hidden = true;
       if (JSON.stringify(r[2]) !== antesAj && !document.activeElement.matches('input[type="text"], select')) { ajustes = r[2]; pintarEstaciones(); pintarReceptor(); pintarHorario(); }
-      pintarEstado(); pintarDirecto();
+      pintarEstado(); pintarDirecto(); pintarClimaEspacial();
       if ((cartas.length ? cartas[0].id : -1) !== antes || !$('cartas').childNodes.length) pintarCartas();
     }).catch(function (e) {
       $('error-general').hidden = false;

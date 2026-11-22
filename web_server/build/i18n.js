@@ -8,6 +8,14 @@
 window.WEFAX_I18N = (function () {
   'use strict';
   var EN = {
+ "Apagón de radio R": "Radio blackout R",
+ ": en el lado de día las frecuencias bajas se absorben; pruebe las más altas.": ": on the day side the low frequencies are absorbed; try the higher ones.",
+ "Tormenta geomagnética G": "Geomagnetic storm G",
+ ": peor recepción, sobre todo de las estaciones del norte, y frecuencias altas menos fiables.": ": worse reception, above all of the northern stations, and high frequencies less reliable.",
+ "Tormenta de radiación S": "Radiation storm S",
+ ": los caminos por latitudes altas pueden cerrarse.": ": paths through high latitudes may close.",
+ "Clima espacial ahora (NOAA, ": "Space weather now (NOAA, ",
+ "La predicción de VOACAP es la mediana del mes y no lo tiene en cuenta.": "VOACAP's prediction is the median of the month and does not take it into account.",
  "Número de manchas solares (vacío: el automático)": "Sunspot number (empty: the automatic one)",
  "automático: ": "automatic: ",
  "Manchas solares leídas de la NOAA: ": "Sunspot number read from NOAA: ",

@@ -4,13 +4,14 @@ Las entradas dicen también qué se probó y qué no.
 
 ## [0.3.0] - 2026-11-22
 
+- **Aviso de clima espacial**: si S.A.T.-APRS+ 1.52.0 está en la red y conoce la dirección de Wefax, le manda las escalas oficiales de la NOAA (ajuste `space.wx`); con un apagón de radio (R), una tormenta geomagnética (G) o de radiación (S) en las últimas tres horas, la página lo avisa arriba. Sin S.A.T.-APRS+ no cambia nada.
 - Recuadro **Hora UTC** en el estado, como en Navtex (con la fecha y la hora local).
 - **Predicción de propagación con VOACAP** (opcional; `tools/instalar-voacap.sh` instala voacapl, la versión para Linux del programa del NTIA / ITS). El servidor web calcula para cada estación con posición la fiabilidad y la señal sobre ruido de cada frecuencia en las 24 horas, hasta la posición propia, y lo deja en `propagacion.json`. El receptor elige con esa tabla la frecuencia de cada emisión; la pestaña Estaciones la enseña en tiras de 24 horas. Sin VOACAP, sin posición o sin número de manchas, sigue la regla de día y noche.
 - **El número de manchas solares se lee solo**, una vez al día (`wefax-manchas.timer`, `tools/actualizar-manchas.sh`): media de los índices solares diarios de la NOAA (la fuente de S.A.T.-APRS+), o estimado con el flujo, (flujo − 64) × 0,9, si faltara. Ajustes `prop.ssn_auto` y `prop.ssn_date`; `prop.ssn`, escrito a mano, manda. **Probado en un equipo real** contra el servidor de la NOAA (22-11-2026: 70, media de 30 días). Si la primera lectura falla (la web aún arrancando, sin red), el servicio lo reintenta cada 30 segundos, hasta seis veces.
 - Otros ajustes nuevos: `prop.noise`, `prop.snr`.
 - `GET /api/voacap` da un circuito cualquiera a otros programas; las respuestas de lectura admiten peticiones de otras páginas de la red.
 - Potencia de cada transmisor en la lista de estaciones (la que publica la NOAA).
-- **Probado:** con voacapl 16.1207W real en el PC: tabla de las nueve estaciones desde Cádiz, elección de frecuencia y consulta de un circuito; `make check`, 128 comprobaciones (el programa no hace falta para ellas). **Sin probar:** el instalador de VOACAP en ningún equipo; nada de esto contra recepciones reales. Los supuestos del cálculo (antenas, ruido, umbral de 40 dB-Hz) están en el README.
+- **Probado:** con voacapl 16.1207W real en el PC: tabla de las nueve estaciones desde Cádiz, elección de frecuencia y consulta de un circuito; `make check`, 129 comprobaciones (el programa no hace falta para ellas). **Sin probar:** el instalador de VOACAP en ningún equipo; nada de esto contra recepciones reales. Los supuestos del cálculo (antenas, ruido, umbral de 40 dB-Hz) están en el README.
 
 ## [0.2.0] - 2026-11-22
 

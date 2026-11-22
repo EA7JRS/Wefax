@@ -177,6 +177,7 @@ int main(void)
         CHECK(schedule_next(day + 40 * 86400 + 12 * 3600, "DDH", "", &b) && b.why == 'm', "next month the table no longer applies");
         CHECK(schedule_load_propagation("test_data/none.json") == 0 && schedule_next(day + 12 * 3600, "DDH", "", &b) && b.why == 'm', "without a table, as before");
         CHECK(store_setting_valid("prop.ssn", "80") && store_setting_valid("prop.ssn", "") && !store_setting_valid("prop.ssn", "500") && store_setting_valid("prop.noise", "150") && !store_setting_valid("prop.snr", "5"), "the prediction settings");
+        CHECK(store_setting_valid("space.wx", "R1S0G2T1795370000") && store_setting_valid("space.wx", "") && !store_setting_valid("space.wx", "R9S0G0T1795370000") && !store_setting_valid("space.wx", "R1S0G2") && !store_setting_valid("space.wx", "R1S0G2Tabc1234567"), "the space weather of now, as S.A.T.-APRS+ sends it");
         CHECK(store_setting_valid("prop.ssn_auto", "83") && !store_setting_valid("prop.ssn_auto", "x") && store_setting_valid("prop.ssn_date", "2026-11-22") && !store_setting_valid("prop.ssn_date", "22/11/2026"), "the sunspot number read from NOAA and its date");
         CHECK(store_setting_valid("position", "36.53,-6.29") && store_setting_valid("position", "") && !store_setting_valid("position", "91,0") && !store_setting_valid("position", "36.5") && store_setting_valid("position_source", "manual"), "the position setting");
     }

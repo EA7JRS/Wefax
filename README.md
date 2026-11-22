@@ -48,7 +48,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 128 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 129 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
@@ -243,7 +243,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (128 comprobaciones) |
+| `make check` | Pasa las pruebas (129 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -326,6 +326,8 @@ El **número de manchas solares** que necesita VOACAP se lee solo, una vez al d�
 - otros programas pueden pedir un circuito: `GET /api/voacap?lat=<tx>&lon=<tx>&khz=<a,b>&kw=<potencia>` (lo usa Navtex para 4209,5 kHz).
 
 **Qué supone el cálculo**, porque el resultado no es mejor que estos datos: transmisor sin ganancia con la potencia que publica la NOAA (10 kW Hamburgo y Northwood, 8 kW Atenas, 4 kW los guardacostas; 5 kW supuestos en Múrmansk), antena corta de látigo en recepción, ruido «residencial» (se cambia: en la mar es menor) y 40 dB-Hz de señal sobre ruido como umbral de una carta legible (valor puesto a ojo, entre los 38 dB-Hz que VOACAP usa para fonía en banda lateral y algo más). **Es la mediana del mes**: no ve una tormenta geomagnética ni un apagón de radio de hoy. Vale de 2 a 30 MHz.
+
+**El aviso de hoy** lo pone [S.A.T.-APRS+](https://github.com/EA7JRS/sat-aprs), si está en la red y tiene la dirección de Wefax: le manda las escalas oficiales de la NOAA y la página avisa arriba de un apagón de radio (R), una tormenta geomagnética (G) o de radiación (S) de las últimas tres horas.
 
 La tabla se rehace sola al cambiar de mes, de número de manchas, de ruido o al moverse más de un grado. Está en `/opt/Wefax/propagacion.json`.
 

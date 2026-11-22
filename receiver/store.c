@@ -113,6 +113,10 @@ int store_setting_valid(const char *name, const char *value)
     if (strcmp(name, "prop.ssn_date") == 0) return all_of(value, DIGITS "-", 10);
     if (strcmp(name, "prop.noise") == 0) return is_number(value, 110, 170) && strchr(value, '.') == NULL && value[0] != '-';
     if (strcmp(name, "prop.snr") == 0) return is_number(value, 10, 80) && strchr(value, '.') == NULL && value[0] != '-';
+    /* space weather now, sent by S.A.T.-APRS+: NOAA scales and the unix time they were read, "R1S0G2T1795370000" */
+    if (strcmp(name, "space.wx") == 0)
+        return value[0] == '\0' || (strlen(value) >= 16 && strlen(value) <= 18 && value[0] == 'R' && strchr("012345", value[1]) && value[2] == 'S' && strchr("012345", value[3])
+            && value[4] == 'G' && strchr("012345", value[5]) && value[6] == 'T' && all_of(value + 7, DIGITS, 11));
     /* where the receiver is: "lat,lon" in decimal degrees, or empty */
     if (strcmp(name, "position") == 0) {
         double la, lo; char extra;
