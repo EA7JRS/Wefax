@@ -20,7 +20,7 @@
   function coma(n, dec) { var s = Number(n).toFixed(dec); return I18N.idioma === 'en' ? s : s.replace('.', ','); }
   function khz(k) { return coma(k, Math.abs(k * 10 - Math.round(k * 10)) < 0.01 && Math.round(k * 10) % 10 === 0 ? 0 : 1) + ' kHz'; }
 
-  var estado = {}, ajustes = {}, cartas = [], datos = { stations: [] }, version = '', gps = null;
+  var estado = {}, ajustes = {}, cartas = [], datos = { stations: [] }, version = '', gps = null, tabla = {}, tablaEstado = null;
   var filtro = { estacion: '', texto: '', guardadas: false };
   var repintarAspecto = function () {};
 
@@ -168,6 +168,33 @@
     return { khz: f[f.length - 1], por: 'd' };
   }
   var CORTO = { n: 'noche', t: 'crepúsculo', d: 'día' };
+  // Tabla de VOACAP: fiabilidad (0..1) de una frecuencia de una estación a una hora UTC; null si no la da
+  function tablaVale() {
+    var d = new Date();
+    return tabla && tabla.stations && tabla.year === d.getUTCFullYear() && tabla.month === d.getUTCMonth() + 1;
+  }
+  function fiabilidad(id, k, hora) {
+    var e = tablaVale() ? tabla.stations[id] : null, i;
+    if (!e) return null;
+    for (i = 0; i < e.khz.length; i++) if (Math.abs(e.khz[i] - k) < 0.05) return typeof e.rel[i][hora] === 'number' ? e.rel[i][hora] : null;
+    return null;
+  }
+  function senal(id, k, hora) {
+    var e = tablaVale() ? tabla.stations[id] : null, i;
+    if (!e) return -1e9;
+    for (i = 0; i < e.khz.length; i++) if (Math.abs(e.khz[i] - k) < 0.05) return typeof e.snr[i][hora] === 'number' ? e.snr[i][hora] : -1e9;
+    return -1e9;
+  }
+  function elegirTabla(frecs, id, ms) {
+    var h = new Date(ms).getUTCHours(), mejor = null;
+    frecs.forEach(function (k) {
+      var r = fiabilidad(id, k, h), q = senal(id, k, h);
+      // la fiabilidad primero; entre iguales, la señal más fuerte (como el receptor)
+      if (r !== null && (mejor === null || r > mejor.rel + 0.005 || (r > mejor.rel - 0.005 && q > mejor.snr))) mejor = { khz: k, por: 'v', rel: r, snr: q };
+    });
+    return mejor;
+  }
+  function pct(r) { return Math.round(r * 100) + ' %'; }
   var POR = { n: 'de noche en el camino', t: 'crepúsculo en el camino', d: 'de día en el camino', m: 'la de en medio' };
   function pintarPosicion() {
     var g = posicionGps(), p = posicion(), a = $('posicion-actual');
@@ -211,6 +238,7 @@
     if (prox) {
       var d = new Date(prox);
       c.appendChild(dato(tr('Próxima emisión'), horaUtc(d) + ' UTC · ' + nombreEstacion(st('next_station')), st('next_title') + (Number(st('next_khz')) ? ' · ' + khz(Number(st('next_khz'))) : '')
+        + (st('next_why') === 'v' && Number(st('next_rel')) >= 0 ? ' (VOACAP ' + pct(Number(st('next_rel'))) + ')' : '')
         + (POR[st('next_why')] && st('next_why') !== 'm' && ajuste('freq.' + st('next_station'), 'auto') === 'auto' ? ' (' + tr(POR[st('next_why')]) + ')' : '')));
     } else c.appendChild(dato(tr('Próxima emisión'), '—', ''));
     c.appendChild(dato(tr('Cartas guardadas'), String(cartas.length), cartas.length ? tr('la última, ') + haceCuanto(Date.parse(cartas[0].received)) : ''));
@@ -340,12 +368,23 @@
         li.appendChild(el('span', 'mono', khz(f.khz) + (f.call ? ' · ' + f.call : '')));
         li.appendChild(el('span', '', f.from ? f.from + '–' + f.to + ' UTC' + (si ? '' : ' · ' + tr('ahora no')) : tr('todo el día')));
         ul.appendChild(li);
+        if (fiabilidad(s.id, f.khz, 0) !== null) {
+          // 24 horas UTC: cuanto más lleno, más días del mes llega bien a esa hora
+          var tira = el('li', 'tira'), hh = new Date().getUTCHours();
+          for (var h = 0; h < 24; h++) {
+            var r = fiabilidad(s.id, f.khz, h), c1 = el('span', 'h' + (h === hh ? ' ya' : ''));
+            c1.style.setProperty('--r', r === null ? 0 : r);
+            c1.title = dos(h) + ' UTC · ' + (r === null ? '—' : pct(r));
+            tira.appendChild(c1);
+          }
+          ul.appendChild(tira);
+        }
       });
       t.appendChild(ul);
       aj.appendChild(document.createTextNode(tr('Frecuencia que se usa')));
       var enAire = s.freqs.filter(function (f) { return enElAire(f, min); }).map(function (f) { return f.khz; });
-      var ele = elegir(enAire, yo, s, ahoraMs);
-      [['auto', tr('Automática') + (ele.khz ? ': ' + khz(ele.khz) + (ele.por !== 'm' ? ' · ' + tr(CORTO[ele.por]) : '') : '')]].concat(s.freqs.map(function (f) { return [String(f.khz), khz(f.khz)]; })).forEach(function (o) {
+      var ele = elegirTabla(enAire, s.id, ahoraMs) || elegir(enAire, yo, s, ahoraMs);
+      [['auto', tr('Automática') + (ele.khz ? ': ' + khz(ele.khz) + (ele.por === 'v' ? ' · VOACAP ' + pct(ele.rel) : ele.por !== 'm' ? ' · ' + tr(CORTO[ele.por]) : '') : '')]].concat(s.freqs.map(function (f) { return [String(f.khz), khz(f.khz)]; })).forEach(function (o) {
         var op = el('option', '', o[1]); op.value = o[0]; sel.appendChild(op);
       });
       sel.value = ajuste('freq.' + s.id, 'auto');
@@ -407,6 +446,19 @@
     t.appendChild(el('p', 'nota', tr('Con una frecuencia fija el receptor se queda en ella y guarda todo lo que oiga, sin mirar el horario. Escriba la frecuencia asignada (la central del canal), no la del dial en banda lateral.')));
     c.appendChild(t);
 
+    t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Predicción de propagación (VOACAP)')));
+    var MOTIVO = { 'voacap not installed': 'VOACAP no está instalado en este equipo: ejecute tools/instalar-voacap.sh.', 'no sunspot number': 'Falta el número de manchas solares del mes.', 'no position': 'Falta la posición (pestaña Estaciones).' };
+    t.appendChild(el('p', 'nota', !tablaEstado ? '' : tablaEstado.ok
+      ? (tablaVale() ? tr('En uso: tabla de ') + dos(tabla.month) + '/' + tabla.year + tr(', manchas solares ') + tabla.ssn + '.' : tr('Calculando la tabla…'))
+      : tr(MOTIVO[tablaEstado.why] || tablaEstado.why)));
+    r = el('div', 'rejilla');
+    r.appendChild(campo(tr('Número de manchas solares suavizado del mes'), texto('prop.ssn', '', tr('sin dato'))));
+    r.appendChild(campo(tr('Ruido en su antena'), selector('prop.noise', '145', [['136', tr('Ciudad, mucho ruido')], ['145', tr('Residencial')], ['150', tr('Rural')], ['160', tr('Lugar tranquilo, en la mar')]])));
+    r.appendChild(campo(tr('Señal sobre ruido necesaria (dB-Hz)'), texto('prop.snr', '40')));
+    t.appendChild(r);
+    t.appendChild(el('p', 'nota', tr('VOACAP calcula, para cada estación, frecuencia y hora, en qué parte de los días del mes la señal llegará con esa relación sobre el ruido. Es la mediana del mes: no ve una tormenta geomagnética ni un apagón de hoy. Supone un transmisor sin ganancia con la potencia publicada (5 kW si no se publica) y una antena corta de látigo en recepción. El número de manchas es el suavizado que publican el SILSO o el SWPC de la NOAA para este mes; cámbielo una vez al mes.')));
+    c.appendChild(t);
+
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Compartir el equipo con Navtex')));
     t.appendChild(casilla('share.on', tr('Tomar el equipo de Navtex durante cada emisión')));
     r = el('div', 'rejilla');
@@ -419,7 +471,11 @@
 
   // ---- todo
   function leerTodo() {
-    return Promise.all([leer('/api/status'), leer('/api/charts?limit=500'), leer('/api/settings'), leer('/api/gps').catch(function () { return null; })]).then(function (r) {
+    return Promise.all([leer('/api/status'), leer('/api/charts?limit=500'), leer('/api/settings'), leer('/api/gps').catch(function () { return null; }),
+      leer('/api/propagation').catch(function () { return {}; }), leer('/api/propagation/state').catch(function () { return null; })]).then(function (r) {
+      var antesTabla = (tabla && tabla.made) || 0, antesEst = JSON.stringify(tablaEstado);
+      tabla = r[4] || {}; tablaEstado = r[5];
+      if (((tabla.made || 0) !== antesTabla || JSON.stringify(tablaEstado) !== antesEst) && !document.activeElement.matches('input[type="text"], select')) { pintarEstaciones(); pintarReceptor(); }
       gps = r[3] && typeof r[3] === 'object' ? r[3] : null;
       var pg = posicionGps();
       if (pg) { window.WEFAX_TEMA.ponerPosicion(pg.lat, pg.lon); repintarAspecto(); }

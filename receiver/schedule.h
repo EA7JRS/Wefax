@@ -34,7 +34,9 @@ struct broadcast {
     double freqs[SCHEDULE_MAX_FREQS];   /* kHz on the air at that time, in the order of the list */
     int nfreqs;
     double suggested_khz;       /* the one to use when the user has not chosen */
-    char why;                   /* how it was chosen: 'n' night, 't' twilight, 'd' day on the path; 'm' the middle one (no positions) */
+    char why;                   /* how it was chosen: 'n' night, 't' twilight, 'd' day on the path; 'm' the middle one (no positions);
+                                   'v' the most reliable one in the VOACAP table */
+    double reliability;         /* with 'v': 0..1; else -1 */
     double distance_km;         /* to the station, -1 when not known */
 };
 
@@ -56,6 +58,10 @@ double schedule_sun_elevation(double lat, double lon, time_t when);
 double schedule_pick(const double *khz, int n, double lat1, double lon1, double lat2, double lon2, time_t when, char *why);
 /* Great circle distance in km */
 double schedule_distance_km(double lat1, double lon1, double lat2, double lon2);
+
+/* The table of VOACAP predictions the web server writes (propagacion.json). Loaded again when the
+   file changes; used only in the month it was made for. Returns 1 when there is a usable table. */
+int schedule_load_propagation(const char *path);
 
 /* The broadcast in progress or, if none, the next one, among the stations in `follow` (ids
    separated by commas) and not in `skip` ("ID:HHMM,..."). Returns 1 when there is one. */

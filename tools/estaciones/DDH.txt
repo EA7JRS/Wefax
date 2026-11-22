@@ -2,6 +2,7 @@
 # Note in the source: "white + 425 Hz, black - 425 Hz". All charts 120/576. Voice transmissions (not facsimile) left out.
 STATION|DDH|Hamburg / Pinneberg|Germany|425
 POS|53.67|9.8|Pinneberg
+PWR|10
 FREQ|3855|DDH3|
 FREQ|7880|DDK3|
 FREQ|13882.5|DDK6|

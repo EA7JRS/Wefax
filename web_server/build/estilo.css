@@ -308,3 +308,7 @@ input[type="number"] { font: inherit; color: var(--texto); background: var(--pan
 .ayuda p { margin: 8px 0 0; }
 .ayuda caption { text-align: left; padding: 6px 10px; font-size: 12px; color: var(--suave); text-transform: uppercase; letter-spacing: 0.4px; }
 .ayuda .horario td, .ayuda .horario th { padding: 4px 10px; }
+/* Fiabilidad por hora (VOACAP): 24 casillas, de las 00 a las 23 UTC */
+.frecs .tira { display: grid; grid-template-columns: repeat(24, 1fr); gap: 1px; padding: 0 0 6px; border-top: 0; height: 20px; align-items: end; }
+.frecs .tira .h { display: block; height: calc(3px + 11px * var(--r, 0)); background: var(--acento); opacity: calc(0.25 + 0.75 * var(--r, 0)); border-radius: 1px; }
+.frecs .tira .h.ya { outline: 1px solid var(--texto); outline-offset: 1px; }

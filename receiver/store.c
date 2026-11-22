@@ -105,6 +105,11 @@ int store_setting_valid(const char *name, const char *value)
     if (strcmp(name, "follow") == 0) return all_of(value, LETTERS DIGITS ",_-", 400);
     /* broadcasts not wanted: STATION:HHMM, separated by commas */
     if (strcmp(name, "skip") == 0) return all_of(value, LETTERS DIGITS ",:_-", 4000);
+    /* VOACAP predictions: smoothed sunspot number of the month (empty: not known, no predictions),
+       man-made noise at 3 MHz in -dBW and signal to noise ratio needed in dB-Hz */
+    if (strcmp(name, "prop.ssn") == 0) return value[0] == '\0' || (is_number(value, 0, 300) && value[0] != '-');
+    if (strcmp(name, "prop.noise") == 0) return is_number(value, 110, 170) && strchr(value, '.') == NULL && value[0] != '-';
+    if (strcmp(name, "prop.snr") == 0) return is_number(value, 10, 80) && strchr(value, '.') == NULL && value[0] != '-';
     /* where the receiver is: "lat,lon" in decimal degrees, or empty */
     if (strcmp(name, "position") == 0) {
         double la, lo; char extra;

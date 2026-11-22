@@ -8,6 +8,8 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -63,6 +65,57 @@ double schedule_pick(const double *khz, int n, double lat1, double lon1, double 
     if (sun <= 6.0) { *why = 't'; return sorted[n / 2]; }
     *why = 'd'; best = sorted[n - 1];
     if (km < 3000.0) for (i = n - 1; i >= 0; i--) { best = sorted[i]; if (sorted[i] <= 14500.0) break; }
+    return best;
+}
+
+static cJSON *prop;
+static time_t prop_mtime;
+
+int schedule_load_propagation(const char *path)
+{
+    struct stat st;
+    FILE *f;
+    char *text;
+    long n;
+    if (stat(path, &st) != 0) { cJSON_Delete(prop); prop = NULL; prop_mtime = 0; return 0; }
+    if (prop != NULL && st.st_mtime == prop_mtime) return 1;
+    f = fopen(path, "rb");
+    if (f == NULL) return prop != NULL;
+    fseek(f, 0, SEEK_END); n = ftell(f); fseek(f, 0, SEEK_SET);
+    if (n <= 0 || n > 4 * 1024 * 1024 || (text = malloc((size_t) n + 1)) == NULL) { fclose(f); return prop != NULL; }
+    n = (long) fread(text, 1, (size_t) n, f); text[n] = '\0';
+    fclose(f);
+    cJSON_Delete(prop);
+    prop = cJSON_Parse(text);
+    prop_mtime = st.st_mtime;
+    free(text);
+    return prop != NULL;
+}
+
+/* The most reliable of the frequencies on the air at that hour, by the table; 0 when it does not say */
+static double from_table(const char *id, const double *khz, int n, time_t when, double *reliability)
+{
+    const cJSON *stations = cJSON_GetObjectItemCaseSensitive(prop, "stations"), *s, *list, *rel, *snr, *y, *m;
+    struct tm tm;
+    double best = 0, best_rel = -1, best_snr = -1e9;
+    int i, j;
+    if (prop == NULL) return 0;
+    gmtime_r(&when, &tm);
+    y = cJSON_GetObjectItemCaseSensitive(prop, "year"); m = cJSON_GetObjectItemCaseSensitive(prop, "month");
+    if (!cJSON_IsNumber(y) || !cJSON_IsNumber(m) || y->valueint != tm.tm_year + 1900 || m->valueint != tm.tm_mon + 1) return 0;
+    s = cJSON_GetObjectItemCaseSensitive(stations, id);
+    list = cJSON_GetObjectItemCaseSensitive(s, "khz"); rel = cJSON_GetObjectItemCaseSensitive(s, "rel"); snr = cJSON_GetObjectItemCaseSensitive(s, "snr");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < cJSON_GetArraySize(list); j++) {
+            const cJSON *k = cJSON_GetArrayItem(list, j);
+            const cJSON *r = cJSON_GetArrayItem(cJSON_GetArrayItem(rel, j), tm.tm_hour), *q = cJSON_GetArrayItem(cJSON_GetArrayItem(snr, j), tm.tm_hour);
+            double sn = cJSON_IsNumber(q) ? q->valuedouble : -1e9;
+            if (!cJSON_IsNumber(k) || fabs(k->valuedouble - khz[i]) > 0.05 || !cJSON_IsNumber(r)) continue;
+            /* reliability first; between equals, the stronger signal */
+            if (r->valuedouble > best_rel + 0.005 || (r->valuedouble > best_rel - 0.005 && sn > best_snr)) { best = khz[i]; best_rel = r->valuedouble; best_snr = sn; }
+        }
+    }
+    *reliability = best_rel;
     return best;
 }
 
@@ -170,13 +223,17 @@ int schedule_next(time_t now, const char *follow, const char *skip, struct broad
                     out->freqs[out->nfreqs++] = k->valuedouble;
                 }
                 out->suggested_khz = out->nfreqs > 0 ? out->freqs[out->nfreqs / 2] : 0;
-                out->why = 'm'; out->distance_km = -1;
+                out->why = 'm'; out->distance_km = -1; out->reliability = -1;
                 {
                     const cJSON *la = cJSON_GetObjectItemCaseSensitive(st, "lat"), *lo = cJSON_GetObjectItemCaseSensitive(st, "lon");
                     if (have_pos && cJSON_IsNumber(la) && cJSON_IsNumber(lo) && out->nfreqs > 0) {
                         time_t t = start > now ? start : now;
                         out->suggested_khz = schedule_pick(out->freqs, out->nfreqs, pos_lat, pos_lon, la->valuedouble, lo->valuedouble, t, &out->why);
                         out->distance_km = schedule_distance_km(pos_lat, pos_lon, la->valuedouble, lo->valuedouble);
+                    }
+                    if (out->nfreqs > 0) {
+                        double r = -1, k = from_table(id, out->freqs, out->nfreqs, start > now ? start : now, &r);
+                        if (k > 0) { out->suggested_khz = k; out->why = 'v'; out->reliability = r; }
                     }
                 }
             }

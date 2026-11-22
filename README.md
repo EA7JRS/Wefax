@@ -8,9 +8,9 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.2.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de nueve estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.3.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de nueve estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
-📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.2.0](docs/releases/v0.2.0.md)
+📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.3.0](docs/releases/v0.3.0.md)
 
 ## Vista previa
 
@@ -43,11 +43,12 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Solo onda corta | No recibe imágenes de satélite: el WEFAX de los geoestacionarios ya no se emite y lo que hay hoy (LRPT, HRIT) es digital, otro sistema |
 | Posición propia | La del GPS (gpsd, como Navtex) o la que se escriba. Con ella las estaciones salen por distancia, con su rumbo, y la frecuencia «automática» se elige según sea de día o de noche en el camino |
 | Ayuda para leer la carta | Isobaras, viento, frentes, tipos de carta y escala Beaufort, en la pestaña Cartas |
+| Predicción de propagación | Con VOACAP instalado (opcional), calcula para cada estación, frecuencia y hora la fiabilidad del circuito hasta su posición, elige con ella la frecuencia y la enseña en 24 horas. Sin él, sigue la regla de día y noche |
 | Descodifica grabaciones | Para probar y para repasar una recepción dudosa |
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 103 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 127 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
@@ -241,7 +242,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (103 comprobaciones) |
+| `make check` | Pasa las pruebas (127 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -266,6 +267,7 @@ ss -tulpn | grep -E "8081|wefax"                          # ¿está escuchando?
 | `/opt/Wefax/Wefax.db` | Ajustes, estado y lista de cartas (SQLite) |
 | `/opt/Wefax/charts/AAAAMMDD/` | Las cartas, en PNG; `charts/live.png` es la que se está recibiendo |
 | `/opt/Wefax/build/` | La interfaz web y `estaciones.json` |
+| `/opt/Wefax/itshfbc/`, `/opt/Wefax/propagacion.json` | Datos de VOACAP y su tabla (solo si se instala) |
 | `/etc/default/wefax` | Puerto, dirección de escucha y gpsd de la interfaz web |
 | `/etc/systemd/system/wefax-web.service`, `wefax-receiver.service` | Los servicios |
 
@@ -293,6 +295,9 @@ Sin contraseña. Los cambios piden `POST` y la cabecera `X-Wefax` (así una pág
 | `GET /api/charts?since=<id>&limit=<n>` | Las cartas recibidas, la más nueva primero |
 | `GET /api/settings` | Los ajustes |
 | `GET /api/gps` | La posición que da gpsd |
+| `GET /api/propagation` | La tabla de VOACAP de las estaciones de la lista (vacía si no la hay) |
+| `GET /api/propagation/state` | Si se pueden hacer predicciones y, si no, por qué |
+| `GET /api/voacap?lat=&lon=&khz=&kw=` | Un circuito de un transmisor a este receptor: fiabilidad y señal sobre ruido de 24 horas |
 | `GET /chart/<id>.png` | Una carta |
 | `GET /live.png` | La carta que se está recibiendo |
 | `GET /estaciones.json` | Estaciones, frecuencias y horarios |
@@ -304,6 +309,24 @@ Sin contraseña. Los cambios piden `POST` y la cabecera `X-Wefax` (así una pág
 La interfaz web lee la posición de gpsd: de serie, el del propio equipo (`127.0.0.1:2947`), el mismo que usa Navtex. Se cambia o se quita con `WEFAX_GPSD` en `/etc/default/wefax`. El servidor solo lee; no envía nada al GPS. La posición se muestra en el recuadro «Posición GPS» y decide el aspecto «Automático» (claro de día, oscuro de noche). Sin GPS se puede escribir en la pestaña Estaciones (grados decimales o localizador).
 
 **Para qué sirve la posición.** En onda corta la distancia no decide si una estación se recibe, así que Wefax no habla de «alcance». La usa para tres cosas: ordenar las estaciones de cerca a lejos, dar la distancia y el rumbo, y elegir la frecuencia «automática» con una regla sencilla según el sol en el punto medio del camino: de noche (sol más de 6° bajo el horizonte), la más baja desde 3 MHz; en el crepúsculo, la de en medio; de día, la más alta (hasta 14,5 MHz si el camino mide menos de 3000 km). Es una orientación, no una previsión de propagación; cada estación permite fijar otra frecuencia. La posición de cada transmisor es aproximada (a la décima de grado, la de su localidad): no viene en los horarios. Con un Leo Bodnar LBE-1420, véase lo que dice el [README de Navtex](https://github.com/EA7JRS/Navtex#posición-por-gps).
+
+## Predicción de propagación (VOACAP)
+
+Opcional. [VOACAP](https://www.voacap.com) es el programa de predicción de onda corta del NTIA / ITS de EE. UU.; Wefax usa su versión para Linux, [voacapl](https://github.com/jawatson/voacapl), como programa aparte y sin Internet.
+
+```bash
+sudo sh tools/instalar-voacap.sh        # como root sin sudo: --usuario <nombre>
+```
+
+Después, en la pestaña **Receptor**, escriba el **número de manchas solares suavizado** del mes (lo publican el [SILSO](https://www.sidc.be/SILSO/forecasts) y el SWPC de la NOAA; `sh tools/actualizar-manchas.sh` intenta ponerlo solo). Con eso y la posición, en medio minuto:
+
+- cada frecuencia de cada estación enseña una tira de 24 casillas, de las 00 a las 23 UTC: cuanto más llena, más días del mes llega bien a esa hora;
+- la frecuencia «automática» pasa a ser la más fiable a la hora de cada emisión (entre iguales, la de señal más fuerte), y el estado dice su porcentaje;
+- otros programas pueden pedir un circuito: `GET /api/voacap?lat=<tx>&lon=<tx>&khz=<a,b>&kw=<potencia>` (lo usa Navtex para 4209,5 kHz).
+
+**Qué supone el cálculo**, porque el resultado no es mejor que estos datos: transmisor sin ganancia con la potencia que publica la NOAA (10 kW Hamburgo y Northwood, 8 kW Atenas, 4 kW los guardacostas; 5 kW supuestos en Múrmansk), antena corta de látigo en recepción, ruido «residencial» (se cambia: en la mar es menor) y 40 dB-Hz de señal sobre ruido como umbral de una carta legible (valor puesto a ojo, entre los 38 dB-Hz que VOACAP usa para fonía en banda lateral y algo más). **Es la mediana del mes**: no ve una tormenta geomagnética ni un apagón de radio de hoy. Vale de 2 a 30 MHz.
+
+La tabla se rehace sola al cambiar de mes, de número de manchas, de ruido o al moverse más de un grado. Está en `/opt/Wefax/propagacion.json`.
 
 ## Seguridad
 

@@ -13,6 +13,8 @@ Las líneas de comentario del principio de cada archivo dicen su origen y su fec
     STATION|ID|nombre|país|desviación en Hz
     POS|latitud|longitud|lugar      (aproximada, a la décima de grado: el pueblo del transmisor; no viene en los
                                     horarios. Solo sirve para la distancia, el rumbo y el día o la noche en el camino)
+    PWR|kW                          (potencia del transmisor que da la fuente; sin esta línea se suponen 5 kW
+                                    en las predicciones)
     FREQ|kHz|indicativo|HHMM-HHMM   (horas en que esa frecuencia está en el aire; vacío = siempre)
     HHMM|qué se emite               (una línea por emisión, hora UTC; 120 líneas por minuto, índice 576)
     HHMM|qué se emite|90            (con otra velocidad: 60, 90 o 240 líneas por minuto)
@@ -43,6 +45,8 @@ for name in sorted(os.listdir(here)):
         elif f[0] == 'POS' and len(f) == 4:
             st['lat'], st['lon'], st['place'] = float(f[1]), float(f[2]), f[3]
             if not (-90 <= st['lat'] <= 90 and -180 <= st['lon'] <= 180): errors.append(f'{where}: posición imposible')
+        elif f[0] == 'PWR' and len(f) == 2:
+            st['kw'] = float(f[1])
         elif f[0] == 'FREQ' and len(f) == 4:
             fr = {'khz': float(f[1]), 'call': f[2]}
             if not 1500 <= fr['khz'] <= 30000: errors.append(f'{where}: frecuencia fuera de onda corta')

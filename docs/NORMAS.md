@@ -1,6 +1,6 @@
 # Normas y reglamentos que contempla Wefax
 
-© 2026 Manuel - EA7JRS · versión 0.2.0 · comprobado el 22 de noviembre de 2026
+© 2026 Manuel - EA7JRS · versión 0.3.0 · comprobado el 22 de noviembre de 2026
 
 Este documento dice qué normas describen el radiofacsímil meteorológico por onda corta, qué parte de ellas aplica el programa y cuáles **no** tienen que ver, aunque a veces se citen. Wefax es una ayuda: no está homologado ni ensayado contra ninguna norma.
 
@@ -53,4 +53,5 @@ Se consultaron porque se citan a veces junto al radiofacsímil, y no son de apli
 - **Enfasado simétrico** y **onda larga:** no hechos.
 - **Satélite:** no recibe imágenes de satélite. El WEFAX analógico de los geoestacionarios (1691 MHz) se sustituyó por LRIT / HRIT, digitales; es otro sistema y otro descodificador.
 - **Posición:** la propia (GPS o escrita) ordena las estaciones y elige la frecuencia automática con una regla sencilla de día o noche en el camino; no es una previsión de propagación (no usa el número de manchas ni ningún modelo ionosférico). Las posiciones de los transmisores son aproximadas y no salen de los horarios.
+- **Predicción de propagación:** la de VOACAP (NTIA / ITS), cuando se instala. Es una mediana mensual con supuestos de antena, ruido y umbral que no se han contrastado con recepciones; no es el método de la UIT-R P.533 ni una medida.
 - **Seguridad de la interfaz web:** sin contraseña ni cifrado; solo para una red de confianza.

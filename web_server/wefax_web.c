@@ -9,6 +9,9 @@
  *   GET  /api/status                 what the receiver is doing
  *   GET  /api/charts?since=&limit=   the charts received, newest first
  *   GET  /api/about                  the version of the program
+ *   GET  /api/propagation            the VOACAP table of the stations of the list (empty object when there is none)
+ *   GET  /api/propagation/state      whether predictions can be made, and why not
+ *   GET  /api/voacap?lat=&lon=&khz=a,b&kw=   one circuit from a transmitter to this receiver, 24 hours
  *   GET  /api/gps                    the position gpsd gives (WEFAX_GPSD=host:port; empty, none)
  *   GET  /api/next                   the broadcast in progress or the next one
  *   GET  /api/settings               the settings
@@ -23,6 +26,7 @@
  */
 #include <stdlib.h>
 #include <math.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -38,6 +42,7 @@
 #include "../receiver/store.h"
 #include "../receiver/schedule.h"
 #include "gps.h"
+#include "voacap.h"
 
 #ifndef PACKAGE_VERSION
 #define PACKAGE_VERSION "?"
@@ -60,6 +65,8 @@ static enum MHD_Result send_text(struct MHD_Connection *c, unsigned int status, 
     MHD_add_response_header(r, "Content-Type", type);
     MHD_add_response_header(r, "X-Content-Type-Options", "nosniff");
     MHD_add_response_header(r, "Cache-Control", "no-store");
+    /* other pages of the local network (Navtex) may read; changes still need the X-Wefax header, which a foreign page cannot send */
+    MHD_add_response_header(r, "Access-Control-Allow-Origin", "*");
     ret = MHD_queue_response(c, status, r);
     MHD_destroy_response(r);
     return ret;
@@ -164,6 +171,7 @@ static char *next_json(void)
         char pos[40]; double la = 0, lo = 0;
         store_get("position", pos, sizeof(pos), "");
         { int ok = sscanf(pos, "%lf,%lf", &la, &lo) == 2; schedule_set_position(ok, ok ? la : 0, ok ? lo : 0); }
+        { char table[600]; snprintf(table, sizeof(table), "%s/propagacion.json", store_dir()); schedule_load_propagation(table); }
     }
     if (schedule_next(time(NULL), follow, skip, &b)) {
         cJSON *f = cJSON_AddArrayToObject(o, "freqs");
@@ -177,11 +185,184 @@ static char *next_json(void)
         cJSON_AddNumberToObject(o, "suggested_khz", b.suggested_khz);
         { char w[2] = { b.why ? b.why : 'm', 0 }; cJSON_AddStringToObject(o, "why", w); }
         cJSON_AddNumberToObject(o, "distance_km", b.distance_km);
+        cJSON_AddNumberToObject(o, "reliability", b.reliability);
         for (i = 0; i < b.nfreqs; i++) cJSON_AddItemToArray(f, cJSON_CreateNumber(b.freqs[i]));
     }
     s = cJSON_PrintUnformatted(o);
     cJSON_Delete(o);
     return s;
+}
+
+/* ---- predictions (VOACAP) */
+static pthread_mutex_t prop_lock = PTHREAD_MUTEX_INITIALIZER;
+static char prop_key[200];          /* what the table on disk was made for */
+
+static double setting_num(const char *name, double def)
+{
+    char v[40];
+    store_get(name, v, sizeof(v), "");
+    return v[0] != '\0' ? atof(v) : def;
+}
+
+/* Why there are no predictions, or NULL when there can be. Fills what a prediction needs. */
+static const char *prop_ready(struct voacap_in *in)
+{
+    char pos[40];
+    time_t now = time(NULL);
+    struct tm tm;
+    memset(in, 0, sizeof(*in));
+    if (!voacap_available()) return "voacap not installed";
+    store_get("prop.ssn", pos, sizeof(pos), "");
+    if (pos[0] == '\0') return "no sunspot number";
+    in->ssn = atof(pos);
+    store_get("position", pos, sizeof(pos), "");
+    if (sscanf(pos, "%lf,%lf", &in->rx_lat, &in->rx_lon) != 2) return "no position";
+    gmtime_r(&now, &tm);
+    in->year = tm.tm_year + 1900; in->month = tm.tm_mon + 1;
+    in->noise = setting_num("prop.noise", 145);
+    in->snr = setting_num("prop.snr", 40);
+    return NULL;
+}
+
+static void add_hours(cJSON *to, const char *name, double v[][24], int n)
+{
+    cJSON *rows = cJSON_AddArrayToObject(to, name);
+    int f, h;
+    for (f = 0; f < n; f++) {
+        cJSON *row = cJSON_CreateArray();
+        for (h = 0; h < 24; h++) cJSON_AddItemToArray(row, isnan(v[f][h]) ? cJSON_CreateNull() : cJSON_CreateNumber(v[f][h]));
+        cJSON_AddItemToArray(rows, row);
+    }
+}
+
+static void add_basis(cJSON *o, const struct voacap_in *in)
+{
+    cJSON_AddNumberToObject(o, "year", in->year);
+    cJSON_AddNumberToObject(o, "month", in->month);
+    cJSON_AddNumberToObject(o, "ssn", in->ssn);
+    cJSON_AddNumberToObject(o, "lat", in->rx_lat);
+    cJSON_AddNumberToObject(o, "lon", in->rx_lon);
+    cJSON_AddNumberToObject(o, "noise", in->noise);
+    cJSON_AddNumberToObject(o, "snr", in->snr);
+}
+
+/* The table of every station of the list that has a position, written to DATA_DIR/propagacion.json
+   for the receiver and the interface. Made again only when what it depends on changes. */
+static void prop_refresh(void)
+{
+    struct voacap_in in;
+    struct stat st;
+    char key[200], path[600], tmp[620], *text, *json;
+    cJSON *list, *stations, *s, *o, *all;
+    FILE *f;
+    long n;
+    if (prop_ready(&in) != NULL) return;
+    if (stat("estaciones.json", &st) != 0) return;
+    snprintf(key, sizeof(key), "%d-%d %.0f %.0f %.0f %.0f %.0f %ld", in.year, in.month, in.ssn, in.rx_lat, in.rx_lon, in.noise, in.snr, (long) st.st_mtime);
+    snprintf(path, sizeof(path), "%s/propagacion.json", store_dir());
+    pthread_mutex_lock(&prop_lock);
+    if (strcmp(key, prop_key) == 0 && access(path, R_OK) == 0) { pthread_mutex_unlock(&prop_lock); return; }
+    pthread_mutex_unlock(&prop_lock);
+
+    f = fopen("estaciones.json", "rb");
+    if (f == NULL) return;
+    fseek(f, 0, SEEK_END); n = ftell(f); fseek(f, 0, SEEK_SET);
+    if (n <= 0 || n > 8 * 1024 * 1024 || (text = malloc((size_t) n + 1)) == NULL) { fclose(f); return; }
+    n = (long) fread(text, 1, (size_t) n, f); text[n] = '\0';
+    fclose(f);
+    list = cJSON_Parse(text);
+    free(text);
+    stations = cJSON_GetObjectItemCaseSensitive(list, "stations");
+    o = cJSON_CreateObject();
+    cJSON_AddNumberToObject(o, "made", (double) time(NULL));
+    add_basis(o, &in);
+    all = cJSON_AddObjectToObject(o, "stations");
+    cJSON_ArrayForEach(s, stations) {
+        const cJSON *id = cJSON_GetObjectItemCaseSensitive(s, "id"), *la = cJSON_GetObjectItemCaseSensitive(s, "lat"), *lo = cJSON_GetObjectItemCaseSensitive(s, "lon");
+        const cJSON *kw = cJSON_GetObjectItemCaseSensitive(s, "kw"), *freqs = cJSON_GetObjectItemCaseSensitive(s, "freqs"), *fr;
+        struct voacap_out out;
+        cJSON *e, *k;
+        int i;
+        if (!cJSON_IsString(id) || !cJSON_IsNumber(la) || !cJSON_IsNumber(lo)) continue;
+        in.tx_lat = la->valuedouble; in.tx_lon = lo->valuedouble;
+        in.kw = cJSON_IsNumber(kw) && kw->valuedouble > 0 ? kw->valuedouble : 5.0;
+        in.nfreqs = 0;
+        cJSON_ArrayForEach(fr, freqs) {
+            const cJSON *v = cJSON_GetObjectItemCaseSensitive(fr, "khz");
+            if (cJSON_IsNumber(v) && in.nfreqs < VOACAP_MAX_FREQS && v->valuedouble >= 2000 && v->valuedouble <= 30000) in.khz[in.nfreqs++] = v->valuedouble;
+        }
+        if (in.nfreqs == 0 || voacap_run(&in, &out) != 0) continue;
+        e = cJSON_AddObjectToObject(all, id->valuestring);
+        cJSON_AddNumberToObject(e, "kw", in.kw);
+        cJSON_AddBoolToObject(e, "kw_assumed", !(cJSON_IsNumber(kw) && kw->valuedouble > 0));
+        k = cJSON_AddArrayToObject(e, "khz");
+        for (i = 0; i < in.nfreqs; i++) cJSON_AddItemToArray(k, cJSON_CreateNumber(in.khz[i]));
+        add_hours(e, "rel", out.rel, in.nfreqs);
+        add_hours(e, "snr", out.snr, in.nfreqs);
+    }
+    cJSON_Delete(list);
+    json = cJSON_PrintUnformatted(o);
+    cJSON_Delete(o);
+    if (json == NULL) return;
+    snprintf(tmp, sizeof(tmp), "%s.part", path);
+    f = fopen(tmp, "w");
+    if (f != NULL) {
+        fputs(json, f);
+        fclose(f);
+        if (rename(tmp, path) == 0) { pthread_mutex_lock(&prop_lock); snprintf(prop_key, sizeof(prop_key), "%s", key); pthread_mutex_unlock(&prop_lock); }
+    }
+    free(json);
+}
+
+/* One circuit, for other programs (Navtex on 4209.5 kHz): from a transmitter to this receiver */
+static char *circuit_json(struct MHD_Connection *c)
+{
+    const char *la = MHD_lookup_connection_value(c, MHD_GET_ARGUMENT_KIND, "lat"), *lo = MHD_lookup_connection_value(c, MHD_GET_ARGUMENT_KIND, "lon");
+    const char *khz = MHD_lookup_connection_value(c, MHD_GET_ARGUMENT_KIND, "khz"), *kw = MHD_lookup_connection_value(c, MHD_GET_ARGUMENT_KIND, "kw");
+    struct voacap_in in;
+    struct voacap_out out;
+    const char *why = prop_ready(&in);
+    cJSON *o = cJSON_CreateObject(), *k;
+    char *s, *end;
+    int i, r;
+    if (o == NULL) return NULL;
+    if (why == NULL && (la == NULL || lo == NULL || khz == NULL || strlen(khz) > 120)) why = "lat, lon and khz are needed";
+    if (why == NULL) {
+        in.tx_lat = strtod(la, &end); if (*end != '\0' || end == la) why = "bad lat";
+        in.tx_lon = strtod(lo, &end); if (*end != '\0' || end == lo) why = "bad lon";
+        in.kw = kw != NULL ? strtod(kw, NULL) : 5.0;
+        while (why == NULL && *khz != '\0') {
+            double v = strtod(khz, &end);
+            if (end == khz || in.nfreqs >= VOACAP_MAX_FREQS) { why = "bad khz"; break; }
+            in.khz[in.nfreqs++] = v;
+            khz = *end == ',' ? end + 1 : end;
+            if (*end != ',' && *end != '\0') why = "bad khz";
+        }
+    }
+    if (why == NULL && (r = voacap_run(&in, &out)) != 0) why = r == -2 ? "out of range: 2 to 30 MHz, 0.001 to 1000 kW" : "the prediction failed";
+    cJSON_AddBoolToObject(o, "ok", why == NULL);
+    if (why != NULL) cJSON_AddStringToObject(o, "why", why);
+    else {
+        add_basis(o, &in);
+        cJSON_AddNumberToObject(o, "kw", in.kw);
+        cJSON_AddNumberToObject(o, "km", schedule_distance_km(in.rx_lat, in.rx_lon, in.tx_lat, in.tx_lon));
+        k = cJSON_AddArrayToObject(o, "khz");
+        for (i = 0; i < in.nfreqs; i++) cJSON_AddItemToArray(k, cJSON_CreateNumber(in.khz[i]));
+        add_hours(o, "rel", out.rel, in.nfreqs);
+        add_hours(o, "snr", out.snr, in.nfreqs);
+    }
+    s = cJSON_PrintUnformatted(o);
+    cJSON_Delete(o);
+    return s;
+}
+
+static char *prop_state_json(void)
+{
+    struct voacap_in in;
+    const char *why = prop_ready(&in);
+    char line[160];
+    snprintf(line, sizeof(line), "{\"ok\":%s,\"why\":\"%s\"}", why == NULL ? "true" : "false", why == NULL ? "" : why);
+    return strdup(line);
 }
 
 static enum MHD_Result handler(void *cls, struct MHD_Connection *c, const char *url, const char *method, const char *version,
@@ -200,6 +381,13 @@ static enum MHD_Result handler(void *cls, struct MHD_Connection *c, const char *
 
     if (strcmp(url, "/api/status") == 0) return send_json_free(c, store_status_json());
     if (strcmp(url, "/api/about") == 0) return send_text(c, MHD_HTTP_OK, "{\"version\":\"" PACKAGE_VERSION "\"}", JSON);
+    if (strcmp(url, "/api/voacap") == 0) return send_json_free(c, circuit_json(c));
+    if (strcmp(url, "/api/propagation/state") == 0) return send_json_free(c, prop_state_json());
+    if (strcmp(url, "/api/propagation") == 0) {
+        snprintf(path, sizeof(path), "%s/propagacion.json", store_dir());
+        if (access(path, R_OK) != 0) return send_text(c, MHD_HTTP_OK, "{}", JSON);
+        return send_file(c, path, 1);
+    }
     if (strcmp(url, "/api/gps") == 0) return send_json_free(c, gps_json());
     if (strcmp(url, "/api/next") == 0) return send_json_free(c, next_json());
     if (strcmp(url, "/api/charts") == 0) {
@@ -275,6 +463,12 @@ int main(int argc, char *const *argv)
     if (dir != NULL && dir[0] != '\0') store_set_dir(dir);
     if (store_init() != 0) { fprintf(stderr, "Error: the database in %s cannot be used\n", store_dir()); return 1; }
     if (chdir(root) != 0) { perror("the folder of the interface"); return 1; }
+    {
+        static char voa[600];
+        snprintf(voa, sizeof(voa), "%s/itshfbc", store_dir());
+        voacap_set_dir(voa);
+        printf(voacap_available() ? "VOACAP predictions: %s\n" : "VOACAP not installed (looked for voacapl and %s/run): no predictions\n", voa);
+    }
     if (schedule_load("estaciones.json") < 0) printf("no schedule: %s/estaciones.json cannot be read\n", root);
 
     {
@@ -313,6 +507,7 @@ int main(int argc, char *const *argv)
         }
         cJSON_Delete(j);
         free(g);
+        prop_refresh();
         sleep(20);
     }
     MHD_stop_daemon(d);

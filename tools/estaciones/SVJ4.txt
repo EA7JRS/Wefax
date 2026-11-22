@@ -3,6 +3,7 @@
 # The source prints this entry next to Murmansk's and the reader mixed them: the rows from 0845 to 1044 are taken as Athens' (they match the 0845-1055 window other lists give for it). All 120/576.
 STATION|SVJ4|Athens|Greece|400
 POS|37.6|21.49|Pirgos, as given by the user
+PWR|8
 FREQ|4482.9|SVJ4|
 FREQ|8106.9|SVJ4|
 0845|SURFACE ANALYSIS

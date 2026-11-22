@@ -2,6 +2,7 @@
 # Schedule effective Sep 04, 2018; information dated Dec. 12, 2024. All 120/576. A row with two times is sent at both; ---- = not sent.
 STATION|NOJ|Kodiak|United States|400
 POS|57.78|-152.53|Kodiak
+PWR|4
 FREQ|2054|NOJ|
 FREQ|4298|NOJ|
 FREQ|8459|NOJ|

@@ -316,6 +316,7 @@
    "lat": 53.67,
    "lon": 9.8,
    "place": "Pinneberg",
+   "kw": 10.0,
    "from": "HAMBURG/PINNEBERG, GERMANY. Deutscher Wetterdienst. Information dated 24 July 2024. Note in the source: \"white + 425 Hz, black - 425 Hz\". All charts 120/576. Voice transmissions (not facsimile) left out."
   },
   {
@@ -962,6 +963,7 @@
    "lat": 51.61,
    "lon": -0.42,
    "place": "Northwood",
+   "kw": 10.0,
    "from": "NORTHWOOD, UNITED KINGDOM. JOMOC HF-Fax Schedule (North Atlantic). Information dated Jan 05, 2022. The source gives no RPM/IOC column for this station: 120/576 is assumed. Slots with no contents shown are left out."
   },
   {
@@ -1556,6 +1558,7 @@
    "lat": 21.43,
    "lon": -158.15,
    "place": "Oahu",
+   "kw": 4.0,
    "from": "HONOLULU, HAWAII, U.S.A. From https://www.weather.gov/media/marine/hfhi.txt Schedule effective February 11, 2020; information dated Dec. 12, 2024. All 120/576 (two rows say 120/570 in the source, taken as a misprint)."
   },
   {
@@ -2104,6 +2107,7 @@
    "lat": 37.92,
    "lon": -122.73,
    "place": "Bolinas, the transmitting site of Point Reyes",
+   "kw": 4.0,
    "from": "PT. REYES, CALIFORNIA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfreyes.txt Schedule effective Sep 04, 2018; information dated December 12, 2024. All 120/576. ---- = not sent at that time. The four 0657-0727 rebroadcast rows: the hour of the original given in the source is left out (two readings of it disagreed)."
   },
   {
@@ -2570,6 +2574,7 @@
    "lat": 41.71,
    "lon": -70.5,
    "place": "Cape Cod, the transmitting site of Boston",
+   "kw": 4.0,
    "from": "BOSTON, MASSACHUSETTS, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfmarsh.txt Schedule effective Sep 04, 2018; information dated December 12, 2024. All 120/576. ---- = not sent at that time."
   },
   {
@@ -2968,6 +2973,7 @@
    "lat": 29.88,
    "lon": -89.95,
    "place": "Belle Chasse, New Orleans",
+   "kw": 4.0,
    "from": "NEW ORLEANS, LOUISIANA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfgulf.txt Schedule effective Apr 03, 2012; information dated December 12, 2024. All 120/576. ---- = not sent at that time."
   },
   {
@@ -3316,6 +3322,7 @@
    "lat": 57.78,
    "lon": -152.53,
    "place": "Kodiak",
+   "kw": 4.0,
    "from": "KODIAK, ALASKA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfak.txt Schedule effective Sep 04, 2018; information dated Dec. 12, 2024. All 120/576. A row with two times is sent at both; ---- = not sent."
   },
   {
@@ -3462,6 +3469,7 @@
    "lat": 37.6,
    "lon": 21.49,
    "place": "Pirgos, as given by the user",
+   "kw": 8.0,
    "from": "ATHENS, GREECE. Hellenic National Meteorological Service. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated 01/2019. The source lists 4481 and 8105 kHz with the note \"Center Frequency is 1.9 khz higher\": the centres used here are 4482.9 and 8106.9 kHz. Other lists give 4481 and 8105 as the centres: if nothing is received, try those as a fixed frequency. The source prints this entry next to Murmansk's and the reader mixed them: the rows from 0845 to 1044 are taken as Athens' (they match the 0845-1055 window other lists give for it). All 120/576."
   }
  ]

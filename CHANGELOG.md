@@ -2,6 +2,14 @@
 
 Las entradas dicen también qué se probó y qué no.
 
+## [0.3.0] - 2026-11-22
+
+- **Predicción de propagación con VOACAP** (opcional; `tools/instalar-voacap.sh` instala voacapl, la versión para Linux del programa del NTIA / ITS). El servidor web calcula para cada estación con posición la fiabilidad y la señal sobre ruido de cada frecuencia en las 24 horas, hasta la posición propia, y lo deja en `propagacion.json`. El receptor elige con esa tabla la frecuencia de cada emisión; la pestaña Estaciones la enseña en tiras de 24 horas. Sin VOACAP, sin posición o sin número de manchas, sigue la regla de día y noche.
+- Ajustes nuevos: `prop.ssn` (número de manchas suavizado del mes), `prop.noise`, `prop.snr`. `tools/actualizar-manchas.sh` intenta poner el número de manchas desde el SWPC (sin probar contra el servidor real).
+- `GET /api/voacap` da un circuito cualquiera a otros programas; las respuestas de lectura admiten peticiones de otras páginas de la red.
+- Potencia de cada transmisor en la lista de estaciones (la que publica la NOAA).
+- **Probado:** con voacapl 16.1207W real en el PC: tabla de las nueve estaciones desde Cádiz, elección de frecuencia y consulta de un circuito; `make check`, 127 comprobaciones (el programa no hace falta para ellas). **Sin probar:** el instalador de VOACAP en ningún equipo; nada de esto contra recepciones reales. Los supuestos del cálculo (antenas, ruido, umbral de 40 dB-Hz) están en el README.
+
 ## [0.2.0] - 2026-11-22
 
 - Interfaz web (`wefaxwebserver`, puerto 8081): cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones con su frecuencia, ajustes del receptor y del reparto del equipo con Navtex. Mismo aspecto, temas e idiomas (ES / EN) que Navtex. Sin contraseña: solo en una red de confianza.

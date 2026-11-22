@@ -159,6 +159,24 @@ int main(void)
         CHECK(schedule_next(day + 12 * 3600, "DDH", "", &b) && b.suggested_khz == 13882.5 && b.why == 'd' && b.distance_km > 2000, "with a position the schedule chooses by the sun");
         schedule_set_position(0, 0, 0);
         CHECK(schedule_next(day + 12 * 3600, "DDH", "", &b) && b.suggested_khz == 7880 && b.why == 'm' && b.distance_km < 0, "without it, the middle one");
+        /* the VOACAP table, when there is one for this month, decides */
+        {
+            FILE *t = fopen("test_data/prop.json", "w");
+            int h;
+            fprintf(t, "{\"year\":2026,\"month\":11,\"stations\":{\"DDH\":{\"khz\":[3855,7880,13882.5],\"rel\":[");
+            fprintf(t, "["); for (h = 0; h < 24; h++) fprintf(t, "%s%s", h ? "," : "", h < 7 ? "0.9" : "0"); fprintf(t, "],");
+            fprintf(t, "["); for (h = 0; h < 24; h++) fprintf(t, "%s0.5", h ? "," : ""); fprintf(t, "],");
+            fprintf(t, "["); for (h = 0; h < 24; h++) fprintf(t, "%s%s", h ? "," : "", h == 12 ? "0.97" : "0.1"); fprintf(t, "]],\"snr\":[[],[],[]]}}}");
+            fclose(t);
+        }
+        CHECK(schedule_load_propagation("test_data/prop.json") == 1, "the table loads");
+        CHECK(schedule_next(day + 12 * 3600, "DDH", "", &b) && b.suggested_khz == 13882.5 && b.why == 'v' && fabs(b.reliability - 0.97) < 0.001, "at noon the table says the high one");
+        CHECK(schedule_next(day + 4 * 3600, "DDH", "", &b) && b.suggested_khz == 3855 && b.why == 'v', "before dawn, the low one");
+        CHECK(schedule_next(day + 20 * 3600, "DDH", "", &b) && b.suggested_khz == 7880 && fabs(b.reliability - 0.5) < 0.001, "in the evening, the middle one");
+        CHECK(schedule_next(day + 12 * 3600, "GYA", "", &b) && b.why == 'm', "a station that is not in the table: as before");
+        CHECK(schedule_next(day + 40 * 86400 + 12 * 3600, "DDH", "", &b) && b.why == 'm', "next month the table no longer applies");
+        CHECK(schedule_load_propagation("test_data/none.json") == 0 && schedule_next(day + 12 * 3600, "DDH", "", &b) && b.why == 'm', "without a table, as before");
+        CHECK(store_setting_valid("prop.ssn", "80") && store_setting_valid("prop.ssn", "") && !store_setting_valid("prop.ssn", "500") && store_setting_valid("prop.noise", "150") && !store_setting_valid("prop.snr", "5"), "the prediction settings");
         CHECK(store_setting_valid("position", "36.53,-6.29") && store_setting_valid("position", "") && !store_setting_valid("position", "91,0") && !store_setting_valid("position", "36.5") && store_setting_valid("position_source", "manual"), "the position setting");
     }
     schedule_free();

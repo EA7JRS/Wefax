@@ -254,6 +254,7 @@ static void describe_next(const struct broadcast *b, double khz)
     store_status("next_title", b->title);
     store_status_num("next_khz", khz);
     { char w[2] = { b->why ? b->why : 'm', 0 }; store_status("next_why", w); }
+    store_status_num("next_rel", b->reliability);
 }
 
 static int service(void)
@@ -304,6 +305,11 @@ static int service(void)
             double la = 0, lo = 0;
             store_get("position", v, sizeof(v), "");
             { int ok = sscanf(v, "%lf,%lf", &la, &lo) == 2; schedule_set_position(ok, ok ? la : 0, ok ? lo : 0); }
+        }
+        {
+            char table[600];
+            snprintf(table, sizeof(table), "%s/propagacion.json", store_dir());
+            schedule_load_propagation(table);
         }
         if (!schedule_next(now, follow, skip, &b)) {
             if (shared_taken) { navtex_set_receiver(share_url, share_rx, 1); shared_taken = 0; }
