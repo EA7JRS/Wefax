@@ -161,9 +161,9 @@ static char *next_json(void)
     store_get("follow", follow, sizeof(follow), "");
     store_get("skip", skip, sizeof(skip), "");
     {
-        char pos[40]; double la, lo;
+        char pos[40]; double la = 0, lo = 0;
         store_get("position", pos, sizeof(pos), "");
-        schedule_set_position(sscanf(pos, "%lf,%lf", &la, &lo) == 2, la, lo);
+        { int ok = sscanf(pos, "%lf,%lf", &la, &lo) == 2; schedule_set_position(ok, ok ? la : 0, ok ? lo : 0); }
     }
     if (schedule_next(time(NULL), follow, skip, &b)) {
         cJSON *f = cJSON_AddArrayToObject(o, "freqs");

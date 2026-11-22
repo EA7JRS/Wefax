@@ -301,9 +301,9 @@ static int service(void)
         store_get("follow", follow, sizeof(follow), "");
         store_get("skip", skip, sizeof(skip), "");
         {
-            double la, lo;
+            double la = 0, lo = 0;
             store_get("position", v, sizeof(v), "");
-            schedule_set_position(sscanf(v, "%lf,%lf", &la, &lo) == 2, la, lo);
+            { int ok = sscanf(v, "%lf,%lf", &la, &lo) == 2; schedule_set_position(ok, ok ? la : 0, ok ? lo : 0); }
         }
         if (!schedule_next(now, follow, skip, &b)) {
             if (shared_taken) { navtex_set_receiver(share_url, share_rx, 1); shared_taken = 0; }
