@@ -42,7 +42,7 @@ static double fixed_khz;              /* -k */
 static int force_now;                 /* -m: take lines at once, without waiting for a start tone */
 static int opt_lpm = 120, opt_ioc = 576;
 static double channel_offset = IQ_TUNE_BELOW_HZ;   /* -O: where the channel is in a recording */
-static char rtl_serial_buf[64], sdr_serial_buf[64];
+static char rtl_serial_buf[64], sdr_serial_buf[64], kiwi_host_buf[84], kiwi_pass_buf[44];
 
 static struct channel *chan;
 static struct wefax_decoder *dec;
@@ -169,6 +169,10 @@ void iq_samples(const short *iq, unsigned int pairs)
             last = time(NULL);
             wefax_tones(dec, &a, &b, &c);
             store_status_num("level", level);
+            if (source_name != NULL && strcmp(source_name, "kiwi") == 0) {
+                store_status_num("kiwi_rssi", kiwi_rssi_dbm);
+                if (kiwi_has_position) { char p[48]; snprintf(p, sizeof(p), "%.3f,%.3f", kiwi_lat, kiwi_lon); store_status("kiwi_position", p); }
+            }
             store_status_num("alive", (double) last);
             store_status("decoder", wefax_state(dec) == WEFAX_IMAGE ? "chart" : wefax_state(dec) == WEFAX_PHASING ? "phasing" :
                                     wefax_state(dec) == WEFAX_START ? "start tone" : "waiting for a start tone");
@@ -211,6 +215,7 @@ static int run_on(double khz, int lpm, int deviation)
 #endif
     }
     if (strcmp(src, "file") == 0) r = file_source_run();
+    else if (strcmp(src, "kiwi") == 0) r = kiwi_source_run();
     else if (strcmp(src, "rtlsdr") == 0) r = rtlsdr_source_run();
     else r = sdrplay_source_run();
     wefax_flush(dec);                  /* a chart half received is kept as far as it got */
@@ -230,7 +235,10 @@ static int read_settings(void)
     store_get("rx.enabled", v, sizeof(v), "0");
     if (strcmp(v, "1") != 0) return 0;
     store_get("rx.source", v, sizeof(v), "");
-    source_name = strcmp(v, "rtlsdr") == 0 ? "rtlsdr" : strcmp(v, "sdrplay") == 0 ? "sdrplay" : NULL;
+    source_name = strcmp(v, "rtlsdr") == 0 ? "rtlsdr" : strcmp(v, "sdrplay") == 0 ? "sdrplay" : strcmp(v, "kiwi") == 0 ? "kiwi" : NULL;
+    store_get("rx.kiwi_host", kiwi_host_buf, sizeof(kiwi_host_buf), ""); iq_opt.kiwi_host = kiwi_host_buf;
+    store_get("rx.kiwi_port", v, sizeof(v), "8073"); iq_opt.kiwi_port = atoi(v);
+    store_get("rx.kiwi_pass", kiwi_pass_buf, sizeof(kiwi_pass_buf), ""); iq_opt.kiwi_password = kiwi_pass_buf;
     store_get("rx.port", v, sizeof(v), "A"); iq_opt.antenna_port = v[0];
     store_get("rx.bias", v, sizeof(v), "0"); iq_opt.bias_t = v[0] == '1';
     store_get("rx.serial", v, sizeof(v), "");
@@ -331,6 +339,14 @@ static int service(void)
             while (!stop_requested && time(NULL) < b.start - TUNE_AHEAD_S && store_settings_version() == settings_seen) sleep(2);
             continue;
         }
+        /* a KiwiSDR is somebody's receiver on the network, often with a time limit: it is only
+           taken a minute before each broadcast, and left when it ends */
+        if (source_name != NULL && strcmp(source_name, "kiwi") == 0 && now < b.start - TUNE_AHEAD_S) {
+            say("waiting: the KiwiSDR is only used during a broadcast");
+            have_bc = 0;
+            while (!stop_requested && time(NULL) < b.start - TUNE_AHEAD_S && store_settings_version() == settings_seen) sleep(2);
+            continue;
+        }
         if (share && !shared_taken) {
             if (navtex_set_receiver(share_url, share_rx, 0) == 0) { shared_taken = 1; wait_seconds(8); }   /* Navtex needs a moment to let go */
             else { say("Navtex does not answer: cannot take the shared receiver"); wait_seconds(20); continue; }
@@ -342,7 +358,7 @@ static int service(void)
         store_status("title", b.title);
         store_status_num("tuned_khz", khz);
         say(now < b.start ? "tuned, waiting for the broadcast" : "listening");
-        if (run_on(khz, b.lpm, b.deviation) != 0 && !stop_requested) { say("no receiver"); wait_seconds(15); }
+        if (run_on(khz, b.lpm, b.deviation) != 0 && !stop_requested) { say("no receiver"); wait_seconds(source_name != NULL && strcmp(source_name, "kiwi") == 0 ? 60 : 15); }   /* a KiwiSDR that is busy is not asked every few seconds */
         have_bc = 0;
     }
     if (shared_taken) navtex_set_receiver(share_url, share_rx, 1);
@@ -356,7 +372,9 @@ static void usage(const char *prog)
 "Usage: %s [options]\n"
 "  -n          service: follow the schedule and the settings of the web interface\n"
 "  -k kHz      stay on this frequency (the assigned one: the centre of the channel)\n"
-"  -s source   sdrplay | rtlsdr | file   (default: sdrplay when built in, else rtlsdr)\n"
+"  -s source   sdrplay | rtlsdr | kiwi | file   (default: sdrplay when built in, else rtlsdr)\n"
+"  -K host[:port]  a KiwiSDR on the network as the receiver (port 8073)\n"
+"  -W password     its password, when it asks for one\n"
 "  -l lpm      lines per minute expected: 60, 90, 120 (default) or 240\n"
 "  -m          manual: take lines at once, without waiting for a start tone; with -I 288 for IOC 288\n"
 "  -o dir      write the charts in this directory instead of the database (default with -k and -f: .)\n"
@@ -389,7 +407,7 @@ int main(int argc, char **argv)
 
     setvbuf(stdout, NULL, _IOLBF, 0);
     opterr = 0;
-    while ((c = getopt(argc, argv, "nk:s:l:mI:o:bqp:S:i:D:u:g:P:f:O:th")) != -1) {
+    while ((c = getopt(argc, argv, "nk:s:l:mI:o:bqp:S:i:D:u:g:P:f:O:tK:W:h")) != -1) {
         switch (c) {
         case 'n': service_mode = 1; break;
         case 'k': fixed_khz = atof(optarg); break;
@@ -402,6 +420,12 @@ int main(int argc, char **argv)
         case 'q': quiet = 1; verbose = 0; break;
         case 'p': iq_opt.antenna_port = optarg[0]; break;
         case 'S': serial = optarg; break;
+        case 'K': {                                     /* host or host:port */
+            char *colon; snprintf(kiwi_host_buf, sizeof(kiwi_host_buf), "%s", optarg);
+            colon = strrchr(kiwi_host_buf, ':');
+            if (colon != NULL && strchr(kiwi_host_buf, ':') == colon) { *colon = '\0'; iq_opt.kiwi_port = atoi(colon + 1); }
+            iq_opt.kiwi_host = kiwi_host_buf; source_name = "kiwi"; break; }
+        case 'W': iq_opt.kiwi_password = optarg; break;
         case 'i': iq_opt.rtl_index = atoi(optarg); break;
         case 'D': iq_opt.rtl_direct_sampling = atoi(optarg); break;
         case 'u': iq_opt.rtl_upconverter_hz = atol(optarg); break;
@@ -414,7 +438,7 @@ int main(int argc, char **argv)
         }
     }
     (void) verbose;
-    if (source_name != NULL && strcmp(source_name, "sdrplay") != 0 && strcmp(source_name, "rtlsdr") != 0 && strcmp(source_name, "file") != 0) { usage(argv[0]); return 1; }
+    if (source_name != NULL && strcmp(source_name, "sdrplay") != 0 && strcmp(source_name, "rtlsdr") != 0 && strcmp(source_name, "kiwi") != 0 && strcmp(source_name, "file") != 0) { usage(argv[0]); return 1; }
     if (opt_lpm != 60 && opt_lpm != 90 && opt_lpm != 120 && opt_lpm != 240) { printf("-l: 60, 90, 120 or 240\n"); return 1; }
     iq_opt.rtl_serial = serial; iq_opt.sdrplay_serial = serial;
 

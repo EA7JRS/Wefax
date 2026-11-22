@@ -16,7 +16,7 @@
 #define RING_SECONDS 8
 #define STREAM_TIMEOUT_S 15         /* seconds without samples before the receiver is taken for lost */
 
-struct iq_options iq_opt = { 0, 'A', NULL, 0, NULL, -1, 0, -1, 0, NULL, 0 };
+struct iq_options iq_opt = { 0, 'A', NULL, 0, NULL, -1, 0, -1, 0, NULL, 0, NULL, 8073, NULL };
 long iq_tuned_hz = 0;
 volatile sig_atomic_t stop_requested = 0;
 volatile sig_atomic_t retune_requested = 0;

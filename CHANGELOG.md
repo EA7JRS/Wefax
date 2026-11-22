@@ -2,6 +2,11 @@
 
 Las entradas dicen también qué se probó y qué no.
 
+## [0.4.0] - 2026-11-22
+
+- **KiwiSDR como receptor.** Tercer tipo de equipo: un KiwiSDR de la red (Receptor > Equipo, o `-K equipo[:puerto]` y `-W contraseña`). Wefax abre su WebSocket, pide el canal en modo I/Q y lleva sus muestras (unas 12 000 por segundo, a la velocidad exacta que dice el KiwiSDR) a las 252 000 de los demás equipos. Siguiendo el horario solo se conecta un minuto antes de cada emisión; si está lleno o corta, lo dice y reintenta al minuto. La página enseña la posición que declara el KiwiSDR, con un botón para calcular desde ahí. Ajustes `rx.kiwi_host`, `rx.kiwi_port`, `rx.kiwi_pass`.
+- **Probado:** `make check`, 183 comprobaciones (tramas WebSocket, mensajes, muestras, remuestreo con la imagen a −86 dB y una emisión entera por esa vía); el programa contra un KiwiSDR de pega (conexión, carta, «ocupado», contraseña mala, corte). **Sin probar con un KiwiSDR de verdad.**
+
 ## [0.3.0] - 2026-11-22
 
 - **Todas las estaciones de la publicación de la NOAA**: de 9 a 21 (903 emisiones). Nuevas: Tokio (JMH, con el horario de la propia JMA de enero de 2022), Kagoshima, Pevek (onda larga, dudosa), Seúl, Bangkok, Kyodo News, Cantón, Valparaíso, Punta Arenas, Sídney de Nueva Escocia, Charleville y Wiluna. Las cerradas (Iqaluit, Resolute, Inuvik, Wellington) se nombran aparte en la pestaña Estaciones. Cada archivo de `tools/estaciones` dice su fecha y sus dudas: varias son antiguas, y la posición de las nuevas es la de la ciudad, no la del transmisor. **Sin recibir ninguna.**

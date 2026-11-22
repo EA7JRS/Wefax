@@ -209,7 +209,8 @@
     'no receiver': 'Sin equipo', 'tuned, waiting for the broadcast': 'Sintonizado, a la espera de la emisión',
     'listening on a fixed frequency': 'A la escucha en una frecuencia fija', 'no station followed': 'No sigue ninguna estación',
     'nothing in the schedule for the stations followed': 'Sin emisiones en el horario', 'waiting: the receiver is with Navtex': 'En espera: el equipo lo tiene Navtex',
-    'Navtex does not answer: cannot take the shared receiver': 'Navtex no responde: no se puede tomar el equipo compartido'
+    'Navtex does not answer: cannot take the shared receiver': 'Navtex no responde: no se puede tomar el equipo compartido',
+    'waiting: the KiwiSDR is only used during a broadcast': 'En espera: el KiwiSDR solo se usa durante cada emisión'
   };
   var DECOD = { chart: 'carta', phasing: 'sincronía', start: 'tono de inicio', idle: 'en espera' };
   function dato(etiqueta, valor, detalle, punto) {
@@ -243,7 +244,7 @@
     var c = $('estado'), s = st('state'), ok = vivo();
     c.textContent = '';
     var texto = ESTADOS[s] ? tr(ESTADOS[s]) : (s || tr('Sin datos del receptor'));
-    if (!ok && s && s !== 'off' && s !== 'stopped' && s !== 'no receiver' && !/Navtex|schedule|followed/.test(s)) texto = tr('El receptor no responde');
+    if (!ok && s && s !== 'off' && s !== 'stopped' && s !== 'no receiver' && !/Navtex|KiwiSDR|schedule|followed/.test(s)) texto = tr('El receptor no responde');
     c.appendChild(dato(tr('Receptor'), texto, estado.state ? haceCuanto(estado.state.at * 1000) : '', ok ? 'ok' : (s === 'off' || !s ? '' : 'mal')));
     var k = Number(st('tuned_khz'));
     c.appendChild(dato(tr('Frecuencia'), ok && k ? khz(k) : '—', ok && k ? tr('en banda lateral superior: ') + khz(k - 1.9) : ''));
@@ -456,9 +457,15 @@
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Equipo')));
     t.appendChild(casilla('rx.enabled', tr('Encendido')));
     r = el('div', 'rejilla');
-    r.appendChild(campo(tr('Equipo'), selector('rx.source', 'sdrplay', [['sdrplay', 'SDRplay'], ['rtlsdr', 'RTL-SDR']])));
-    r.appendChild(campo(tr('Número de serie (si hay varios)'), texto('rx.serial', '', tr('cualquiera'))));
-    if (fuente === 'sdrplay') r.appendChild(campo(tr('Toma de antena (RSPdx)'), selector('rx.port', 'A', [['A', 'A'], ['B', 'B'], ['C', 'C']])));
+    r.appendChild(campo(tr('Equipo'), selector('rx.source', 'sdrplay', [['sdrplay', 'SDRplay'], ['rtlsdr', 'RTL-SDR'], ['kiwi', 'KiwiSDR']])));
+    if (fuente === 'kiwi') {
+      var clave = texto('rx.kiwi_pass', '', tr('ninguna')); clave.type = 'password';
+      r.appendChild(campo(tr('Nombre o dirección del KiwiSDR'), texto('rx.kiwi_host', '', 'kiwisdr.local')));
+      r.appendChild(campo(tr('Puerto'), texto('rx.kiwi_port', '8073')));
+      r.appendChild(campo(tr('Contraseña (si la pide)'), clave));
+    } else r.appendChild(campo(tr('Número de serie (si hay varios)'), texto('rx.serial', '', tr('cualquiera'))));
+    if (fuente === 'kiwi') { /* nada más que elegir: la antena y la ganancia son cosa del KiwiSDR */ }
+    else if (fuente === 'sdrplay') r.appendChild(campo(tr('Toma de antena (RSPdx)'), selector('rx.port', 'A', [['A', 'A'], ['B', 'B'], ['C', 'C']])));
     else {
       r.appendChild(campo(tr('Muestreo directo'), selector('rx.direct', 'a', [['a', tr('Automático, según el modelo')], ['2', tr('Rama Q')], ['1', tr('Rama I')], ['0', tr('Apagado (conversor)')]])));
       r.appendChild(campo(tr('Conversor externo (Hz; 0 = ninguno)'), texto('rx.upconv', '0')));
@@ -466,7 +473,19 @@
       r.appendChild(campo(tr('Corrección (ppm)'), texto('rx.ppm', '0')));
     }
     t.appendChild(r);
-    t.appendChild(casilla('rx.bias', tr('Alimentar la antena por el coaxial')));
+    if (fuente === 'kiwi') {
+      t.appendChild(el('p', 'nota', tr('Un KiwiSDR es un receptor de onda corta en la red: el suyo o el de otra persona. Wefax se conecta a él un minuto antes de cada emisión y lo deja al acabar; con una frecuencia fija se queda conectado. Los públicos limitan el tiempo de cada visitante y tienen dueño: para un uso continuo, use uno propio o pida permiso. Sin cifrar (ws://), con la contraseña a la vista de quien abra esta página.')));
+      var kp = st('kiwi_position'), kr = st('kiwi_rssi');
+      if (kp) {
+        var fila = el('p', 'nota'), usar = el('button', 'boton', tr('Usar como mi posición'));
+        fila.appendChild(document.createTextNode(tr('El KiwiSDR dice estar en ') + kp.replace(',', ', ') + (kr ? ' · ' + tr('señal ') + Math.round(Number(kr)) + ' dBm' : '') + '. ' + tr('La propagación y la frecuencia automática deben calcularse desde ahí, no desde su GPS.') + ' '));
+        usar.type = 'button';
+        usar.addEventListener('click', function () {
+          guardar('position_source', 'manual', 'estado-receptor').then(function () { return guardar('position', kp, 'estado-receptor'); }).then(function () { pintarEstaciones(); pintarHorario(); });
+        });
+        fila.appendChild(usar); t.appendChild(fila);
+      }
+    } else t.appendChild(casilla('rx.bias', tr('Alimentar la antena por el coaxial')));
     c.appendChild(t);
 
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Qué se recibe')));

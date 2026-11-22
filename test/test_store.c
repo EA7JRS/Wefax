@@ -51,6 +51,10 @@ int main(void)
     /* settings: only the ones there are, with values that make sense */
     store_get("rx.source", v, sizeof(v), "none");
     CHECK(strcmp(v, "none") == 0, "a setting not set gives the default");
+    CHECK(store_set("rx.source", "kiwi") == 0, "a KiwiSDR is a receiver too");
+    CHECK(store_set("rx.kiwi_host", "kiwi.example.org") == 0 && store_set("rx.kiwi_host", "192.168.1.40") == 0 && store_set("rx.kiwi_host", "a b") != 0 && store_set("rx.kiwi_host", "x/y") != 0, "its name or address");
+    CHECK(store_set("rx.kiwi_port", "8073") == 0 && store_set("rx.kiwi_port", "0") != 0 && store_set("rx.kiwi_port", "70000") != 0 && store_set("rx.kiwi_port", "80.5") != 0, "its port");
+    CHECK(store_set("rx.kiwi_pass", "s3cret-1") == 0 && store_set("rx.kiwi_pass", "") == 0 && store_set("rx.kiwi_pass", "two words") != 0 && store_set("rx.kiwi_pass", "a=b") != 0, "its password: nothing that breaks the command it goes in");
     CHECK(store_set("rx.source", "rtlsdr") == 0 && store_set("rx.source", "hackrf") != 0, "rx.source");
     store_get("rx.source", v, sizeof(v), "none");
     CHECK(strcmp(v, "rtlsdr") == 0, "a setting is read back");

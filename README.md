@@ -1,6 +1,6 @@
 # Wefax
 
-Receptor de radiofacsímil meteorológico (WEFAX, cartas del tiempo por onda corta) por software para Linux, con SDRplay o RTL-SDR. Sigue el horario de las estaciones, sintoniza solo cada emisión y guarda cada carta como imagen.
+Receptor de radiofacsímil meteorológico (WEFAX, cartas del tiempo por onda corta) por software para Linux, con SDRplay, RTL-SDR o un KiwiSDR de la red. Sigue el horario de las estaciones, sintoniza solo cada emisión y guarda cada carta como imagen.
 
 Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APRS LoRa+ · hermano de [Navtex](https://github.com/EA7JRS/Navtex)
 
@@ -8,9 +8,9 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.3.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de 21 estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.4.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de 21 estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
-📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.3.0](docs/releases/v0.3.0.md)
+📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.4.0](docs/releases/v0.4.0.md)
 
 ## Vista previa
 
@@ -35,7 +35,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Descodifica el radiofacsímil | Índice de cooperación 576 y 288; 60, 90, 120 y 240 líneas por minuto; negro y blanco a ±400 Hz del centro (±425 Hz en las estaciones que lo usan) |
 | Encuentra sola cada carta | Tono de inicio (300 o 675 Hz), enfasado y tono de parada (450 Hz); sin tono de parada, la carta acaba al perderse la señal o al cumplirse su hora |
 | Corrige el error del receptor | Mide en el tono de inicio cuánto se desvía de frecuencia el receptor (un RTL-SDR puede irse 700 Hz en 14 MHz) y, en el enfasado, el error de su reloj, para que la carta no salga inclinada |
-| Dos tipos de receptor | SDRplay (RSP1A, RSP1B, RSP2, RSPdx, RSPdx-R2) y RTL-SDR (muestreo directo, conversor integrado o externo) |
+| Tres tipos de receptor | SDRplay (RSP1A, RSP1B, RSP2, RSPdx, RSPdx-R2), RTL-SDR (muestreo directo, conversor integrado o externo) y KiwiSDR por la red |
 | Sigue el horario | En modo servicio sintoniza cada emisión de las estaciones elegidas un minuto antes. También puede quedarse en una frecuencia fija |
 | Comparte el receptor con Navtex | Puede usar un equipo propio o turnarse con [Navtex](https://github.com/EA7JRS/Navtex): le pide que suelte el receptor antes de cada emisión y se lo devuelve al acabar |
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
@@ -48,12 +48,13 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 129 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 183 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
 - la base de datos, el horario (con una lista de estaciones inventada para la prueba) y los ajustes;
 - el programa `wefaxreceiver` descodificando una grabación generada;
+- el receptor KiwiSDR contra un KiwiSDR de pega hecho para la prueba (conexión, sintonía, muestras, carta, «ocupado», contraseña mala, corte);
 - la interfaz web en un navegador, con una base de datos de muestra (las capturas de arriba).
 
 Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): compila, pasa `make check`, se instala, los servicios arrancan y la interfaz se abre desde la red local.
@@ -61,6 +62,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 **Sin probar:**
 
 - una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; la parte de SDRplay compila, pero **no se ha usado todavía con un receptor**;
+- **un KiwiSDR de verdad**: el protocolo está leído del cliente de referencia (kiwiclient), pero no se ha conectado a ninguno;
 - el turno con Navtex contra un Navtex en marcha;
 - **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta) y Tokio del horario de la propia JMA; las demás, del PDF mundial de la NOAA, más propenso a errores, y varias con datos antiguos (Seúl y Bangkok de 2009, Chile de 2010, Sídney de 2014, Pevek de 1997). Compruebe una hora antes de fiarse de ella.
 
@@ -204,7 +206,9 @@ El servicio lo arranca con `-q -n`. A mano sirve para probar un equipo, escuchar
 | `-h` | Ayuda |
 | `-n` | Servicio: sigue el horario y los ajustes de la base de datos |
 | `-k <kHz>` | Se queda en esa frecuencia (la asignada: el centro del canal) |
-| `-s sdrplay` \| `rtlsdr` \| `file` | Tipo de equipo |
+| `-s sdrplay` \| `rtlsdr` \| `kiwi` \| `file` | Tipo de equipo |
+| `-K <equipo[:puerto]>` | Un KiwiSDR de la red como receptor (puerto 8073) |
+| `-W <contraseña>` | Su contraseña, si la pide |
 | `-l <lpm>` | Líneas por minuto esperadas: 60, 90, 120 (de serie) o 240 |
 | `-m` | Manual: toma líneas ya, sin esperar un tono de inicio (emisión cogida a medias); `-I 288` para ese índice |
 | `-o <carpeta>` | Escribe las cartas ahí y no toca la base de datos |
@@ -220,6 +224,7 @@ El servicio lo arranca con `-q -n`. A mano sirve para probar un equipo, escuchar
 ```bash
 wefaxreceiver -s rtlsdr -k 7880        # escuchar 7880 kHz con un RTL-SDR; las cartas, en la carpeta actual
 wefaxreceiver -k 13882.5 -o cartas     # con un SDRplay
+wefaxreceiver -K kiwisdr.local -k 7880 # con un KiwiSDR de la red
 wefaxreceiver -f grabacion.wav         # descodificar una grabación
 ```
 
@@ -245,7 +250,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (129 comprobaciones) |
+| `make check` | Pasa las pruebas (183 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -273,6 +278,20 @@ ss -tulpn | grep -E "8081|wefax"                          # ¿está escuchando?
 | `/opt/Wefax/itshfbc/`, `/opt/Wefax/propagacion.json` | Datos de VOACAP y su tabla (solo si se instala) |
 | `/etc/default/wefax` | Puerto, dirección de escucha y gpsd de la interfaz web |
 | `/etc/systemd/system/wefax-web.service`, `wefax-receiver.service` | Los servicios |
+
+### KiwiSDR
+
+Un [KiwiSDR](http://kiwisdr.com) es un receptor de onda corta (0 a 30 MHz) que se usa por la red; puede ser el suyo o el de otra persona. En **Receptor > Equipo** elija *KiwiSDR* y escriba su nombre o dirección, el puerto (8073) y la contraseña si la pide.
+
+- **Cuándo se conecta.** Siguiendo el horario, un minuto antes de cada emisión, y lo deja al acabar. Con una frecuencia fija se queda conectado.
+- **Los públicos tienen dueño y límites.** Limitan el tiempo de cada visitante y cortan ellos; si están llenos, Wefax lo dice en su registro y vuelve a probar al minuto. Para un uso continuo, use uno propio o pida permiso.
+- **La posición es la del KiwiSDR.** La propagación y la frecuencia automática deben calcularse desde donde está el receptor, no desde su GPS: la página enseña la posición que dice el KiwiSDR y un botón para usarla.
+- **Qué se le pide.** Modo I/Q de 12 kHz centrado en el canal, sin compresión; Wefax hace el resto. La antena y la ganancia son cosa del KiwiSDR.
+- **Sin cifrar.** La conexión es `ws://` y la contraseña se guarda como un ajuste más, a la vista de quien abra la página.
+
+![El KiwiSDR en la pestaña Receptor](docs/img/web_kiwi.png)
+
+El protocolo es el del cliente de referencia, [kiwiclient](https://github.com/jks-prv/kiwiclient), leído de su código; no se copia nada de él. **Sin probar con un KiwiSDR de verdad.**
 
 ### Lista de estaciones
 
