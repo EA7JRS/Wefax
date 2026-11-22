@@ -107,14 +107,20 @@ a { color: var(--acento); }
 
 .cabecera {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 16px; background: var(--panel); border-bottom: 1px solid var(--borde);
+  padding: 12px 16px; background: var(--panel);
+  /* la raya de APRS LoRa+: verde a cian */
+  border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #3ce68a, #28b5e1) 1;
   position: sticky; top: 0; z-index: 2;
 }
 .marca { display: flex; align-items: center; gap: 12px; }
-.logo {
-  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px;
-  background: var(--acento); color: var(--panel); font: 700 13px/1 var(--mono); letter-spacing: 0.5px;
-}
+.logo { width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; display: block; }
+/* la versión bajo el nombre, en el cian de APRS LoRa+ (más oscuro sobre fondo claro, para que se lea) */
+.sub.ver { color: #0779ab; font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; }
+:root[data-tema="oscuro"] .sub.ver { color: #28b5e1; }
+@media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .sub.ver { color: #28b5e1; } }
+:root[data-tema="noche"] .sub.ver { color: inherit; }
+:root[data-tema="noche"] .cabecera { border-image: none; border-bottom-color: var(--borde); }
+:root[data-tema="noche"] .logo { filter: grayscale(1) sepia(1) saturate(6) hue-rotate(-50deg) brightness(0.7); }
 h1 { margin: 0; font-size: 20px; line-height: 1.2; }
 h2 { margin: 0 0 8px; font-size: 18px; }
 .sub { margin: 0; color: var(--suave); font-size: 13px; }

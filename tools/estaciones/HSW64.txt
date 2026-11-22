@@ -1,0 +1,28 @@
+# BANGKOK, THAILAND. Thai Meteorological Department. From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); information dated Jan 2009.
+# The source lists 7395.0 kHz with the note "May refer to carrier frequency, for center frequency add 1.9 kHz": the centre used here is 7396.9 kHz. If nothing is received, try 7395 as a fixed frequency.
+# All 120/576, 3 kW. A row with two times is sent at both; ---- = not sent.
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|HSW64|Bangkok|Thailand|400
+POS|13.8|100.5|Bangkok (city)
+PWR|3
+FREQ|7396.9|HSW64|
+0050/----|TEST CHART
+0100/0700|FORECAST FOR SHIPPING (IN ENGLISH)
+0120/----|SURFACE PRESSURE
+0140/----|SURFACE ANALYSIS
+0200/----|BROADCAST SCHEDULE
+0300/0720|24 HR SURFACE PROG
+0320/0740|48 HR SURFACE PROG
+0340/0800|72 HR SURFACE PROG
+----/0820|24 HR 850 mb WIND/TEMP PROG
+0400/1000|FORECAST FOR SHIPPING (IN ENGLISH)
+0420/----|24 HR 850 mb WIND/TEMP PROG
+0500/1020|SURFACE ANALYSIS
+0520/----|850 mb ANALYSIS
+0540/----|700 mb ANALYSIS
+0600/----|500 mb ANALYSIS
+----/1300|FORECAST FOR SHIPPING (IN ENGLISH)
+----/1700|FORECAST FOR SHIPPING (IN ENGLISH)
+----/1720|SURFACE ANALYSIS
+----/2300|FORECAST FOR SHIPPING (IN ENGLISH)
+----/2320|SURFACE ANALYSIS

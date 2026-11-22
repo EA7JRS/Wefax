@@ -48,7 +48,7 @@ struct chart_info {
     int ioc, lpm, width, height;
     const char *ended;          /* "stop", "long", "lost", "cut" */
     double offset_hz, clock_ppm;
-    int phased;                 /* 1 when the start of the lines was found; 0 for a chart caught half way */
+    int phased;                 /* 1 when the start of the lines was found (2: by a symmetrical phasing); 0 for a chart caught half way */
     const char *file;           /* path of the PNG under the charts directory */
 };
 /* Adds a chart; returns its id, or -1 */

@@ -38,6 +38,10 @@ static void tone(struct signal *s, double f, double secs, double *t)
     for (i = 0; i < n; i++, *t += 1.0 / s->fs) put(s, fmod(*t * f, 1.0) < 0.5 ? 400.0 : -400.0);
 }
 
+static int sym_phasing;            /* 1: the phasing is half white, half black (white first) */
+static int was_phased;
+#define PH(p) (sym_phasing ? (p) < 0.5 : ((p) < 0.025 || (p) >= 0.975))
+
 /* A whole broadcast. clock: the transmitter's seconds per receiver second (1 + ppm / 1e6). */
 static void broadcast(struct signal *s, int ioc, int lpm, int lines, double clock, double start_secs)
 {
@@ -48,9 +52,9 @@ static void broadcast(struct signal *s, int ioc, int lpm, int lines, double cloc
     n = (long) (30.0 * s->fs);                                        /* phasing */
     {
         double t0 = t;
-        for (i = 0; i < n; i++, t += 1.0 / s->fs) { double p = fmod((t - t0) / line, 1.0); put(s, p < 0.025 || p >= 0.975 ? 400.0 : -400.0); }
+        for (i = 0; i < n; i++, t += 1.0 / s->fs) { double p = fmod((t - t0) / line, 1.0); put(s, PH(p) ? 400.0 : -400.0); }
         /* the chart begins on a whole line */
-        while (fmod((t - t0) / line, 1.0) > 1.5 / (s->fs * line)) { double p = fmod((t - t0) / line, 1.0); put(s, p < 0.025 || p >= 0.975 ? 400.0 : -400.0); t += 1.0 / s->fs; }
+        while (fmod((t - t0) / line, 1.0) > 1.5 / (s->fs * line)) { double p = fmod((t - t0) / line, 1.0); put(s, PH(p) ? 400.0 : -400.0); t += 1.0 / s->fs; }
     }
     {
         double t0 = t;
@@ -67,7 +71,7 @@ static void broadcast(struct signal *s, int ioc, int lpm, int lines, double cloc
 
 struct chart { int begun, ended, ioc, lpm, width, lines, drop; enum wefax_end why; double ppm; unsigned char *px; int cap; };
 
-static void on_begin(void *u, int ioc, int lpm, int width, double ppm, int phased) { (void) phased; struct chart *c = u; c->begun++; c->ioc = ioc; c->lpm = lpm; c->width = width; c->ppm = ppm; c->lines = 0; }
+static void on_begin(void *u, int ioc, int lpm, int width, double ppm, int phased) { was_phased = phased; struct chart *c = u; c->begun++; c->ioc = ioc; c->lpm = lpm; c->width = width; c->ppm = ppm; c->lines = 0; }
 static void on_line(void *u, const unsigned char *p, int width)
 {
     struct chart *c = u;
@@ -153,6 +157,23 @@ int main(void)
     c = run(576, 90, 60, 0, 0, 120, 5.0);
     CHECK(c.begun == 1 && c.lpm == 90, "90 LPM found by the phasing");
     CHECK(error_of(&c, 50, &shift) < 6.0 && abs(shift) <= 2, "90 LPM chart");
+    free(c.px);
+    /* symmetrical phasing: half the line white, half black */
+    sym_phasing = 1;
+    c = run(576, 120, 100, 0, 0, 120, 5.0);
+    CHECK(c.begun == 1 && c.lpm == 120 && was_phased == 2, "symmetrical phasing found at 120 LPM");
+    e = error_of(&c, 80, &shift);
+    CHECK(e < 6.0 && abs(shift) <= 2, "chart after a symmetrical phasing");
+    free(c.px);
+    c = run(576, 60, 40, 0, 0, 120, 5.0);
+    CHECK(c.begun == 1 && c.lpm == 60 && was_phased == 2, "symmetrical phasing at 60 LPM is not taken for 120");
+    free(c.px);
+    c = run(576, 120, 100, 60, 0, 120, 5.0);
+    CHECK(c.begun == 1 && was_phased == 2 && fabs(c.ppm - 60) < 15, "clock error measured in a symmetrical phasing");
+    free(c.px);
+    sym_phasing = 0;
+    c = run(576, 120, 60, 0, 0, 120, 5.0);
+    CHECK(was_phased == 1, "the usual phasing is still the usual one");
     free(c.px);
     c = run(576, 240, 200, 0, 0, 120, 5.0);
     CHECK(c.begun == 1 && c.lpm == 240, "240 LPM found by the phasing");

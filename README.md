@@ -8,7 +8,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.3.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de nueve estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.3.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de 21 estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
 📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.3.0](docs/releases/v0.3.0.md)
 
@@ -62,13 +62,15 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 
 - una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; la parte de SDRplay compila, pero **no se ha usado todavía con un receptor**;
 - el turno con Navtex contra un Navtex en marcha;
-- **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta); Hamburgo, Northwood, Atenas y Múrmansk, del PDF mundial, más propenso a errores. Compruebe una hora antes de fiarse de ella.
+- **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta) y Tokio del horario de la propia JMA; las demás, del PDF mundial de la NOAA, más propenso a errores, y varias con datos antiguos (Seúl y Bangkok de 2009, Chile de 2010, Sídney de 2014, Pevek de 1997). Compruebe una hora antes de fiarse de ella.
 
 **Sin hacer todavía:**
 
-- más estaciones: la lista trae Hamburgo / Pinneberg, Northwood, Atenas, Múrmansk, Boston, Nueva Orleans, Point Reyes, Kodiak y Honolulu. Faltan las de Asia, Chile y Australia;
+- la posición de los transmisores de las estaciones nuevas (Asia, Chile, Australia, Canadá): es la de la ciudad que da nombre a la estación, no la del transmisor;
+- **Kagoshima y Kyodo News** no son estaciones meteorológicas (pesca y prensa): la fuente no da su velocidad ni qué va en cada frecuencia;
 - **Atenas y Múrmansk son dudosas**: de Atenas no está claro si las frecuencias publicadas (4481 y 8105 kHz) son el centro del canal o la portadora (la lista usa 4482,9 y 8106,9, como dice la NOAA); de Múrmansk la propia NOAA duda de que siga emitiendo, y las frecuencias salen de otra lista;
-- el enfasado simétrico (mitad blanco, mitad negro), que algunas estaciones pueden usar: esas cartas saldrían desplazadas.
+- el enfasado simétrico (mitad blanco, mitad negro) se reconoce, pero se supone que la línea empieza donde el negro pasa a blanco: no he podido leer la recomendación ni hay una señal real con que comprobarlo, así que una carta así puede salir desplazada media línea (lo dice en sus datos: «fase simétrica»);
+- la onda larga (Pevek, 148 kHz) no se ha probado, y no todos los equipos bajan hasta ahí.
 
 ## Qué hace falta
 
@@ -274,7 +276,7 @@ ss -tulpn | grep -E "8081|wefax"                          # ¿está escuchando?
 
 ### Lista de estaciones
 
-`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Hamburgo, Northwood, Atenas y Múrmansk, de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025). Cada archivo dice su origen y su fecha. Para ver qué otras estaciones hay en el mundo y cuáles han dejado de emitir, la [lista de radiofacsímil de DX Info Centre](https://www.dxinfocentre.com/rafax.htm) (W. R. Hepburn) está al día; no se copia aquí, pero las frecuencias de las estaciones se han contrastado con ella. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
+`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Tokio, del [horario de la JMA](https://www.data.jma.go.jp/common/177jmh/JMH-ENG.pdf) (enero de 2022); las demás (Hamburgo, Northwood, Atenas, Múrmansk, Kagoshima, Pevek, Seúl, Bangkok, Kyodo News, Cantón, Valparaíso, Punta Arenas, Sídney de Nueva Escocia, Charleville y Wiluna), de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025), que son todas las que trae. Las que esa publicación da por cerradas (Iqaluit, Resolute, Inuvik, Wellington) van en `cerradas.csv` y la pestaña Estaciones las nombra aparte. Cada archivo dice su origen y su fecha. Para ver qué otras estaciones hay en el mundo y cuáles han dejado de emitir, la [lista de radiofacsímil de DX Info Centre](https://www.dxinfocentre.com/rafax.htm) (W. R. Hepburn) está al día; no se copia aquí, pero las frecuencias de las estaciones se han contrastado con ella. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
 
 ### Probar sin radio
 
@@ -352,7 +354,7 @@ La interfaz no tiene contraseña: está pensada para la red local o la de a bord
 | «No sigue ninguna estación» | No hay ninguna marcada | Pestaña Estaciones |
 | «Sintonizado» pero no llega ninguna carta | Propagación, frecuencia poco adecuada a esa hora, antena | Pruebe otra frecuencia de la estación; de día las altas, de noche las bajas |
 | Carta inclinada | Error de reloj del receptor que el enfasado no midió bien | Guarde la carta y avise: es un fallo a corregir |
-| Carta partida, con el borde en medio | Sin sincronía (emisión cogida a medias) o enfasado simétrico | Dice «sin sincronía» en sus datos; el enfasado simétrico no está hecho |
+| Carta partida, con el borde en medio | Sin sincronía (emisión cogida a medias) o enfasado simétrico | Dice «sin sincronía» o «fase simétrica» en sus datos; en el simétrico el comienzo de la línea es un supuesto |
 | «gpsd no contesta» | gpsd parado, o en otro equipo | `systemctl status gpsd`; `WEFAX_GPSD` en `/etc/default/wefax` |
 
 ## Cómo es una emisión

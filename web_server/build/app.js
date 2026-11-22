@@ -302,7 +302,7 @@
       img.loading = 'lazy'; img.alt = ''; img.src = '/chart/' + c.id + '.png';
       pie.appendChild(el('span', 'titulo', c.title || tr('Carta sin título')));
       pie.appendChild(el('span', 'meta', fechaUtc(d) + ' ' + horaUtc(d) + ' UTC · ' + nombreEstacion(c.station) + ' · ' + khz(c.khz)));
-      pie.appendChild(el('span', 'meta', c.height + tr(' líneas') + ' · ' + tr(FIN[c.ended] || c.ended) + (c.phased ? '' : ' · ' + tr('sin sincronía')) + (c.keep ? ' · ★ ' + tr('conservada') : '')));
+      pie.appendChild(el('span', 'meta', c.height + tr(' líneas') + ' · ' + tr(FIN[c.ended] || c.ended) + (c.phased ? (c.symmetric ? ' · ' + tr('fase simétrica') : '') : ' · ' + tr('sin sincronía')) + (c.keep ? ' · ★ ' + tr('conservada') : '')));
       b.appendChild(img); b.appendChild(pie);
       b.addEventListener('click', function () { abrir(c); });
       li.appendChild(b); ol.appendChild(li);
@@ -414,6 +414,16 @@
       aj.appendChild(sel); t.appendChild(aj);
       c.appendChild(t);
     });
+    if (datos.closed && datos.closed.length) {
+      // las que la fuente da por cerradas: para que nadie las busque
+      var tc = el('div', 'tarjeta'), uc = el('ul', 'frecs');
+      tc.appendChild(el('h2', '', tr('Estaciones cerradas')));
+      tc.appendChild(el('p', 'nota', tr('La fuente las da por cerradas: ya no emiten radiofacsímil.')));
+      datos.closed.forEach(function (x) {
+        var li = el('li', 'apagada'); li.appendChild(el('span', '', x.name + ' · ' + x.country)); li.appendChild(el('span', '', x.note)); uc.appendChild(li);
+      });
+      tc.appendChild(uc); c.appendChild(tc);
+    }
     $('fuente-estaciones').textContent = datos.source ? tr('Horarios: ') + datos.source + '. ' +
       tr('Transcritos de forma automática: pueden tener errores y los horarios cambian; compruebe una hora con la fuente antes de fiarse de ella.') : tr('No se pudo leer la lista de estaciones.');
   }
@@ -601,7 +611,7 @@
     b.addEventListener('click', function () { I18N.poner(otro); });
   })();
 
-  leer('/api/about').then(function (a) { version = a.version; $('version').textContent = version; }).catch(function () {});
+  leer('/api/about').then(function (a) { version = a.version; $('version').textContent = version; $('version-cabecera').textContent = 'v' + version; }).catch(function () {});
   leer('estaciones.json').then(function (d) { datos = d; }).catch(function () {}).then(function () {
     return leer('/api/settings').then(function (a) { ajustes = a; }).catch(function () {});
   }).then(function () {

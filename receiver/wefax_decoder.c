@@ -245,6 +245,89 @@ static int find_phasing(const struct wefax_decoder *d, int *lpm_out, double *lin
     return 1;
 }
 
+/*
+ * Symmetrical phasing: half of each line white, half black, instead of the 5 % pulse. Folded on
+ * the right length of a line it is one white run of half the line; on twice that length, two runs;
+ * on any other, grey. The line is taken to begin where black turns to white (white first): the
+ * text of the recommendation was not at hand to check which edge it is, and no station is known
+ * to use it today, so a chart phased this way may come out shifted by half a line.
+ */
+static int find_sym_phasing(const struct wefax_decoder *d, int *lpm_out, double *line_len_out, double *origin_out, int *good_lines_out)
+{
+    static double fold[PHASING_BINS];
+    static int cnt[PHASING_BINS];
+    int k, i, best_lpm = 0;
+    double best_edge = 0;
+
+    for (k = 0; k < N_LPMS && best_lpm == 0; k++) {
+        double len = d->fs * 60.0 / LPMS[k];
+        int white = 0, clear = 0, rises = 0, at = 0;
+        size_t s;
+        if (d->ph_n < (size_t) (len * PHASING_MIN_LINES)) continue;
+        memset(fold, 0, sizeof(fold)); memset(cnt, 0, sizeof(cnt));
+        for (s = 0; s < d->ph_n; s++) {
+            int b = (int) (fmod((double) s, len) / len * PHASING_BINS);
+            if (b >= PHASING_BINS) b = PHASING_BINS - 1;
+            fold[b] += d->ph[s]; cnt[b]++;
+        }
+        for (i = 0; i < PHASING_BINS; i++) {
+            if (cnt[i]) fold[i] /= cnt[i];
+            if (fold[i] > 0.5) white++;
+            if (fold[i] > 0.8 || fold[i] < 0.2) clear++;
+        }
+        for (i = 0; i < PHASING_BINS; i++)
+            if (fold[i] <= 0.5 && fold[(i + 1) % PHASING_BINS] > 0.5) { rises++; at = i + 1; }
+        /* one white run of half the line, with sharp edges */
+        if (rises == 1 && abs(white - PHASING_BINS / 2) < PHASING_BINS / 20 && clear > PHASING_BINS * 9 / 10) {
+            best_lpm = LPMS[k]; best_edge = (double) at / PHASING_BINS * len;
+        }
+    }
+    if (best_lpm == 0) return 0;
+
+    /* the edge in every line: with black before it and white after, the white in a window around
+       it tells where it is */
+    {
+        double len = d->fs * 60.0 / best_lpm;
+        double sx = 0, sy = 0, sxx = 0, sxy = 0, half = len * 0.06;
+        int n = 0, lines = (int) (d->ph_n / len), l;
+        static double px[MAX_PHASING_LINES], py[MAX_PHASING_LINES];
+        if (lines > MAX_PHASING_LINES) lines = MAX_PHASING_LINES;
+        for (l = 0; l < lines; l++) {
+            double c = l * len + best_edge, w = 0, hi = 0, lo = 0; long nh = 0, nl = 0, s;
+            long a = (long) (c - half), b = (long) (c + half);
+            if (a < 0 || (long) (c + len * 0.94) >= (long) d->ph_n) continue;
+            for (s = a; s <= b; s++) w += d->ph[s];
+            for (s = (long) (c + len * 0.06); s < (long) (c + len * 0.44); s += 4) { hi += d->ph[s]; nh++; }
+            for (s = (long) (c + len * 0.56); s < (long) (c + len * 0.94); s += 4) { lo += d->ph[s]; nl++; }
+            if (nh == 0 || nl == 0 || hi / nh < 0.8 || lo / nl > 0.2) continue;
+            px[n] = l; py[n] = (double) b + 1 - w; n++;
+        }
+        if (n < PHASING_MIN_LINES) return 0;
+        for (l = 0; l < n; l++) { sx += px[l]; sy += py[l]; sxx += px[l] * px[l]; sxy += px[l] * py[l]; }
+        {
+            double den = n * sxx - sx * sx;
+            double slope = den > 0 ? (n * sxy - sx * sy) / den : len;
+            if (fabs(slope - len) > len * 0.001 || n < 10) slope = len;
+            *lpm_out = best_lpm;
+            *line_len_out = slope;
+            *origin_out = (sy - slope * sx) / n;
+            *good_lines_out = n;
+        }
+    }
+    return 1;
+}
+
+/* Is the line that begins at sample `start` a line of symmetrical phasing? White its first half,
+   black the second. */
+static int is_sym_phasing_line(const float *ph, size_t ph_n, double start, double line_len)
+{
+    long s; double hi = 0, lo = 0; long nh = 0, nl = 0;
+    if (start < 0 || (long) (start + line_len * 0.94) >= (long) ph_n) return 1;
+    for (s = (long) (start + line_len * 0.06); s < (long) (start + line_len * 0.44); s += 2) { hi += ph[s]; nh++; }
+    for (s = (long) (start + line_len * 0.56); s < (long) (start + line_len * 0.94); s += 2) { lo += ph[s]; nl++; }
+    return nh > 0 && nl > 0 && hi / nh > 0.8 && lo / nl < 0.2;
+}
+
 /* Is the line that begins at sample `start` a phasing line? Black, but for the white pulse that
    straddles its beginning and its end. A black line of the chart (a frame) is not one. */
 static int is_phasing_line(const float *ph, size_t ph_n, double start, double line_len)
@@ -259,10 +342,11 @@ static int is_phasing_line(const float *ph, size_t ph_n, double start, double li
 }
 
 /* Is the last whole line of the phasing buffer still a phasing line? */
-static int last_line_is_phasing(const struct wefax_decoder *d, double line_len, double origin)
+static int last_line_is_phasing(const struct wefax_decoder *d, double line_len, double origin, int sym)
 {
     double n_lines = floor(((double) d->ph_n - origin) / line_len);
-    return is_phasing_line(d->ph, d->ph_n, origin + (n_lines - 1) * line_len, line_len);
+    double start = origin + (n_lines - 1) * line_len;
+    return sym ? is_sym_phasing_line(d->ph, d->ph_n, start, line_len) : is_phasing_line(d->ph, d->ph_n, start, line_len);
 }
 
 static void tone_window(struct wefax_decoder *d)
@@ -319,9 +403,11 @@ static void phasing_sample(struct wefax_decoder *d, double v)
 
     /* once a second: is the start of a line known, and has the chart begun? */
     if (d->ph_n % (size_t) d->fs == 0) {
-        int lpm = 0, good = 0;
+        int lpm = 0, good = 0, sym = 0;
         double len = 0, origin = 0;
-        if (find_phasing(d, &lpm, &len, &origin, &good) && !last_line_is_phasing(d, len, origin)) {
+        int found = find_phasing(d, &lpm, &len, &origin, &good);
+        if (!found) { found = find_sym_phasing(d, &lpm, &len, &origin, &good); sym = found; }
+        if (found && !last_line_is_phasing(d, len, origin, sym)) {
             /* The chart began with the first line that was not a phasing line. Go back to it: the
                lines of the chart already received are in the buffer. */
             double nominal = d->fs * 60.0 / lpm;
@@ -329,10 +415,10 @@ static void phasing_sample(struct wefax_decoder *d, double v)
             long l = (long) total - 1;
             double first, ppm = (len - nominal) / nominal * 1e6;
             float *buf = d->ph; size_t n = d->ph_n, s;
-            while (l > 0 && !is_phasing_line(buf, n, origin + (l - 1) * len, len)) l--;   /* line l - 1 is phasing: the chart begins at l */
+            while (l > 0 && !(sym ? is_sym_phasing_line(buf, n, origin + (l - 1) * len, len) : is_phasing_line(buf, n, origin + (l - 1) * len, len))) l--;   /* line l - 1 is phasing: the chart begins at l */
             first = origin + l * len;
             d->ph = NULL; d->ph_n = d->ph_cap = 0;
-            begin_image(d, lpm, len, 0, ppm, 1);
+            begin_image(d, lpm, len, 0, ppm, sym ? 2 : 1);
             /* replay what was received of the chart */
             for (s = (size_t) (first + 0.5); s < n && d->state == WEFAX_IMAGE; s++)
                 image_sample(d, buf[s], buf[s] * 2.0 * d->deviation - d->deviation);

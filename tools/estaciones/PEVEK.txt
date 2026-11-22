@@ -1,0 +1,9 @@
+# PEVEK, CHUKOTKA PENINSULA, RUSSIA. DOUBTFUL STATION: the information in "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025) is dated 11/97 and nothing newer confirms it is on the air.
+# Long wave (148 kHz), ice charts at 90 lines per minute, index 576. Each broadcast is given as a two-hour window (0530-0730, 1130-1330, 1430-1630): the time here is the start of the window. No call sign and no power in the source.
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|PEVEK|Pevek|Russia|400
+POS|69.7|170.3|Pevek (town)
+FREQ|148||
+0530|ICE|90
+1130|ICE|90
+1430|ICE|90

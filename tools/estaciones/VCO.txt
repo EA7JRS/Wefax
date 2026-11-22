@@ -1,0 +1,12 @@
+# SYDNEY, NOVA SCOTIA, CANADA. Canadian Coast Guard: ice charts. From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); information dated 2014 (the same source says the other Canadian stations stopped in 2019: this one may have too).
+# The source gives each frequency for the times of its broadcasts (4416 kHz 2200-2331, 6915.1 kHz 1121-1741): the windows here end after the last broadcast starts. All 120/576. No power in the source.
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|VCO|Sydney (Nova Scotia)|Canada|400
+POS|46.1|-60.2|Sydney, Nova Scotia (town)
+FREQ|4416|VCO|2200-0000
+FREQ|6915.1|VCO|1121-1800
+1121|ICE ANALYSIS GULF OF ST. LAWRENCE
+1142|ICE ANALYSIS EAST OR SOUTHEAST NEWFOUNDLAND WATERS
+1741|ICE ANALYSIS ICEBERG LIMIT
+2200|ICE ANALYSIS GULF OF ST. LAWRENCE
+2331|ICE ANALYSIS EAST OR SOUTHEAST NEWFOUNDLAND WATERS

@@ -133,7 +133,10 @@ int main(void)
     schedule_free();
 
     /* the list that is installed: transcribed from the NOAA schedule */
-    CHECK(schedule_load(STATIONS_SRC) == 9, "the installed list loads: nine stations");
+    CHECK(schedule_load(STATIONS_SRC) == 21, "the installed list loads: twenty-one stations");
+    CHECK(schedule_next(day + 2 * 3600 + 41 * 60, "JMH", "", &b) && b.start == day + 2 * 3600 + 40 * 60 && b.nfreqs == 3 && b.freqs[1] == 7795, "Tokyo: the 02:40 surface analysis, three frequencies");
+    CHECK(schedule_next(day + 12 * 3600, "VMW", "", &b) && b.nfreqs == 4 && b.freqs[0] == 5755, "Wiluna at 12:00: 5755 kHz on, 18060 off");
+    CHECK(schedule_next(day + 5 * 3600, "PEVEK", "", &b) && b.lpm == 90 && b.nfreqs == 1 && b.freqs[0] == 148 && b.suggested_khz == 148, "Pevek: long wave, 90 lines a minute");
     CHECK(schedule_next(day + 4 * 3600, "DDH", "", &b) && b.start == day + 4 * 3600 + 30 * 60 && b.deviation == 425 && b.nfreqs == 3 && b.suggested_khz == 7880,
           "Hamburg: 04:30, 425 Hz, three frequencies");
     CHECK(schedule_next(day + 3600, "GYA", "", &b) && b.nfreqs == 3 && b.freqs[0] == 2618.5 && b.end - b.start == 12 * 60, "Northwood at night: 2618.5 kHz on, 12 minute slots");

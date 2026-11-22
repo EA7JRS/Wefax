@@ -1,0 +1,20 @@
+# PUNTA ARENAS MAGALLANES, CHILE. Servicio Meteorologico de la Armada de Chile. From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); information dated Sep 23, 2010.
+# The source prints the schedules of Valparaiso and Punta Arenas together and the reader may have put a row under the wrong station: the rows from 1100 to 0405 are taken as Valparaiso's and those from 1115 to 2325 as Punta Arenas'.
+# All 120/576, 1 kW. The source says the Antarctic ice limit charts are no longer sent by radiofacsimile.
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|CBM|Punta Arenas Magallanes|Chile|400
+POS|-53.2|-70.9|Punta Arenas (city)
+PWR|1
+FREQ|4322|CBM|
+FREQ|8696|CBM|
+1115|SURFACE CHART
+1130|SATELLITE IMAGE
+1630|24 HR SURFACE FORECAST
+1645|SATELLITE IMAGE
+1915|SURFACE CHART
+1930|SATELLITE IMAGE
+2200|36 HR SURFACE FORECAST
+2215|SURFACE CHART
+2230|WINDS BARB ISOTACHS FORECAST
+2310|48 HR SURFACE FORECAST
+2325|SATELLITE IMAGE

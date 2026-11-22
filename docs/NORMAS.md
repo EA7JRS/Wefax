@@ -14,7 +14,7 @@ El **Manual del Sistema Mundial de Telecomunicación** de la Organización Meteo
 | Índice de cooperación 576 o 288 | 5.1.2 | Los dos; 1810 y 905 puntos por línea (índice × π) |
 | Señal de inicio: 5 a 10 s de negro y blanco alternando a 300 Hz (índice 576) o 675 Hz (índice 288) | 5.2.2.1 | Reconocida con 1,5 s de tono; de ella sale también el error de frecuencia del receptor |
 | Señal de enfasado: 30 s, con línea asimétrica (blanco el 5 %, negro el 95 %) | 5.2.3 | Reconocida; da el comienzo de las líneas y el error del reloj del receptor |
-| Señal de enfasado simétrica (mitad blanco, mitad negro) | 5.2.3.2 | **No hecho:** la carta se toma igualmente, pero puede salir desplazada |
+| Señal de enfasado simétrica (mitad blanco, mitad negro) | 5.2.3.2 | Reconocida (velocidad, comienzo de las líneas y error del reloj). **Supuesto sin comprobar:** la línea empieza donde el negro pasa a blanco; si es al revés, la carta sale desplazada media línea. Probado solo con una señal generada |
 | Señal de parada: 5 s a 450 Hz y después 10 s de negro | 5.2.5.1 | Reconocida; las líneas del tono no se guardan |
 | Por radio en onda corta: negro a fo − 400 Hz y blanco a fo + 400 Hz | 5.5.2 | Así se descodifica; ±425 Hz para las estaciones que lo indican |
 | Subportadora: centro 1900 Hz, negro 1500 Hz, blanco 2300 Hz | 5.5.1 | Es lo mismo visto desde un receptor de banda lateral superior sintonizado 1,9 kHz por debajo |
@@ -50,7 +50,8 @@ Se consultaron porque se citan a veces junto al radiofacsímil, y no son de apli
 
 - **Homologación.** Sin ensayos ni aprobación de tipo de ninguna clase.
 - **Sensibilidad y selectividad:** dependen del receptor y de la antena; no se han medido con una señal real.
-- **Enfasado simétrico** y **onda larga:** no hechos.
+- **Enfasado simétrico:** el borde que marca el comienzo de la línea es un supuesto (ver la tabla).
+- **Onda larga:** la lista trae una estación (Pevek, 148 kHz, dudosa); sin probar.
 - **Satélite:** no recibe imágenes de satélite. El WEFAX analógico de los geoestacionarios (1691 MHz) se sustituyó por LRIT / HRIT, digitales; es otro sistema y otro descodificador.
 - **Posición:** la propia (GPS o escrita) ordena las estaciones y elige la frecuencia automática con una regla sencilla de día o noche en el camino; no es una previsión de propagación (no usa el número de manchas ni ningún modelo ionosférico). Las posiciones de los transmisores son aproximadas y no salen de los horarios.
 - **Predicción de propagación:** la de VOACAP (NTIA / ITS), cuando se instala. Es una mediana mensual con supuestos de antena, ruido y umbral que no se han contrastado con recepciones; no es el método de la UIT-R P.533 ni una medida.

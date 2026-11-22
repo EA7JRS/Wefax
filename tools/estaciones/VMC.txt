@@ -1,0 +1,60 @@
+# CHARLEVILLE, AUSTRALIA. Bureau of Meteorology. From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); information dated Apr 20, 2022 (http://www.bom.gov.au/marine/radio-sat/radio-fax-schedule.shtml).
+# Charleville (VMC) and Wiluna (VMW) send the same schedule. All 120/576, 1 kW. A row with two times is sent at both; ---- = not sent.
+# Not included: the four repeats the source gives "on 11030 kHz only via a directional aerial pointing from Charleville towards Tasmania" (0000, 0345, 0500, 0515).
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|VMC|Charleville|Australia|400
+POS|-26.4|146.2|Charleville (town)
+PWR|1
+FREQ|2628|VMC|0900-1900
+FREQ|5100|VMC|
+FREQ|11030|VMC|
+FREQ|13920|VMC|
+FREQ|20469|VMC|1900-0900
+----/1200|Australian MSLP Prog (H+36)
+0015/1215|VMC/VMW Schedule Page 1 of 2
+0030/1230|VMC/VMW Schedule Page 2 of 2
+0045/----|VMC/VMW Information Notice
+0100/----|IPS Recommended Frequencies for VMC (Charleville)
+0130/----|IPS Recommended Frequencies for VMW (Wiluna)
+----/1245|Indian Ocean MSLP Prog (H+36)
+----/1315|South Pacific Ocean Total Waves (H+48)
+----/1330|Indian Ocean Total Waves (H+48)
+----/1345|Pacific Ocean Sea Surface Temps (Weekly)
+----/1400|Indian Ocean Sea Surface Temps (Weekly)
+0200/----|Australian MSLP Prog (H+36)
+----/1415|Casey Eastern and Western High Seas (H+48)
+0245/1430|Australian MSLP Anal (Manual)
+0300/1500|Australian 500 hPa Anal
+0315/----|Voice Broadcast Information for VMW (Wiluna) and VMC (Charleville)
+----/1515|Australian MSLP Prog (H+36)
+0400/----|Australian 500 hPa (H+24) Prog
+0430/1530|Australian MSLP 4-day forecast, Days 1 and 2
+0445/1545|Australian MSLP 4-day forecast, Days 3 and 4
+----/1600|Australian 500 hPa (H+24) Prog
+----/1630|IPS Recommended Frequencies for VMC (Charleville)
+----/1700|IPS Recommended Frequencies for VMW (Wiluna)
+0600/1800|Asian (Part A) Gradient Level Wind Anal (Manual)
+0623/1823|Asian (Part B) Gradient Level Wind Anal (Manual)
+0645/----|Asian MSLP Anal (Manual)
+0730/1915|Indian Ocean MSLP Anal (Manual)
+0745/1930|Australian Wind Waves Ht(m) Prog
+0800/1945|Australian Swell Waves Ht(m) Prog (H+24)
+0830/----|South Pacific Ocean MSLP Anal
+0845/----|Australian MSLP Anal (Manual)
+0900/----|Australian MSLP Prog (H+36) (Repeat)
+0915/----|Australian MSLP 4-day forecast, Days 1 and 2 (Repeat)
+0930/----|Australian MSLP 4-day forecast, Days 3 and 4 (Repeat)
+----/2000|South Pacific Ocean MSLP Anal (Manual)
+----/2015|Casey Eastern and Western High Seas (H+24)
+----/2030|Australian MSLP Anal (Manual)
+1015/----|Casey Eastern and Western High Seas (H+24)
+----/2215|Casey Eastern and Western High Seas (H+36)
+1030/2230|S.H. 500 hPa Prog (H+48)
+1045/2245|S.H. MSLP Prog (H+48)
+1100/----|Casey Eastern and Western High Seas (H+36)
+1115/2300|S.H. 500 hPa Anal
+----/2315|Casey Eastern and Western High Seas (H+48)
+1130/----|Asian Sea Surface Temp Anal (Weekly)
+----/2330|Australian MSLP Prog (H+36)
+----/2345|Indian Ocean MSLP Prog (H+48)
+1145/----|VMC/VMW Information Notice

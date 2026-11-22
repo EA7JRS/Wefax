@@ -76,7 +76,7 @@ static void on_begin(void *u, int ioc, int lpm, int width, double ppm, int phase
     px_lines = 0; px_width = width; px_ioc = ioc; px_lpm = lpm; px_ppm = ppm; px_phased = phased;
     px_began = time(NULL); px_live = px_began;
     snprintf(msg, sizeof(msg), "chart begins: IOC %d, %d lines a minute, %s (clock %+.0f ppm, receiver %+.0f Hz off)", ioc, lpm,
-             phased ? "phased" : "not phased: it may come out shifted", ppm, wefax_offset_hz(dec));
+             phased == 2 ? "symmetrical phasing: it may come out shifted by half a line" : phased ? "phased" : "not phased: it may come out shifted", ppm, wefax_offset_hz(dec));
     printf("%s\n", msg); fflush(stdout);
     if (service_mode) { store_status("state", "receiving a chart"); store_status_num("offset_hz", wefax_offset_hz(dec)); }
 }

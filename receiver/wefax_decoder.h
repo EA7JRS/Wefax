@@ -45,7 +45,8 @@ struct wefax_events {
     void *user;
     /* a chart begins: index of cooperation, lines per minute, points per line, and how far the
        receiver's clock is from the transmitter's, in parts per million (0 when not measured).
-       phased: 1 when the start of the lines was found in the phasing; 0 when the chart is taken
+       phased: 1 when the start of the lines was found in the phasing (2: in a symmetrical phasing,
+       half white and half black, whose first half is taken to be the white one); 0 when the chart is taken
        as it comes (no phasing found, or forced) and may be shifted sideways */
     void (*begin)(void *user, int ioc, int lpm, int width, double clock_ppm, int phased);
     /* one line of the chart: width values, 0 black to 255 white */

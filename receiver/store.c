@@ -247,6 +247,7 @@ char *store_charts_json(long since_id, int limit)
             cJSON_AddNumberToObject(c, "offset_hz", sqlite3_column_double(st, 10));
             cJSON_AddNumberToObject(c, "clock_ppm", sqlite3_column_double(st, 11));
             cJSON_AddBoolToObject(c, "phased", sqlite3_column_int(st, 12) != 0);
+            cJSON_AddBoolToObject(c, "symmetric", sqlite3_column_int(st, 12) == 2);
             cJSON_AddBoolToObject(c, "keep", sqlite3_column_int(st, 13) != 0);
             cJSON_AddItemToArray(list, c);
         }

@@ -5,6 +5,200 @@
  "note": "Transcribed through an automatic reader of the sources: check a time against the source before relying on it. Frequencies are the assigned ones (centre of the channel).",
  "stations": [
   {
+   "id": "CBM",
+   "name": "Punta Arenas Magallanes",
+   "country": "Chile",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 4322.0,
+     "call": "CBM"
+    },
+    {
+     "khz": 8696.0,
+     "call": "CBM"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "1115",
+     "title": "SURFACE CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1130",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1630",
+     "title": "24 HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1645",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1915",
+     "title": "SURFACE CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1930",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2200",
+     "title": "36 HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2215",
+     "title": "SURFACE CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2230",
+     "title": "WINDS BARB ISOTACHS FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2310",
+     "title": "48 HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2325",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": -53.2,
+   "lon": -70.9,
+   "place": "Punta Arenas (city)",
+   "kw": 1.0,
+   "from": "PUNTA ARENAS MAGALLANES, CHILE. Servicio Meteorologico de la Armada de Chile. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated Sep 23, 2010. The source prints the schedules of Valparaiso and Punta Arenas together and the reader may have put a row under the wrong station: the rows from 1100 to 0405 are taken as Valparaiso's and those from 1115 to 2325 as Punta Arenas'. All 120/576, 1 kW. The source says the Antarctic ice limit charts are no longer sent by radiofacsimile. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "CBV",
+   "name": "Valparaiso Playa Ancha",
+   "country": "Chile",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 4228.0,
+     "call": "CBV"
+    },
+    {
+     "khz": 8677.0,
+     "call": "CBV"
+    },
+    {
+     "khz": 17146.4,
+     "call": "CBV"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0350",
+     "title": "48 HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0405",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1100",
+     "title": "TEST CHART, CBV CBM SCHEDULES",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1550",
+     "title": "TEST CHART, CBV CBM SCHEDULES",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1605",
+     "title": "12HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1620",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1730",
+     "title": "SURFACE CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1745",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2005",
+     "title": "SIGNIFICANT WAVE MAP FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2020",
+     "title": "SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2240",
+     "title": "36 HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2255",
+     "title": "SURFACE CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2310",
+     "title": "WINDS BARB ISOTACHS FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": -33.0,
+   "lon": -71.6,
+   "place": "Valparaiso (city)",
+   "kw": 1.0,
+   "from": "VALPARAISO PLAYA ANCHA, CHILE. Servicio Meteorologico de la Armada de Chile. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated Sep 23, 2010. The source prints the schedules of Valparaiso and Punta Arenas together and the reader may have put a row under the wrong station: the rows from 1100 to 0405 are taken as Valparaiso's and those from 1115 to 2325 as Punta Arenas'. All 120/576, 1 kW. The source says the Antarctic ice limit charts are no longer sent by radiofacsimile. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
    "id": "DDH",
    "name": "Hamburg / Pinneberg",
    "country": "Germany",
@@ -965,6 +1159,1283 @@
    "place": "Northwood",
    "kw": 10.0,
    "from": "NORTHWOOD, UNITED KINGDOM. JOMOC HF-Fax Schedule (North Atlantic). Information dated Jan 05, 2022. The source gives no RPM/IOC column for this station: 120/576 is assumed. Slots with no contents shown are left out."
+  },
+  {
+   "id": "HLL2",
+   "name": "Seoul",
+   "country": "Republic of Korea",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 3585.0,
+     "call": "HLL2",
+     "from": "1200",
+     "to": "0000"
+    },
+    {
+     "khz": 5857.5,
+     "call": "HLL2"
+    },
+    {
+     "khz": 7433.5,
+     "call": "HLL2"
+    },
+    {
+     "khz": 9165.0,
+     "call": "HLL2"
+    },
+    {
+     "khz": 13570.0,
+     "call": "HLL2",
+     "from": "0000",
+     "to": "1200"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0000",
+     "title": "SPECIAL WEATHER REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0033",
+     "title": "SEA-SHORE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0100",
+     "title": "FISHERY WEATHER OBSERVATION REPORT MANAM",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0133",
+     "title": "LIGHTHOUSE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0147",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0200",
+     "title": "WARNING TYPHOON REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0214",
+     "title": "GENERAL WEATHER CONDITIONS REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0314",
+     "title": "LIGHTHOUSE SIGN WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0333",
+     "title": "LIGHTHOUSE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "SURFACE ANALYSIS FAR ASIA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0447",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0500",
+     "title": "500 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0513",
+     "title": "650 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0526",
+     "title": "700 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0539",
+     "title": "300 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0600",
+     "title": "SPECIAL WEATHER REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0633",
+     "title": "LIGHTHOUSE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0647",
+     "title": "FISHERY WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0700",
+     "title": "12HR WAVE HEIGHT & SEA SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0714",
+     "title": "24HR WAVE HEIGHT & SEA SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0728",
+     "title": "36HR WAVE HEIGHT & SEA SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0747",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0800",
+     "title": "WARNING TYPHOON REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0814",
+     "title": "GENERAL WEATHER CONDITIONS REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0828",
+     "title": "SST OBSERVATION CHART OF NEAR KOREAN PENINSULA AREA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0846",
+     "title": "MAIN SEASHORE WEATHER FORECAST FOR SHIP ROUTE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0900",
+     "title": "SEA FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0914",
+     "title": "LIGHTHOUSE SIGN WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0933",
+     "title": "LIGHTHOUSE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0947",
+     "title": "WEEKLY SEA WEATHER FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1047",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1200",
+     "title": "SPECIAL WEATHER REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1233",
+     "title": "SEA-SHORE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1347",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1400",
+     "title": "WARNING TYPHOON REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1500",
+     "title": "SPECIAL WEATHER REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1530",
+     "title": "SST OBSERVATION CHART OF NEAR KOREAN PENINSULA AREA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1547",
+     "title": "LIGHTHOUSE SIGN WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1600",
+     "title": "SURFACE ANALYSIS FAR ASIA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1647",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1700",
+     "title": "500 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1713",
+     "title": "650 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1726",
+     "title": "700 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1739",
+     "title": "300 hPa UPPER AIR WEATHER CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1800",
+     "title": "SPECIAL WEATHER REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1833",
+     "title": "SEA-SHORE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1847",
+     "title": "FISHERY WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1900",
+     "title": "12HR WAVE HEIGHT & SEA SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1914",
+     "title": "24HR WAVE HEIGHT & SEA SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1928",
+     "title": "36HR WAVE HEIGHT & SEA SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1947",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2000",
+     "title": "WARNING TYPHOON REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2014",
+     "title": "GENERAL WEATHER CONDITIONS REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2046",
+     "title": "MAIN SEASHORE WEATHER FORECAST FOR SHIP ROUTE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2100",
+     "title": "SEA FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2114",
+     "title": "LIGHTHOUSE SIGN WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2133",
+     "title": "LIGHTHOUSE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2147",
+     "title": "WEEKLY SEA WEATHER FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2233",
+     "title": "LIGHTHOUSE WEATHER OBSERVATION REPORT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2247",
+     "title": "SURFACE ANALYSIS FAR EAST",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 37.5,
+   "lon": 127.0,
+   "place": "Seoul (city)",
+   "kw": 3.0,
+   "from": "SEOUL, REPUBLIC OF KOREA. Korea Meteorological Administration. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated Jan 01, 2009: \"Many of these reports may be in Korean\". All 120/576, 3 kW. A row with two times is sent at both; ---- = not sent. The source has a row at 0047/1247 with no title: not included. Notes of the source: 300 Hz black and white signal for 10 s before phasing, phasing 30 s, stop 15 s; \"tsunami warning\" is transmitted without delay. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "HSW64",
+   "name": "Bangkok",
+   "country": "Thailand",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 7396.9,
+     "call": "HSW64"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0050",
+     "title": "TEST CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0100",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0120",
+     "title": "SURFACE PRESSURE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0140",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0200",
+     "title": "BROADCAST SCHEDULE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0300",
+     "title": "24 HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0320",
+     "title": "48 HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0340",
+     "title": "72 HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0420",
+     "title": "24 HR 850 mb WIND/TEMP PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0500",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0520",
+     "title": "850 mb ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0540",
+     "title": "700 mb ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0600",
+     "title": "500 mb ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0700",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0720",
+     "title": "24 HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0740",
+     "title": "48 HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0800",
+     "title": "72 HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0820",
+     "title": "24 HR 850 mb WIND/TEMP PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1000",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1020",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1300",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1700",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1720",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2300",
+     "title": "FORECAST FOR SHIPPING (IN ENGLISH)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2320",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 13.8,
+   "lon": 100.5,
+   "place": "Bangkok (city)",
+   "kw": 3.0,
+   "from": "BANGKOK, THAILAND. Thai Meteorological Department. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated Jan 2009. The source lists 7395.0 kHz with the note \"May refer to carrier frequency, for center frequency add 1.9 kHz\": the centre used here is 7396.9 kHz. If nothing is received, try 7395 as a fixed frequency. All 120/576, 3 kW. A row with two times is sent at both; ---- = not sent. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "JFX",
+   "name": "Kagoshima",
+   "country": "Japan",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 4274.0,
+     "call": "JFX"
+    },
+    {
+     "khz": 8658.0,
+     "call": "JFX"
+    },
+    {
+     "khz": 13074.0,
+     "call": "JFX"
+    },
+    {
+     "khz": 16907.5,
+     "call": "JFX"
+    },
+    {
+     "khz": 22559.6,
+     "call": "JFX"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0020",
+     "title": "SURFACE PRESSURE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0110",
+     "title": "BROADCAST SCHEDULE (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0310",
+     "title": "SURFACE ANALYSIS JMH ASAS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0330",
+     "title": "FISH MARKET INFORMATION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "SURFACE PRESSURE FORECAST (REBROADCAST)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0440",
+     "title": "TROPICAL CYCLONE INFORMATION (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0610",
+     "title": "JFX NOAA INFORMATION (REBROADCAST)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0700",
+     "title": "SEA SURFACE TEMPERATURE AROUND JAPAN (4) / MISAKI FISHING PORT FROZEN TUNA MARKET (3)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0730",
+     "title": "WEATHER INFORMATION (4)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0800",
+     "title": "PACIFIC SAURY FISHING INFORMATION (5)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0830",
+     "title": "TUNA MARKET INFORMATION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0930",
+     "title": "COAST GUARD NAVIGATIONAL WARNINGS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1030",
+     "title": "MARITIME SECURITY INTELLIGENCE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1100",
+     "title": "NOTIFICATIONS FROM RADIO STATIONS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1800",
+     "title": "JFX NOAA INFORMATION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2200",
+     "title": "GENERAL NAVIGATIONAL WARNINGS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2240",
+     "title": "MARINE WEATHER (KAGOSHIMA, NAGASAKI, OKINAWA)",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 31.6,
+   "lon": 130.6,
+   "place": "Kagoshima (city)",
+   "from": "KAGOSHIMA, JAPAN. Kagoshima fishery radio (fisheries information, with some weather charts). From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); schedule updated 1/29/2025. The source prints the schedule in blocks by frequency that the reader could not tell apart: here every time is listed once, for all the frequencies, so a broadcast may not be on the frequency the receiver chooses. The source gives no speed (120/576 assumed), no power and no hours for each frequency. Notes of the source: (1) Monday only; (2) in case of tropical cyclone; (3) Monday and Wednesday only; (4) Tuesday and Friday only; (5) August to December. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "JJC",
+   "name": "Kyodo News",
+   "country": "Japan",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 16971.0,
+     "call": "JJC"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0200",
+     "title": "KYODO NEWS (EVENING) (1) / KYODO FURUSATO NEWS (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0300",
+     "title": "KYODO NEWS (MORNING), SPORTS, JAPAN NAVIGATIONAL WARNINGS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0700",
+     "title": "OCEAN CURRENT FORECASTING (MAP) (3)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0710",
+     "title": "KYODO NEWS (ENGLISH EDITION) (4)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0730",
+     "title": "MARINE ADMINISTRATION NEWS (5)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0745",
+     "title": "KYODO NEWS (EVENING), KAIUN-SUISAN NEWS (6) / FURUSATO NEWS, MARINE ADMINISTRATION NEWS (7)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0940",
+     "title": "SUMO MATCH TABLE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1000",
+     "title": "KYODO FURUSATO NEWS (7)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1020",
+     "title": "KYODO NEWS SPORTS (MORNING), KYODO NEWS (MORNING)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1130",
+     "title": "JAPAN NAVIGATIONAL WARNINGS, SUMO MATCH TABLE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1200",
+     "title": "KYODO NEWS (ENGLISH EDITION)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1400",
+     "title": "KYODO KAIUN-SUISAN NEWS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1500",
+     "title": "KYODO NEWS (MORNING), SPORTS, JAPAN NAVIGATIONAL WARNINGS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1645",
+     "title": "KYODO NEWS (EVENING)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2030",
+     "title": "JAPAN NAVIGATIONAL WARNINGS, MARINE ADMINISTRATION NEWS (5)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2300",
+     "title": "KYODO NEWS (MORNING), SPORTS, JAPAN NAVIGATIONAL WARNINGS, KAIUN-SUISAN NEWS",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 35.7,
+   "lon": 139.7,
+   "place": "Tokyo (city); the transmitter site is not in the source",
+   "from": "KYODO NEWS, JAPAN / SINGAPORE. Newspaper by facsimile for ships (news, sports, navigational warnings), not weather charts, except the ocean current map. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information updated January 30, 2025. The source gives one frequency (16971 kHz), no speed, no power and no transmitter site. Kyodo's pages are sent at other speeds than the weather charts (the source does not say which): 120/576 is assumed here and may be wrong. Notes of the source: (1) Tuesday to Sunday; (2) Monday; (3) Sunday, Monday; (4) Tuesday to Saturday; (5) Saturday; (6) Monday to Saturday; (7) Sunday. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "JMH",
+   "name": "Tokyo",
+   "country": "Japan",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 3622.5,
+     "call": "JMH"
+    },
+    {
+     "khz": 7795.0,
+     "call": "JMH2"
+    },
+    {
+     "khz": 13988.5,
+     "call": "JMH4"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0000",
+     "title": "FSAS04/FSAS07 48/72HR SURFACE PRESSURE, PRECIPITATION PROG (RETRANSMISSION OF 2200)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0020",
+     "title": "FSAS09 96HR SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0040",
+     "title": "FSAS12 120HR SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0103",
+     "title": "TEST CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0110",
+     "title": "METEOROLOGICAL SATELLITE PICTURE (00)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0130",
+     "title": "STPN/FIOH SEA ICE (RETRANSMISSION OF 1019)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0150",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0210",
+     "title": "SOPQ SEA SURFACE CURRENT, WATER TEMPERATURE AT 100M DEPTH (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0229",
+     "title": "RADIO PREDICTION (3)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0240",
+     "title": "ASAS SURFACE ANALYSIS (00)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0300",
+     "title": "COPQ1 SEA SURFACE WATER TEMPERATURE (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0320",
+     "title": "ASAS SURFACE ANALYSIS (FIRST RETRANSMISSION OF 0240)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0340",
+     "title": "MANAM JMH BROADCAST SCHEDULE AND MANUAL AMENDMENTS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (RETRANSMISSION OF 0150)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0421",
+     "title": "AWPN OCEAN WAVE ANALYSIS (00)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0440",
+     "title": "AWJP COASTAL WAVE ANALYSIS (00)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0459",
+     "title": "AUAS50 500HPA HEIGHT, TEMPERATURE (00)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0518",
+     "title": "AUAS85 850HPA HEIGHT, TEMPERATURE, DEW POINT (00)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0537",
+     "title": "FUFE502/FSFE02 24HR 500HPA HEIGHT, VORTICITY; SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0548",
+     "title": "FSAS24 24HR SURFACE PRESSURE, WIND, FOG, ICING, SEA ICE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0630",
+     "title": "FSAS04/FSAS07 48/72HR SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0651",
+     "title": "FWPN 24HR OCEAN WAVE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0710",
+     "title": "METEOROLOGICAL SATELLITE PICTURE (06)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0730",
+     "title": "FWJP 24HR COASTAL WAVE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0750",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0809",
+     "title": "FUFE503/FSFE03 36HR 500HPA HEIGHT, VORTICITY; SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0820",
+     "title": "FSAS48 48HR SURFACE PRESSURE, WIND, ICING, SEA ICE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0840",
+     "title": "ASAS SURFACE ANALYSIS (06)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0900",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (RETRANSMISSION OF 0750)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0920",
+     "title": "ASAS SURFACE ANALYSIS (FIRST RETRANSMISSION OF 0840)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0940",
+     "title": "FSAS04/FSAS07 48/72HR SURFACE PRESSURE, PRECIPITATION PROG (RETRANSMISSION OF 0630)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1000",
+     "title": "FSAS48 48HR SURFACE PROG (RETRANSMISSION OF 0820)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1019",
+     "title": "STPN SEA ICE CONDITION (4) / FIOH SEA ICE PROG (5)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1040",
+     "title": "FSAS24 24HR SURFACE PROG (RETRANSMISSION OF 0548)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1100",
+     "title": "AWPN OCEAN WAVE ANALYSIS (RETRANSMISSION OF 0421)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1119",
+     "title": "AWJP COASTAL WAVE ANALYSIS (RETRANSMISSION OF 0440)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1140",
+     "title": "FWPN 24HR OCEAN WAVE PROG (RETRANSMISSION OF 0651)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1220",
+     "title": "FWPN07 12/24/48/72HR OCEAN WAVE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1240",
+     "title": "FXFE572/FXFE782 24HR 500HPA TEMP, 700HPA DEW POINT DEPRESSION; 850HPA TEMP, WIND, 700HPA VERTICAL P-VELOCITY PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1251",
+     "title": "FXFE573/FXFE783 36HR 500HPA TEMP, 700HPA DEW POINT DEPRESSION; 850HPA TEMP, WIND, 700HPA VERTICAL P-VELOCITY PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1303",
+     "title": "TEST CHART",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1310",
+     "title": "METEOROLOGICAL SATELLITE PICTURE (12)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1330",
+     "title": "FWJP 24HR COASTAL WAVE PROG (RETRANSMISSION OF 0730)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1350",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1420",
+     "title": "SOPQ SEA SURFACE CURRENT, WATER TEMPERATURE AT 100M DEPTH (RETRANSMISSION OF 0210) (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1440",
+     "title": "ASAS SURFACE ANALYSIS (12)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1520",
+     "title": "ASAS SURFACE ANALYSIS (FIRST RETRANSMISSION OF 1440)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1540",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (RETRANSMISSION OF 1350)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1600",
+     "title": "COPQ1 SEA SURFACE WATER TEMPERATURE (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1620",
+     "title": "AWPN OCEAN WAVE ANALYSIS (12)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1640",
+     "title": "AUAS50 500HPA HEIGHT, TEMPERATURE (12)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1700",
+     "title": "AUAS85 850HPA HEIGHT, TEMPERATURE, DEW POINT (12)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1719",
+     "title": "AWJP COASTAL WAVE ANALYSIS (12)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1739",
+     "title": "FUFE502/FSFE02 24HR 500HPA HEIGHT, VORTICITY; SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1810",
+     "title": "FUFE503/FSFE03 36HR 500HPA HEIGHT, VORTICITY; SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1821",
+     "title": "FXFE572/FXFE782 24HR 500HPA TEMP, 700HPA DEW POINT DEPRESSION; 850HPA TEMP, WIND, 700HPA VERTICAL P-VELOCITY PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1832",
+     "title": "FXFE573/FXFE783 36HR 500HPA TEMP, 700HPA DEW POINT DEPRESSION; 850HPA TEMP, WIND, 700HPA VERTICAL P-VELOCITY PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1850",
+     "title": "FWPN07 12/24/48/72HR OCEAN WAVE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1910",
+     "title": "METEOROLOGICAL SATELLITE PICTURE (18)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1930",
+     "title": "FSAS24 24HR SURFACE PRESSURE, WIND, FOG, ICING, SEA ICE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1950",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2010",
+     "title": "FWJP 24HR COASTAL WAVE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2040",
+     "title": "ASAS SURFACE ANALYSIS (18)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2100",
+     "title": "FSAS48 48HR SURFACE PRESSURE, WIND, ICING, SEA ICE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2120",
+     "title": "ASAS SURFACE ANALYSIS (FIRST RETRANSMISSION OF 2040)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2140",
+     "title": "WTAS12 TROPICAL CYCLONE FORECAST (RETRANSMISSION OF 1950)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2200",
+     "title": "FSAS04/FSAS07 48/72HR SURFACE PRESSURE, PRECIPITATION PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2220",
+     "title": "FWPN 24HR OCEAN WAVE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2300",
+     "title": "FSAS24 24HR SURFACE PROG (RETRANSMISSION OF 1930)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2320",
+     "title": "AWJP COASTAL WAVE ANALYSIS (RETRANSMISSION OF 1719)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2340",
+     "title": "FSAS48 48HR SURFACE PROG (RETRANSMISSION OF 2100)",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 35.7,
+   "lon": 139.7,
+   "place": "Tokyo (city)",
+   "kw": 5.0,
+   "from": "TOKYO, JAPAN. Japan Meteorological Agency. Schedule from JMA's own timetable (https://www.data.jma.go.jp/common/177jmh/JMH-ENG.pdf, effective 19 January 2022): the copy in \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025) is dated 2014 and its columns could not be read reliably. Frequencies and power (5 kW, F3C, white +400 / black -400) are the same in both. 120/576 as given by NOAA; JMA's page does not state the speed. Notes of the source: (1) in case of tropical cyclone; (2) every Tuesday and Friday; (3) on the 20th and 21st; (4) every Tuesday and Friday, seasonal; (5) except Tuesday and Friday, seasonal. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
   },
   {
    "id": "KVM70",
@@ -3326,6 +4797,42 @@
    "from": "KODIAK, ALASKA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfak.txt Schedule effective Sep 04, 2018; information dated Dec. 12, 2024. All 120/576. A row with two times is sent at both; ---- = not sent."
   },
   {
+   "id": "PEVEK",
+   "name": "Pevek",
+   "country": "Russia",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 148.0,
+     "call": ""
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0530",
+     "title": "ICE",
+     "lpm": 90,
+     "ioc": 576
+    },
+    {
+     "utc": "1130",
+     "title": "ICE",
+     "lpm": 90,
+     "ioc": 576
+    },
+    {
+     "utc": "1430",
+     "title": "ICE",
+     "lpm": 90,
+     "ioc": 576
+    }
+   ],
+   "lat": 69.7,
+   "lon": 170.3,
+   "place": "Pevek (town)",
+   "from": "PEVEK, CHUKOTKA PENINSULA, RUSSIA. DOUBTFUL STATION: the information in \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025) is dated 11/97 and nothing newer confirms it is on the air. Long wave (148 kHz), ice charts at 90 lines per minute, index 576. Each broadcast is given as a two-hour window (0530-0730, 1130-1330, 1430-1630): the time here is the start of the window. No call sign and no power in the source. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
    "id": "RBW",
    "name": "Murmansk",
    "country": "Russia",
@@ -3471,6 +4978,1087 @@
    "place": "Pirgos, as given by the user",
    "kw": 8.0,
    "from": "ATHENS, GREECE. Hellenic National Meteorological Service. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated 01/2019. The source lists 4481 and 8105 kHz with the note \"Center Frequency is 1.9 khz higher\": the centres used here are 4482.9 and 8106.9 kHz. Other lists give 4481 and 8105 as the centres: if nothing is received, try those as a fixed frequency. The source prints this entry next to Murmansk's and the reader mixed them: the rows from 0845 to 1044 are taken as Athens' (they match the 0845-1055 window other lists give for it). All 120/576."
+  },
+  {
+   "id": "VCO",
+   "name": "Sydney (Nova Scotia)",
+   "country": "Canada",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 4416.0,
+     "call": "VCO",
+     "from": "2200",
+     "to": "0000"
+    },
+    {
+     "khz": 6915.1,
+     "call": "VCO",
+     "from": "1121",
+     "to": "1800"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "1121",
+     "title": "ICE ANALYSIS GULF OF ST. LAWRENCE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1142",
+     "title": "ICE ANALYSIS EAST OR SOUTHEAST NEWFOUNDLAND WATERS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1741",
+     "title": "ICE ANALYSIS ICEBERG LIMIT",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2200",
+     "title": "ICE ANALYSIS GULF OF ST. LAWRENCE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2331",
+     "title": "ICE ANALYSIS EAST OR SOUTHEAST NEWFOUNDLAND WATERS",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 46.1,
+   "lon": -60.2,
+   "place": "Sydney, Nova Scotia (town)",
+   "from": "SYDNEY, NOVA SCOTIA, CANADA. Canadian Coast Guard: ice charts. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated 2014 (the same source says the other Canadian stations stopped in 2019: this one may have too). The source gives each frequency for the times of its broadcasts (4416 kHz 2200-2331, 6915.1 kHz 1121-1741): the windows here end after the last broadcast starts. All 120/576. No power in the source. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "VMC",
+   "name": "Charleville",
+   "country": "Australia",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 2628.0,
+     "call": "VMC",
+     "from": "0900",
+     "to": "1900"
+    },
+    {
+     "khz": 5100.0,
+     "call": "VMC"
+    },
+    {
+     "khz": 11030.0,
+     "call": "VMC"
+    },
+    {
+     "khz": 13920.0,
+     "call": "VMC"
+    },
+    {
+     "khz": 20469.0,
+     "call": "VMC",
+     "from": "1900",
+     "to": "0900"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0015",
+     "title": "VMC/VMW Schedule Page 1 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0030",
+     "title": "VMC/VMW Schedule Page 2 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0045",
+     "title": "VMC/VMW Information Notice",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0100",
+     "title": "IPS Recommended Frequencies for VMC (Charleville)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0130",
+     "title": "IPS Recommended Frequencies for VMW (Wiluna)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0200",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0245",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0300",
+     "title": "Australian 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0315",
+     "title": "Voice Broadcast Information for VMW (Wiluna) and VMC (Charleville)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "Australian 500 hPa (H+24) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0430",
+     "title": "Australian MSLP 4-day forecast, Days 1 and 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0445",
+     "title": "Australian MSLP 4-day forecast, Days 3 and 4",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0600",
+     "title": "Asian (Part A) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0623",
+     "title": "Asian (Part B) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0645",
+     "title": "Asian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0730",
+     "title": "Indian Ocean MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0745",
+     "title": "Australian Wind Waves Ht(m) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0800",
+     "title": "Australian Swell Waves Ht(m) Prog (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0830",
+     "title": "South Pacific Ocean MSLP Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0845",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0900",
+     "title": "Australian MSLP Prog (H+36) (Repeat)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0915",
+     "title": "Australian MSLP 4-day forecast, Days 1 and 2 (Repeat)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0930",
+     "title": "Australian MSLP 4-day forecast, Days 3 and 4 (Repeat)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1015",
+     "title": "Casey Eastern and Western High Seas (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1030",
+     "title": "S.H. 500 hPa Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1045",
+     "title": "S.H. MSLP Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1100",
+     "title": "Casey Eastern and Western High Seas (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1115",
+     "title": "S.H. 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1130",
+     "title": "Asian Sea Surface Temp Anal (Weekly)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1145",
+     "title": "VMC/VMW Information Notice",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1200",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1215",
+     "title": "VMC/VMW Schedule Page 1 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1230",
+     "title": "VMC/VMW Schedule Page 2 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1245",
+     "title": "Indian Ocean MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1315",
+     "title": "South Pacific Ocean Total Waves (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1330",
+     "title": "Indian Ocean Total Waves (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1345",
+     "title": "Pacific Ocean Sea Surface Temps (Weekly)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1400",
+     "title": "Indian Ocean Sea Surface Temps (Weekly)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1415",
+     "title": "Casey Eastern and Western High Seas (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1430",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1500",
+     "title": "Australian 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1515",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1530",
+     "title": "Australian MSLP 4-day forecast, Days 1 and 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1545",
+     "title": "Australian MSLP 4-day forecast, Days 3 and 4",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1600",
+     "title": "Australian 500 hPa (H+24) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1630",
+     "title": "IPS Recommended Frequencies for VMC (Charleville)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1700",
+     "title": "IPS Recommended Frequencies for VMW (Wiluna)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1800",
+     "title": "Asian (Part A) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1823",
+     "title": "Asian (Part B) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1915",
+     "title": "Indian Ocean MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1930",
+     "title": "Australian Wind Waves Ht(m) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1945",
+     "title": "Australian Swell Waves Ht(m) Prog (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2000",
+     "title": "South Pacific Ocean MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2015",
+     "title": "Casey Eastern and Western High Seas (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2030",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2215",
+     "title": "Casey Eastern and Western High Seas (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2230",
+     "title": "S.H. 500 hPa Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2245",
+     "title": "S.H. MSLP Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2300",
+     "title": "S.H. 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2315",
+     "title": "Casey Eastern and Western High Seas (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2330",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2345",
+     "title": "Indian Ocean MSLP Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": -26.4,
+   "lon": 146.2,
+   "place": "Charleville (town)",
+   "kw": 1.0,
+   "from": "CHARLEVILLE, AUSTRALIA. Bureau of Meteorology. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated Apr 20, 2022 (http://www.bom.gov.au/marine/radio-sat/radio-fax-schedule.shtml). Charleville (VMC) and Wiluna (VMW) send the same schedule. All 120/576, 1 kW. A row with two times is sent at both; ---- = not sent. Not included: the four repeats the source gives \"on 11030 kHz only via a directional aerial pointing from Charleville towards Tasmania\" (0000, 0345, 0500, 0515). Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "VMW",
+   "name": "Wiluna",
+   "country": "Australia",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 5755.0,
+     "call": "VMW",
+     "from": "1100",
+     "to": "2100"
+    },
+    {
+     "khz": 7535.0,
+     "call": "VMW"
+    },
+    {
+     "khz": 10555.0,
+     "call": "VMW"
+    },
+    {
+     "khz": 15615.0,
+     "call": "VMW"
+    },
+    {
+     "khz": 18060.0,
+     "call": "VMW",
+     "from": "2100",
+     "to": "1100"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0015",
+     "title": "VMC/VMW Schedule Page 1 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0030",
+     "title": "VMC/VMW Schedule Page 2 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0045",
+     "title": "VMC/VMW Information Notice",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0100",
+     "title": "IPS Recommended Frequencies for VMC (Charleville)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0130",
+     "title": "IPS Recommended Frequencies for VMW (Wiluna)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0200",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0245",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0300",
+     "title": "Australian 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0315",
+     "title": "Voice Broadcast Information for VMW (Wiluna) and VMC (Charleville)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "Australian 500 hPa (H+24) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0430",
+     "title": "Australian MSLP 4-day forecast, Days 1 and 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0445",
+     "title": "Australian MSLP 4-day forecast, Days 3 and 4",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0600",
+     "title": "Asian (Part A) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0623",
+     "title": "Asian (Part B) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0645",
+     "title": "Asian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0730",
+     "title": "Indian Ocean MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0745",
+     "title": "Australian Wind Waves Ht(m) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0800",
+     "title": "Australian Swell Waves Ht(m) Prog (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0830",
+     "title": "South Pacific Ocean MSLP Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0845",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0900",
+     "title": "Australian MSLP Prog (H+36) (Repeat)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0915",
+     "title": "Australian MSLP 4-day forecast, Days 1 and 2 (Repeat)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0930",
+     "title": "Australian MSLP 4-day forecast, Days 3 and 4 (Repeat)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1015",
+     "title": "Casey Eastern and Western High Seas (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1030",
+     "title": "S.H. 500 hPa Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1045",
+     "title": "S.H. MSLP Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1100",
+     "title": "Casey Eastern and Western High Seas (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1115",
+     "title": "S.H. 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1130",
+     "title": "Asian Sea Surface Temp Anal (Weekly)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1145",
+     "title": "VMC/VMW Information Notice",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1200",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1215",
+     "title": "VMC/VMW Schedule Page 1 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1230",
+     "title": "VMC/VMW Schedule Page 2 of 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1245",
+     "title": "Indian Ocean MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1315",
+     "title": "South Pacific Ocean Total Waves (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1330",
+     "title": "Indian Ocean Total Waves (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1345",
+     "title": "Pacific Ocean Sea Surface Temps (Weekly)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1400",
+     "title": "Indian Ocean Sea Surface Temps (Weekly)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1415",
+     "title": "Casey Eastern and Western High Seas (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1430",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1500",
+     "title": "Australian 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1515",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1530",
+     "title": "Australian MSLP 4-day forecast, Days 1 and 2",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1545",
+     "title": "Australian MSLP 4-day forecast, Days 3 and 4",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1600",
+     "title": "Australian 500 hPa (H+24) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1630",
+     "title": "IPS Recommended Frequencies for VMC (Charleville)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1700",
+     "title": "IPS Recommended Frequencies for VMW (Wiluna)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1800",
+     "title": "Asian (Part A) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1823",
+     "title": "Asian (Part B) Gradient Level Wind Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1915",
+     "title": "Indian Ocean MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1930",
+     "title": "Australian Wind Waves Ht(m) Prog",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1945",
+     "title": "Australian Swell Waves Ht(m) Prog (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2000",
+     "title": "South Pacific Ocean MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2015",
+     "title": "Casey Eastern and Western High Seas (H+24)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2030",
+     "title": "Australian MSLP Anal (Manual)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2215",
+     "title": "Casey Eastern and Western High Seas (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2230",
+     "title": "S.H. 500 hPa Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2245",
+     "title": "S.H. MSLP Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2300",
+     "title": "S.H. 500 hPa Anal",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2315",
+     "title": "Casey Eastern and Western High Seas (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2330",
+     "title": "Australian MSLP Prog (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2345",
+     "title": "Indian Ocean MSLP Prog (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": -26.6,
+   "lon": 120.2,
+   "place": "Wiluna (town)",
+   "kw": 1.0,
+   "from": "WILUNA, AUSTRALIA. Bureau of Meteorology. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated Apr 20, 2022 (http://www.bom.gov.au/marine/radio-sat/radio-fax-schedule.shtml). Charleville (VMC) and Wiluna (VMW) send the same schedule. All 120/576, 1 kW. A row with two times is sent at both; ---- = not sent. Not included: the four repeats the source gives \"on 11030 kHz only via a directional aerial pointing from Charleville towards Tasmania\" (0000, 0345, 0500, 0515). Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  },
+  {
+   "id": "XSQ",
+   "name": "Guangzhou",
+   "country": "China",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 4199.75,
+     "call": "XSQ"
+    },
+    {
+     "khz": 8412.5,
+     "call": "XSQ"
+    },
+    {
+     "khz": 12629.25,
+     "call": "XSQ"
+    },
+    {
+     "khz": 16826.25,
+     "call": "XSQ"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0000",
+     "title": "MANAM XSQ BROADCAST SCHEDULE AND MANUAL AMENDMENTS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0025",
+     "title": "FSAS024 24H SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0050",
+     "title": "FSAS048 48H SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0115",
+     "title": "FSAS072 72H SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0140",
+     "title": "FSSS024 24H SOUTH CHINA SEA FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0215",
+     "title": "FTPW120 120H TROPICAL CYCLONE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0240",
+     "title": "FSSS048 48H SOUTH CHINA SEA FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0305",
+     "title": "FSSS072 72H SOUTH CHINA SEA FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0330",
+     "title": "FWEA024 24H WAVE HEIGHT, SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0400",
+     "title": "ASPN SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0425",
+     "title": "FWEA048 48H WAVE HEIGHT, SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0450",
+     "title": "FWEA072 72H WAVE HEIGHT, SURFACE WIND FORECAST (2)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0515",
+     "title": "REISSUE CHART (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0815",
+     "title": "FTPW120 120H TROPICAL CYCLONE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1225",
+     "title": "FSAS024 24H SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1250",
+     "title": "FSAS048 48H SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1315",
+     "title": "FSAS072 72H SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1340",
+     "title": "FSSS024 24H SOUTH CHINA SEA FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1415",
+     "title": "FTPW120 120H TROPICAL CYCLONE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1440",
+     "title": "FSSS048 48H SOUTH CHINA SEA FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1505",
+     "title": "FSSS072 72H SOUTH CHINA SEA FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1600",
+     "title": "FWEA024 24H WAVE HEIGHT, SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1625",
+     "title": "FWEA048 48H WAVE HEIGHT, SURFACE WIND FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1650",
+     "title": "FWEA072 72H WAVE HEIGHT, SURFACE WIND FORECAST (1)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2015",
+     "title": "FTPW120 120H TROPICAL CYCLONE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "lat": 23.1,
+   "lon": 113.3,
+   "place": "Guangzhou (city)",
+   "kw": 5.0,
+   "from": "GUANGZHOU COAST RADIO STATION, CHINA. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); schedule effective 23 August 2022. Times are UTC (the source gives Beijing time beside each one). F3C, 5 kW. The source gives no speed (120/576 assumed) and does not say whether the frequencies are the centre of the channel. Notes of the source: (1) in case of tropical cyclone; (2) in case charts not broadcast in time. Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site."
+  }
+ ],
+ "closed": [
+  {
+   "name": "Iqaluit",
+   "country": "Canada",
+   "note": "Services discontinued in 2019 (information dated August 2024)"
+  },
+  {
+   "name": "Resolute",
+   "country": "Canada",
+   "note": "Services discontinued in 2019 (information dated August 2024)"
+  },
+  {
+   "name": "Inuvik",
+   "country": "Canada",
+   "note": "Services discontinued in 2019 (information dated August 2024)"
+  },
+  {
+   "name": "Wellington (ZKLF)",
+   "country": "New Zealand",
+   "note": "Stopped broadcasting radiofax charts on 1 July 2023"
   }
  ]
 }

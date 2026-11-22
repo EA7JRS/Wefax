@@ -1,0 +1,23 @@
+# KYODO NEWS, JAPAN / SINGAPORE. Newspaper by facsimile for ships (news, sports, navigational warnings), not weather charts, except the ocean current map. From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); information updated January 30, 2025.
+# The source gives one frequency (16971 kHz), no speed, no power and no transmitter site. Kyodo's pages are sent at other speeds than the weather charts (the source does not say which): 120/576 is assumed here and may be wrong.
+# Notes of the source: (1) Tuesday to Sunday; (2) Monday; (3) Sunday, Monday; (4) Tuesday to Saturday; (5) Saturday; (6) Monday to Saturday; (7) Sunday.
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|JJC|Kyodo News|Japan|400
+POS|35.7|139.7|Tokyo (city); the transmitter site is not in the source
+FREQ|16971|JJC|
+0200|KYODO NEWS (EVENING) (1) / KYODO FURUSATO NEWS (2)
+0300|KYODO NEWS (MORNING), SPORTS, JAPAN NAVIGATIONAL WARNINGS
+0700|OCEAN CURRENT FORECASTING (MAP) (3)
+0710|KYODO NEWS (ENGLISH EDITION) (4)
+0730|MARINE ADMINISTRATION NEWS (5)
+0745|KYODO NEWS (EVENING), KAIUN-SUISAN NEWS (6) / FURUSATO NEWS, MARINE ADMINISTRATION NEWS (7)
+0940|SUMO MATCH TABLE
+1000|KYODO FURUSATO NEWS (7)
+1020|KYODO NEWS SPORTS (MORNING), KYODO NEWS (MORNING)
+1130|JAPAN NAVIGATIONAL WARNINGS, SUMO MATCH TABLE
+1200|KYODO NEWS (ENGLISH EDITION)
+1400|KYODO KAIUN-SUISAN NEWS
+1500|KYODO NEWS (MORNING), SPORTS, JAPAN NAVIGATIONAL WARNINGS
+1645|KYODO NEWS (EVENING)
+2030|JAPAN NAVIGATIONAL WARNINGS, MARINE ADMINISTRATION NEWS (5)
+2300|KYODO NEWS (MORNING), SPORTS, JAPAN NAVIGATIONAL WARNINGS, KAIUN-SUISAN NEWS

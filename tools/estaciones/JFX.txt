@@ -1,0 +1,28 @@
+# KAGOSHIMA, JAPAN. Kagoshima fishery radio (fisheries information, with some weather charts). From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); schedule updated 1/29/2025.
+# The source prints the schedule in blocks by frequency that the reader could not tell apart: here every time is listed once, for all the frequencies, so a broadcast may not be on the frequency the receiver chooses. The source gives no speed (120/576 assumed), no power and no hours for each frequency.
+# Notes of the source: (1) Monday only; (2) in case of tropical cyclone; (3) Monday and Wednesday only; (4) Tuesday and Friday only; (5) August to December.
+# Position: the city of the station name, to a tenth of a degree; the source does not give the transmitter site.
+STATION|JFX|Kagoshima|Japan|400
+POS|31.6|130.6|Kagoshima (city)
+FREQ|4274|JFX|
+FREQ|8658|JFX|
+FREQ|13074|JFX|
+FREQ|16907.5|JFX|
+FREQ|22559.6|JFX|
+0020|SURFACE PRESSURE FORECAST
+0110|BROADCAST SCHEDULE (1)
+0310|SURFACE ANALYSIS JMH ASAS
+0330|FISH MARKET INFORMATION
+0400|SURFACE PRESSURE FORECAST (REBROADCAST)
+0440|TROPICAL CYCLONE INFORMATION (2)
+0610|JFX NOAA INFORMATION (REBROADCAST)
+0700|SEA SURFACE TEMPERATURE AROUND JAPAN (4) / MISAKI FISHING PORT FROZEN TUNA MARKET (3)
+0730|WEATHER INFORMATION (4)
+0800|PACIFIC SAURY FISHING INFORMATION (5)
+0830|TUNA MARKET INFORMATION
+0930|COAST GUARD NAVIGATIONAL WARNINGS
+1030|MARITIME SECURITY INTELLIGENCE
+1100|NOTIFICATIONS FROM RADIO STATIONS
+1800|JFX NOAA INFORMATION
+2200|GENERAL NAVIGATIONAL WARNINGS
+2240|MARINE WEATHER (KAGOSHIMA, NAGASAKI, OKINAWA)

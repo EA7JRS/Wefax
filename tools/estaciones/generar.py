@@ -5,8 +5,9 @@
 
 Cada archivo <ID>.txt es la transcripción del horario de una estación. Las de EE. UU. (NMF, NMG,
 NMC, NOJ, KVM70) salen del horario en texto de cada una que publica el National Weather Service
-(https://www.weather.gov/media/marine/hf*.txt, datos del 12 de diciembre de 2024); DDH, GYA, SVJ4 y RBW, de
-«Worldwide Marine Radiofacsimile Broadcast Schedules» (NOAA, edición del 7 de marzo de 2025).
+(https://www.weather.gov/media/marine/hf*.txt, datos del 12 de diciembre de 2024); Tokio (JMH), del horario de
+la propia JMA (enero de 2022); las demás, de «Worldwide Marine Radiofacsimile Broadcast Schedules» (NOAA, edición
+del 7 de marzo de 2025). `cerradas.csv`: las que esa publicación da por cerradas.
 Las líneas de comentario del principio de cada archivo dicen su origen y su fecha:
 
     # comentarios
@@ -49,7 +50,7 @@ for name in sorted(os.listdir(here)):
             st['kw'] = float(f[1])
         elif f[0] == 'FREQ' and len(f) == 4:
             fr = {'khz': float(f[1]), 'call': f[2]}
-            if not 1500 <= fr['khz'] <= 30000: errors.append(f'{where}: frecuencia fuera de onda corta')
+            if not 100 <= fr['khz'] <= 30000: errors.append(f'{where}: frecuencia imposible')
             if f[3]:
                 m = re.fullmatch(r'(\d{4})-(\d{4})', f[3])
                 if not m: errors.append(f'{where}: horas mal escritas')
@@ -69,6 +70,13 @@ for name in sorted(os.listdir(here)):
         st['broadcasts'].sort(key=lambda b: b['utc'])
         if not st['freqs'] or not st['broadcasts']: errors.append(f'{name}: sin frecuencias o sin emisiones')
         stations.append(st)
+# las que la fuente da por cerradas: solo se enseñan, para que nadie las busque
+closed = []
+for line in open(os.path.join(here, 'cerradas.csv'), encoding='utf-8'):
+    f = line.rstrip('\n').split('|')
+    if line.startswith('#') or not line.strip(): continue
+    if len(f) != 3: errors.append(f'cerradas.csv: no se entiende: {line[:40]}')
+    else: closed.append({'name': f[0], 'country': f[1], 'note': f[2]})
 if errors:
     print('\n'.join(errors)); sys.exit(1)
 data = {
@@ -77,6 +85,7 @@ data = {
     'dated': '2025-03-07',
     'note': 'Transcribed through an automatic reader of the sources: check a time against the source before relying on it. Frequencies are the assigned ones (centre of the channel).',
     'stations': stations,
+    'closed': closed,
 }
 with open(out, 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=1)
