@@ -7,6 +7,7 @@ Las entradas dicen también qué se probó y qué no.
 - Interfaz web (`wefaxwebserver`, puerto 8081): cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones con su frecuencia, ajustes del receptor y del reparto del equipo con Navtex. Mismo aspecto, temas e idiomas (ES / EN) que Navtex. Sin contraseña: solo en una red de confianza.
 - Lista de estaciones `web_server/build/estaciones.json` con siete estaciones, hecha con `tools/estaciones/generar.py`: Boston, Nueva Orleans, Point Reyes, Kodiak y Honolulu, de los horarios en texto por estación del National Weather Service (datos del 12 de diciembre de 2024); Hamburgo / Pinneberg y Northwood, de «Worldwide Marine Radiofacsimile Broadcast Schedules» de la NOAA (edición del 7 de marzo de 2025). Transcrita con un lector automático: sin cotejar línea a línea con el original.
 - Posición del GPS: la interfaz la toma de gpsd (`WEFAX_GPSD`, de serie `127.0.0.1:2947`; el mismo lector que Navtex) y la muestra en un recuadro; el aspecto automático usa el sol en esa posición.
+- Ayuda «Cómo leer una carta» en la pestaña Cartas: isobaras, viento, frentes, tipos de carta y escala Beaufort (redacción propia).
 - Servicios de systemd (`wefax-web`, `wefax-receiver`) y `tools/instalar-servicios.sh`; el receptor no toca ningún equipo hasta que se enciende en la web.
 - `make check` carga también la lista instalada (91 comprobaciones).
 - README con la instalación paso a paso, servicios, comandos, API, seguridad y solución de problemas, al modo de Navtex.

@@ -42,6 +42,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Interfaz web | Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
 | Solo onda corta | No recibe imágenes de satélite: el WEFAX de los geoestacionarios ya no se emite y lo que hay hoy (LRPT, HRIT) es digital, otro sistema |
 | Posición del GPS | La toma de gpsd (como Navtex) y la muestra; con ella el aspecto automático cambia con el sol |
+| Ayuda para leer la carta | Isobaras, viento, frentes, tipos de carta y escala Beaufort, en la pestaña Cartas |
 | Descodifica grabaciones | Para probar y para repasar una recepción dudosa |
 
 ## Estado

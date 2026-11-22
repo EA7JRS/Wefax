@@ -303,3 +303,8 @@ input[type="text"] {
 .frecs li:first-child { border-top: 0; }
 .frecs .apagada { color: var(--suave); }
 input[type="number"] { font: inherit; color: var(--texto); background: var(--panel); border: 1px solid var(--borde); border-radius: 10px; padding: 8px 12px; min-height: 40px; width: 100%; }
+/* Ayuda */
+.ayuda > summary { font-weight: 600; font-size: 16px; color: var(--texto); }
+.ayuda p { margin: 8px 0 0; }
+.ayuda caption { text-align: left; padding: 6px 10px; font-size: 12px; color: var(--suave); text-transform: uppercase; letter-spacing: 0.4px; }
+.ayuda .horario td, .ayuda .horario th { padding: 4px 10px; }

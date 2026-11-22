@@ -67,6 +67,22 @@
       <p class="nota" id="resumen"></p>
       <ol class="cartas" id="cartas"></ol>
       <p class="vacio" id="vacio" hidden></p>
+      <details class="tarjeta ayuda" id="ayuda-carta">
+        <summary>Cómo leer una carta</summary>
+        <p>Las cartas llegan rotuladas en inglés y con las horas en UTC. Mire siempre en el rótulo la hora de validez (VALID): un análisis es lo observado a esa hora; una previsión (FORECAST, PROGNOSIS, 24HR, 48HR…) es lo esperado para esa hora.</p>
+        <p><strong>Isobaras.</strong> Las líneas de una carta de superficie unen los puntos con la misma presión al nivel del mar, normalmente cada 4 hPa (1008, 1012, 1016…). H marca una alta presión y L una baja.</p>
+        <p><strong>Viento.</strong> El viento sopla casi a lo largo de las isobaras. En el hemisferio norte, de espaldas al viento la baja queda a la izquierda (en el sur, a la derecha); sobre la mar se desvía un poco hacia la baja. Cuanto más juntas están las isobaras, más viento: es lo primero que hay que mirar en la zona por la que se va a navegar.</p>
+        <p><strong>Frentes.</strong> Línea con triángulos, frente frío; con semicírculos, frente cálido; con los dos alternados, frente ocluido. Los símbolos apuntan hacia donde avanza. Al paso de un frente frío el viento rola de golpe y suele arreciar.</p>
+        <p><strong>Otras cartas.</strong> WIND/WAVE: viento (barbas: media barba 5 nudos, una entera 10, un banderín 50) y altura de ola en metros o pies. SEA STATE: altura significativa de la mar. 500 MB: el flujo en altura, que guía a las borrascas. ICE: límites del hielo. SATELLITE IMAGE: nubes vistas desde el satélite.</p>
+        <div class="tabla-caja">
+          <table class="horario">
+            <caption>Escala Beaufort</caption>
+            <thead><tr><th>Fuerza</th><th>Nudos</th><th>Nombre</th><th>Ola probable (m)</th></tr></thead>
+            <tbody><tr><td class="hora">0</td><td>menos de 1</td><td>Calma</td><td>0</td></tr><tr><td class="hora">1</td><td>1 a 3</td><td>Ventolina</td><td>0,1</td></tr><tr><td class="hora">2</td><td>4 a 6</td><td>Flojito</td><td>0,2</td></tr><tr><td class="hora">3</td><td>7 a 10</td><td>Flojo</td><td>0,6</td></tr><tr><td class="hora">4</td><td>11 a 16</td><td>Bonancible</td><td>1</td></tr><tr><td class="hora">5</td><td>17 a 21</td><td>Fresquito</td><td>2</td></tr><tr><td class="hora">6</td><td>22 a 27</td><td>Fresco</td><td>3</td></tr><tr><td class="hora">7</td><td>28 a 33</td><td>Frescachón</td><td>4</td></tr><tr><td class="hora">8</td><td>34 a 40</td><td>Temporal</td><td>5,5</td></tr><tr><td class="hora">9</td><td>41 a 47</td><td>Temporal fuerte</td><td>7</td></tr><tr><td class="hora">10</td><td>48 a 55</td><td>Temporal duro</td><td>9</td></tr><tr><td class="hora">11</td><td>56 a 63</td><td>Temporal muy duro</td><td>11,5</td></tr><tr><td class="hora">12</td><td>64 o más</td><td>Temporal huracanado</td><td>14 o más</td></tr></tbody>
+          </table>
+        </div>
+        <p class="nota">Esta ayuda es un resumen general, no un curso de meteorología. Los avisos de temporal empiezan en fuerza 8.</p>
+      </details>
     </section>
 
     <section id="vista-horario" aria-label="Horario" hidden>
