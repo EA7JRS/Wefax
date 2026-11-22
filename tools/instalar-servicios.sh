@@ -94,6 +94,6 @@ if command -v ufw >/dev/null 2>&1 && ufw status 2>/dev/null | grep -q '^Status: 
     echo "  sudo ufw allow from 192.168.0.0/16 to any port ${PUERTO:-8081} proto tcp"
   fi
 fi
-# la primera lectura, ya; si no hay Internet se reintenta mañana, o a mano con el guion
-systemctl start wefax-manchas.service 2>/dev/null || true
+# la primera lectura, ya (sin esperar: si falla, el servicio lo reintenta solo cada 30 s, hasta seis veces)
+systemctl start --no-block wefax-manchas.service 2>/dev/null || true
 echo "Registro:  journalctl -u wefax-receiver -f"
