@@ -8,6 +8,8 @@
 window.WEFAX_I18N = (function () {
   'use strict';
   var EN = {
+ "Hora UTC": "UTC time",
+ "local ": "local ",
  "Predicción de propagación (VOACAP)": "Propagation prediction (VOACAP)",
  "VOACAP no está instalado en este equipo: ejecute tools/instalar-voacap.sh.": "VOACAP is not installed on this machine: run tools/instalar-voacap.sh.",
  "Falta el número de manchas solares del mes.": "The sunspot number of the month is missing.",

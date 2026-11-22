@@ -223,6 +223,11 @@
   }
   function vivo() { var a = estado.alive ? Number(estado.alive.at) : 0; return a && Date.now() / 1000 - a < 30; }
   function recibiendo() { return vivo() && st('decoder') === 'chart'; }
+  function pintarHora() {
+    var d = new Date(), u = $('hora-utc'), l = $('hora-local');
+    if (u) u.textContent = dos(d.getUTCHours()) + ':' + dos(d.getUTCMinutes()) + ':' + dos(d.getUTCSeconds());
+    if (l) l.textContent = fechaUtc(d) + ' · ' + tr('local ') + horaLocal(d);
+  }
   function pintarEstado() {
     var c = $('estado'), s = st('state'), ok = vivo();
     c.textContent = '';
@@ -242,6 +247,12 @@
         + (POR[st('next_why')] && st('next_why') !== 'm' && ajuste('freq.' + st('next_station'), 'auto') === 'auto' ? ' (' + tr(POR[st('next_why')]) + ')' : '')));
     } else c.appendChild(dato(tr('Próxima emisión'), '—', ''));
     c.appendChild(dato(tr('Cartas guardadas'), String(cartas.length), cartas.length ? tr('la última, ') + haceCuanto(Date.parse(cartas[0].received)) : ''));
+    // Hora UTC, como en Navtex: los horarios de las emisiones van en UTC
+    var reloj = dato(tr('Hora UTC'), '', '');
+    reloj.querySelector('.valor').className = 'valor mono'; reloj.querySelector('.valor').id = 'hora-utc';
+    reloj.appendChild(el('span', 'detalle')); reloj.lastChild.id = 'hora-local';
+    c.appendChild(reloj);
+    pintarHora();
     c.appendChild(datoGps());
   }
 
@@ -587,6 +598,7 @@
     if (p) p.click();
     leerTodo();
     setInterval(leerTodo, 5000);
+    setInterval(pintarHora, 1000);
     setInterval(function () { if (!$('vista-horario').hidden) pintarHorario(); }, 60000);
   });
 })();
