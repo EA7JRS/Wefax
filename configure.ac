@@ -1,4 +1,4 @@
-AC_INIT([wefax], [0.1.0])
+AC_INIT([wefax], [0.2.0])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_PROG_CC
 AC_CHECK_LIB(m,atan2,,[AC_MSG_ERROR([the maths library is missing])])

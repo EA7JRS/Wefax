@@ -8,9 +8,9 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.1.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de cinco estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.2.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de cinco estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
-📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md)
+📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.2.0](docs/releases/v0.2.0.md)
 
 ## Vista previa
 
@@ -40,6 +40,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Comparte el receptor con Navtex | Puede usar un equipo propio o turnarse con [Navtex](https://github.com/EA7JRS/Navtex): le pide que suelte el receptor antes de cada emisión y se lo devuelve al acabar |
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
 | Interfaz web | Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
+| Solo onda corta | No recibe imágenes de satélite: el WEFAX de los geoestacionarios ya no se emite y lo que hay hoy (LRPT, HRIT) es digital, otro sistema |
 | Descodifica grabaciones | Para probar y para repasar una recepción dudosa |
 
 ## Estado

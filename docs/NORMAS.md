@@ -1,6 +1,6 @@
 # Normas y reglamentos que contempla Wefax
 
-© 2026 Manuel - EA7JRS · versión 0.1.0 · comprobado el 22 de noviembre de 2026
+© 2026 Manuel - EA7JRS · versión 0.2.0 · comprobado el 22 de noviembre de 2026
 
 Este documento dice qué normas describen el radiofacsímil meteorológico por onda corta, qué parte de ellas aplica el programa y cuáles **no** tienen que ver, aunque a veces se citen. Wefax es una ayuda: no está homologado ni ensayado contra ninguna norma.
 
@@ -23,7 +23,7 @@ El **Manual del Sistema Mundial de Telecomunicación** de la Organización Meteo
 
 ## Los horarios y frecuencias
 
-Los horarios, frecuencias e indicativos de cada estación los publica el Servicio Meteorológico Nacional de EE. UU. en [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025), con los datos que le da cada país. De ahí saldrá la lista de estaciones del programa, que **todavía no está hecha**.
+Los horarios, frecuencias e indicativos de cada estación los publica el Servicio Meteorológico Nacional de EE. UU. en [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025), con los datos que le da cada país. De ahí sale la lista del programa (`web_server/build/estaciones.json`, hecha con `tools/estaciones/generar.py`), con cinco estaciones: Hamburgo / Pinneberg (datos del 24 de julio de 2024), Northwood (5 de enero de 2022), Boston, Nueva Orleans y Point Reyes (12 de febrero de 2020). Se transcribió con un lector automático del PDF y **no se ha cotejado línea a línea con el original**; además los horarios cambian. La interfaz lo avisa. Northwood no da velocidad ni índice en esa publicación: se supone 120 líneas por minuto e índice 576. Kodiak y Honolulu no están porque su tabla no se pudo leer con seguridad.
 
 ## Reglamentación marítima
 
@@ -49,3 +49,5 @@ Se consultaron porque se citan a veces junto al radiofacsímil, y no son de apli
 - **Homologación.** Sin ensayos ni aprobación de tipo de ninguna clase.
 - **Sensibilidad y selectividad:** dependen del receptor y de la antena; no se han medido con una señal real.
 - **Enfasado simétrico** y **onda larga:** no hechos.
+- **Satélite:** no recibe imágenes de satélite. El WEFAX analógico de los geoestacionarios (1691 MHz) se sustituyó por LRIT / HRIT, digitales; es otro sistema y otro descodificador.
+- **Seguridad de la interfaz web:** sin contraseña ni cifrado; solo para una red de confianza.
