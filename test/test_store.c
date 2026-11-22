@@ -15,6 +15,9 @@
 #include "../receiver/store.h"
 
 static int checks, failed;
+#ifndef STATIONS_SRC
+#define STATIONS_SRC "../web_server/build/estaciones.json"
+#endif
 #define CHECK(c, what) do { checks++; if (!(c)) { failed++; printf("FAIL: %s (line %d)\n", what, __LINE__); } } while (0)
 
 /* A schedule written for the test: the stations and times are made up */
@@ -126,6 +129,15 @@ int main(void)
     CHECK(schedule_next(day + 23 * 3600, "AAA", "", &b) && strcmp(b.title, "Late chart") == 0 && b.lpm == 60 && b.ioc == 288, "the last of the day");
     CHECK(schedule_next(day + 23 * 3600 + 3540 + 1800, "AAA", "", &b) && b.start == day + 86400 + 4 * 3600 + 30 * 60, "after it, tomorrow's first");
     CHECK(schedule_next(day + 3 * 3600, "AA", "", &b) == 0, "part of an id is not the id");
+    schedule_free();
+
+    /* the list that is installed: transcribed from the NOAA schedule */
+    CHECK(schedule_load(STATIONS_SRC) == 5, "the installed list loads: five stations");
+    CHECK(schedule_next(day + 4 * 3600, "DDH", "", &b) && b.start == day + 4 * 3600 + 30 * 60 && b.deviation == 425 && b.nfreqs == 3 && b.suggested_khz == 7880,
+          "Hamburg: 04:30, 425 Hz, three frequencies");
+    CHECK(schedule_next(day + 3600, "GYA", "", &b) && b.nfreqs == 3 && b.freqs[0] == 2618.5 && b.end - b.start == 12 * 60, "Northwood at night: 2618.5 kHz on, 12 minute slots");
+    CHECK(schedule_next(day + 12 * 3600, "GYA", "", &b) && b.nfreqs == 3 && b.freqs[2] == 11086.5, "Northwood by day: 11086.5 kHz on");
+    CHECK(schedule_next(day + 15 * 3600, "NMF", "", &b) && b.nfreqs == 3 && b.freqs[0] == 6340.5, "Boston in the afternoon: 4235 kHz off");
     schedule_free();
 
     /* the address of Navtex */

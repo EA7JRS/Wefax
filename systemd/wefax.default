@@ -1,0 +1,12 @@
+# /etc/default/wefax · ajustes del servicio wefax-web
+# Tras cambiarlos:  sudo systemctl restart wefax-web
+
+# El receptor (equipo, estaciones, encendido) se ajusta en la interfaz web:
+# no hay nada que poner aquí para él.
+
+# Interfaz web: puerto y dirección en la que escucha. No tiene contraseña.
+#   0.0.0.0    cualquier equipo de la red (abra el puerto en el cortafuegos)
+#   127.0.0.1  solo este equipo
+# Navtex usa el 8080 y Wefax el 8081.
+WEB_PORT=8081
+WEB_ADDRESS=0.0.0.0

@@ -8,7 +8,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.1.0, en construcción.** Está hecho y probado el descodificador y el programa receptor por línea de órdenes. **Faltan** la interfaz web, los servicios, la lista de estaciones con sus horarios y la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.1.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de cinco estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
 📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md)
 
@@ -17,6 +17,16 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 ![Carta de prueba descodificada](docs/img/carta_prueba.png)
 
 *Carta de prueba, no recibida del aire: la genera el propio proyecto (`test/make_recording.c`) como la entregaría un receptor, con ruido (10 dB) y el receptor 350 Hz fuera de frecuencia, y la descodifica `wefaxreceiver`. Nunca se ha emitido.*
+
+### Interfaz web
+
+![Cartas recibidas](docs/img/web_cartas.png)
+
+*Las tres cartas son la carta de prueba de arriba, y el estado del receptor está puesto a mano para la captura: nada de eso se recibió del aire.*
+
+![Horario de las próximas 24 horas](docs/img/web_horario.png)
+
+![Estaciones](docs/img/web_estaciones.png)
 
 ## Qué hace
 
@@ -29,26 +39,29 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Sigue el horario | En modo servicio sintoniza cada emisión de las estaciones elegidas un minuto antes. También puede quedarse en una frecuencia fija |
 | Comparte el receptor con Navtex | Puede usar un equipo propio o turnarse con [Navtex](https://github.com/EA7JRS/Navtex): le pide que suelte el receptor antes de cada emisión y se lo devuelve al acabar |
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
+| Interfaz web | Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
 | Descodifica grabaciones | Para probar y para repasar una recepción dudosa |
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 85 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 89 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
 - la base de datos, el horario (con una lista de estaciones inventada para la prueba) y los ajustes;
-- el programa `wefaxreceiver` descodificando una grabación generada.
+- el programa `wefaxreceiver` descodificando una grabación generada;
+- la interfaz web en un navegador, con una base de datos de muestra (las capturas de arriba).
 
 **Sin probar:**
 
 - una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; **la parte de SDRplay no se ha podido compilar** donde se escribió (no hay API), solo en un equipo que la tenga;
-- el turno con Navtex contra un Navtex en marcha.
+- el turno con Navtex contra un Navtex en marcha;
+- los servicios y su instalador, en ningún equipo (el guion solo se ha revisado con `sh -n`);
+- **la lista de estaciones contra el original**: se transcribió del PDF de la NOAA con un lector automático y no se ha cotejado línea a línea. Compruebe una hora antes de fiarse de ella.
 
 **Sin hacer todavía:**
 
-- la lista de estaciones y horarios (saldrá del [horario mundial de la NOAA](https://www.weather.gov/media/marine/rfax.pdf));
-- la interfaz web (cartas, horario, receptor), los servicios y su instalador;
+- más estaciones: la lista trae Hamburgo / Pinneberg, Northwood, Boston, Nueva Orleans y Point Reyes. Kodiak y Honolulu quedaron fuera porque su tabla, de dos horas por fila, no se pudo leer con seguridad; Atenas no publica horario; faltan las de Asia, Chile, Canadá y Australia;
 - el enfasado simétrico (mitad blanco, mitad negro), que algunas estaciones pueden usar: esas cartas saldrían desplazadas.
 
 ## Qué hace falta
@@ -65,13 +78,14 @@ Hecho y comprobado en el PC (`make check`, 85 comprobaciones):
 | `zlib1g-dev` | zlib: comprime las imágenes PNG | Sí |
 | `libcjson-dev` | cJSON: la lista de estaciones y la API | Sí |
 | `libsqlite3-dev` | SQLite: ajustes y lista de cartas | Sí |
+| `libmicrohttpd-dev` | GNU libmicrohttpd: el servidor de la interfaz web | Sí |
 | `librtlsdr-dev` | Receptores RTL-SDR | Solo con RTL-SDR |
 | API de SDRplay 3.15 o posterior | Receptores SDRplay; se baja de [sdrplay.com/api](https://www.sdrplay.com/api/) | Solo con SDRplay |
 
 ## Instalación
 
 ```bash
-sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev librtlsdr-dev
+sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev libmicrohttpd-dev librtlsdr-dev
 ```
 
 ```bash
@@ -83,7 +97,45 @@ make check
 sudo make install
 ```
 
-`./configure` acaba diciendo qué receptores quedan incluidos (`receivers: SDRplay yes, RTL-SDR yes`). El programa va a `/usr/local/bin`; las cartas y la base de datos, a `/opt/Wefax`.
+`./configure` acaba diciendo qué receptores quedan incluidos (`receivers: SDRplay yes, RTL-SDR yes`). Los programas van a `/usr/local/bin`; la interfaz, las cartas y la base de datos, a `/opt/Wefax`.
+
+Para que arranquen solos como servicios (con su usuario, no con root):
+
+```bash
+sudo sh tools/instalar-servicios.sh
+```
+
+Después abra `http://<equipo>:8081/`, elija las estaciones en **Estaciones** y encienda el receptor en **Receptor**. Hasta entonces el receptor no toca ningún equipo. El puerto se cambia en `/etc/default/wefax` (Navtex usa el 8080).
+
+> La interfaz web no tiene contraseña: déjela solo en una red de confianza, o en `127.0.0.1`.
+
+### Actualizar
+
+```bash
+cd Wefax
+git pull
+```
+
+```bash
+autoreconf -i && automake --add-missing; autoreconf
+./configure && make
+sudo make install
+```
+
+```bash
+sudo systemctl restart wefax-web wefax-receiver
+```
+
+`sudo make install` sustituye la interfaz y la lista de estaciones de `/opt/Wefax/build`; no toca las cartas ni los ajustes.
+
+### Desinstalar
+
+```bash
+sudo sh tools/instalar-servicios.sh --quitar
+sudo make uninstall
+```
+
+Las cartas y los ajustes quedan en `/opt/Wefax`; bórrelos a mano si ya no los quiere.
 
 ## Comandos
 
@@ -114,6 +166,35 @@ wefaxreceiver -f grabacion.wav         # descodificar una grabación
 ```
 
 **La frecuencia** es la asignada, que es el centro del canal: negro 400 Hz por debajo y blanco 400 Hz por encima. Con un receptor de banda lateral superior se sintonizaría 1,9 kHz por debajo; aquí no hace falta restar nada.
+
+### `wefaxwebserver`
+
+```bash
+wefaxwebserver [puerto] [dirección]     # de serie: 8081, todas las direcciones
+```
+
+| Ruta | Qué da |
+| :--- | :--- |
+| `GET /api/status` | Qué hace el receptor |
+| `GET /api/charts?since=&limit=` | Las cartas recibidas, la más nueva primero |
+| `GET /api/next` | La emisión en curso o la siguiente |
+| `GET /api/settings` | Los ajustes |
+| `GET /api/about` | La versión |
+| `GET /chart/<id>.png`, `GET /live.png` | Una carta; la que se está recibiendo |
+| `POST /api/settings/<nombre>/<valor>` | Cambia un ajuste (con la cabecera `X-Wefax`) |
+| `POST /api/charts/keep/<id>/<0\|1>` | Marca una carta para conservarla |
+
+### Servicios
+
+```bash
+systemctl status wefax-web wefax-receiver
+journalctl -u wefax-receiver -f
+sudo systemctl restart wefax-receiver
+```
+
+### Lista de estaciones
+
+`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación, transcritos de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) de la NOAA (edición del 7 de marzo de 2025). Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
 
 ### Probar sin radio
 

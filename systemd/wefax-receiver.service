@@ -1,0 +1,24 @@
+# Wefax receiver (EA7JRS/Wefax). Installed by tools/instalar-servicios.sh, which replaces
+# @USUARIO@. Which radio, which stations and whether it is switched on are chosen in the web
+# interface; the receiver follows those settings without restarting, and touches no radio
+# until it is switched on there.
+[Unit]
+Description=Weather facsimile (WEFAX) receiver
+# The SDRplay API service, when there is one, must be up first
+After=network.target sdrplay.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=@USUARIO@
+SupplementaryGroups=plugdev
+WorkingDirectory=/opt/Wefax
+ExecStart=/usr/local/bin/wefaxreceiver -q -n
+Restart=on-failure
+RestartSec=15
+# SIGTERM makes it stop streaming and release the radio
+TimeoutStopSec=20
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

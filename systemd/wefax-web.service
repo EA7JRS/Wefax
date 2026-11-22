@@ -1,0 +1,28 @@
+# Wefax web interface and JSON API (EA7JRS/Wefax). Installed by
+# tools/instalar-servicios.sh, which replaces @USUARIO@.
+[Unit]
+Description=Weather facsimile (WEFAX) web interface
+After=network.target
+
+[Service]
+Type=simple
+User=@USUARIO@
+Environment=WEB_PORT=8081
+Environment=WEB_ADDRESS=0.0.0.0
+EnvironmentFile=-/etc/default/wefax
+ExecStart=/usr/local/bin/wefaxwebserver $WEB_PORT $WEB_ADDRESS
+Restart=on-failure
+RestartSec=5
+# It only needs its own folder (the database is written there)
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/opt/Wefax
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

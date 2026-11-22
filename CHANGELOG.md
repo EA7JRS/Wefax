@@ -6,7 +6,9 @@ Las entradas dicen también qué se probó y qué no.
 
 - Interfaz web (`wefaxwebserver`, puerto 8081): cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones con su frecuencia, ajustes del receptor y del reparto del equipo con Navtex. Mismo aspecto, temas e idiomas (ES / EN) que Navtex. Sin contraseña: solo en una red de confianza.
 - Lista de estaciones `web_server/build/estaciones.json` (Hamburgo / Pinneberg, Northwood, Boston, Nueva Orleans y Point Reyes), hecha con `tools/estaciones/generar.py` a partir de «Worldwide Marine Radiofacsimile Broadcast Schedules» de la NOAA (edición del 7 de marzo de 2025). Transcrita con un lector automático del PDF: sin cotejar línea a línea con el original.
-- Sin probar con un receptor ni con una señal real. Faltan los servicios de systemd y el instalador.
+- Servicios de systemd (`wefax-web`, `wefax-receiver`) y `tools/instalar-servicios.sh`; el receptor no toca ningún equipo hasta que se enciende en la web.
+- `make check` carga también la lista instalada (89 comprobaciones).
+- Sin probar con un receptor ni con una señal real; los servicios y el instalador, sin ejecutar en ningún equipo.
 
 ## [0.1.0] - 2026-11-22
 
