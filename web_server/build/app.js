@@ -242,8 +242,8 @@
       aj.appendChild(sel); t.appendChild(aj);
       c.appendChild(t);
     });
-    $('fuente-estaciones').textContent = datos.source ? tr('Horarios: ') + datos.source + tr(', edición del ') + datos.dated + '. ' +
-      tr('Transcritos de forma automática del PDF: pueden tener errores y los horarios cambian; compruebe una hora con la fuente antes de fiarse de ella.') : tr('No se pudo leer la lista de estaciones.');
+    $('fuente-estaciones').textContent = datos.source ? tr('Horarios: ') + datos.source + '. ' +
+      tr('Transcritos de forma automática: pueden tener errores y los horarios cambian; compruebe una hora con la fuente antes de fiarse de ella.') : tr('No se pudo leer la lista de estaciones.');
   }
 
   // ---- receptor

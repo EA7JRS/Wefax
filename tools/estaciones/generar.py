@@ -3,13 +3,17 @@
 # Copyright (c) 2026 Manuel - EA7JRS
 """Wefax · hace web_server/build/estaciones.json a partir de los archivos de esta carpeta.
 
-Cada archivo <ID>.txt es la transcripción de una estación de «Worldwide Marine Radiofacsimile
-Broadcast Schedules» (NOAA / National Weather Service, edición del 7 de marzo de 2025):
+Cada archivo <ID>.txt es la transcripción del horario de una estación. Las de EE. UU. (NMF, NMG,
+NMC, NOJ, KVM70) salen del horario en texto de cada una que publica el National Weather Service
+(https://www.weather.gov/media/marine/hf*.txt, datos del 12 de diciembre de 2024); DDH y GYA, de
+«Worldwide Marine Radiofacsimile Broadcast Schedules» (NOAA, edición del 7 de marzo de 2025).
+Las líneas de comentario del principio de cada archivo dicen su origen y su fecha:
 
     # comentarios
     STATION|ID|nombre|país|desviación en Hz
     FREQ|kHz|indicativo|HHMM-HHMM   (horas en que esa frecuencia está en el aire; vacío = siempre)
     HHMM|qué se emite               (una línea por emisión, hora UTC; 120 líneas por minuto, índice 576)
+    HHMM/HHMM|qué se emite          (lo mismo a dos horas, como en los horarios del NWS; ---- = a esa hora no)
 
 Uso:  python3 tools/estaciones/generar.py
 """
@@ -21,11 +25,11 @@ stations, errors = [], []
 for name in sorted(os.listdir(here)):
     if not name.endswith('.txt'):
         continue
-    st, seen = None, set()
+    st, seen, notes = None, set(), []
     for n, line in enumerate(open(os.path.join(here, name), encoding='utf-8'), 1):
         line = line.rstrip('\n')
         if not line.strip() or line.startswith('#'):
-            if st is None and line.startswith('# ') and 'note' not in locals(): pass
+            if st is None: notes.append(line[1:].strip())
             continue
         f = line.split('|')
         where = f'{name}:{n}'
@@ -41,24 +45,27 @@ for name in sorted(os.listdir(here)):
                 if not m: errors.append(f'{where}: horas mal escritas')
                 else: fr['from'], fr['to'] = m.group(1), m.group(2)
             st['freqs'].append(fr)
-        elif re.fullmatch(r'\d{4}', f[0]) and len(f) == 2 and f[1]:
-            if int(f[0][:2]) > 23 or int(f[0][2:]) > 59: errors.append(f'{where}: hora imposible')
-            if f[0] in seen: errors.append(f'{where}: hora repetida')
-            seen.add(f[0])
-            st['broadcasts'].append({'utc': f[0], 'title': f[1], 'lpm': 120, 'ioc': 576})
+        elif re.fullmatch(r'(\d{4}|----)(/(\d{4}|----))?', f[0]) and len(f) == 2 and f[1]:
+            for t in f[0].split('/'):
+                if t == '----': continue
+                if int(t[:2]) > 23 or int(t[2:]) > 59: errors.append(f'{where}: hora imposible')
+                if t in seen: errors.append(f'{where}: hora repetida')
+                seen.add(t)
+                st['broadcasts'].append({'utc': t, 'title': f[1], 'lpm': 120, 'ioc': 576})
         else:
             errors.append(f'{where}: no se entiende: {line[:40]}')
     if st:
+        st['from'] = ' '.join(n for n in notes if n)
         st['broadcasts'].sort(key=lambda b: b['utc'])
         if not st['freqs'] or not st['broadcasts']: errors.append(f'{name}: sin frecuencias o sin emisiones')
         stations.append(st)
 if errors:
     print('\n'.join(errors)); sys.exit(1)
 data = {
-    'source': 'Worldwide Marine Radiofacsimile Broadcast Schedules, NOAA / National Weather Service',
-    'source_url': 'https://www.weather.gov/media/marine/rfax.pdf',
+    'source': 'NOAA / National Weather Service: station schedules (weather.gov/marine/radiofax_charts) and Worldwide Marine Radiofacsimile Broadcast Schedules',
+    'source_url': 'https://www.weather.gov/marine/radiofax_charts',
     'dated': '2025-03-07',
-    'note': 'Transcribed through an automatic reader of the PDF: check a time against the source before relying on it. Frequencies are the assigned ones (centre of the channel).',
+    'note': 'Transcribed through an automatic reader of the sources: check a time against the source before relying on it. Frequencies are the assigned ones (centre of the channel).',
     'stations': stations,
 }
 with open(out, 'w', encoding='utf-8') as f:

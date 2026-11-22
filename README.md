@@ -8,7 +8,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.2.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de cinco estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.2.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de siete estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
 📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.2.0](docs/releases/v0.2.0.md)
 
@@ -45,7 +45,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 89 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 91 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
@@ -58,11 +58,11 @@ Hecho y comprobado en el PC (`make check`, 89 comprobaciones):
 - una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; **la parte de SDRplay no se ha podido compilar** donde se escribió (no hay API), solo en un equipo que la tenga;
 - el turno con Navtex contra un Navtex en marcha;
 - los servicios y su instalador, en ningún equipo (el guion solo se ha revisado con `sh -n`);
-- **la lista de estaciones contra el original**: se transcribió del PDF de la NOAA con un lector automático y no se ha cotejado línea a línea. Compruebe una hora antes de fiarse de ella.
+- **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta); Hamburgo y Northwood, del PDF mundial, más propenso a errores. Compruebe una hora antes de fiarse de ella.
 
 **Sin hacer todavía:**
 
-- más estaciones: la lista trae Hamburgo / Pinneberg, Northwood, Boston, Nueva Orleans y Point Reyes. Kodiak y Honolulu quedaron fuera porque su tabla, de dos horas por fila, no se pudo leer con seguridad; Atenas no publica horario; faltan las de Asia, Chile, Canadá y Australia;
+- más estaciones: la lista trae Hamburgo / Pinneberg, Northwood, Boston, Nueva Orleans, Point Reyes, Kodiak y Honolulu. Atenas no publica horario; faltan las de Asia, Chile, Canadá y Australia;
 - el enfasado simétrico (mitad blanco, mitad negro), que algunas estaciones pueden usar: esas cartas saldrían desplazadas.
 
 ## Qué hace falta
@@ -200,7 +200,7 @@ sudo systemctl restart wefax-receiver
 
 ### Lista de estaciones
 
-`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación, transcritos de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) de la NOAA (edición del 7 de marzo de 2025). Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
+`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Hamburgo y Northwood, de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025). Cada archivo dice su origen y su fecha. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
 
 ### Probar sin radio
 

@@ -1,8 +1,8 @@
 {
- "source": "Worldwide Marine Radiofacsimile Broadcast Schedules, NOAA / National Weather Service",
- "source_url": "https://www.weather.gov/media/marine/rfax.pdf",
+ "source": "NOAA / National Weather Service: station schedules (weather.gov/marine/radiofax_charts) and Worldwide Marine Radiofacsimile Broadcast Schedules",
+ "source_url": "https://www.weather.gov/marine/radiofax_charts",
  "dated": "2025-03-07",
- "note": "Transcribed through an automatic reader of the PDF: check a time against the source before relying on it. Frequencies are the assigned ones (centre of the channel).",
+ "note": "Transcribed through an automatic reader of the sources: check a time against the source before relying on it. Frequencies are the assigned ones (centre of the channel).",
  "stations": [
   {
    "id": "DDH",
@@ -312,7 +312,8 @@
      "lpm": 120,
      "ioc": 576
     }
-   ]
+   ],
+   "from": "HAMBURG/PINNEBERG, GERMANY. Deutscher Wetterdienst. Information dated 24 July 2024. Note in the source: \"white + 425 Hz, black - 425 Hz\". All charts 120/576. Voice transmissions (not facsimile) left out."
   },
   {
    "id": "GYA",
@@ -954,7 +955,599 @@
      "lpm": 120,
      "ioc": 576
     }
-   ]
+   ],
+   "from": "NORTHWOOD, UNITED KINGDOM. JOMOC HF-Fax Schedule (North Atlantic). Information dated Jan 05, 2022. The source gives no RPM/IOC column for this station: 120/576 is assumed. Slots with no contents shown are left out."
+  },
+  {
+   "id": "KVM70",
+   "name": "Honolulu",
+   "country": "United States",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 9982.5,
+     "call": "KVM70",
+     "from": "0519",
+     "to": "1556"
+    },
+    {
+     "khz": 11090.0,
+     "call": "KVM70"
+    },
+    {
+     "khz": 16135.0,
+     "call": "KVM70",
+     "from": "1719",
+     "to": "0356"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0014",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0034",
+     "title": "EAST PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0048",
+     "title": "SW PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0100",
+     "title": "SCHEDULE PART I",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0120",
+     "title": "SCHEDULE PART II",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0140",
+     "title": "SYMBOLS OR PRODUCT NOTICE BULLETIN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0200",
+     "title": "24HR TROPICAL SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0210",
+     "title": "48HR TROPICAL SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0220",
+     "title": "72HR TROPICAL SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0230",
+     "title": "48/72HR TROPICAL WAVE PERIOD,SWELL DIR",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0240",
+     "title": "TROPICAL SEA STATE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0250",
+     "title": "rebroadcast 24HR WIND/WAVE FORECASTS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0300",
+     "title": "48HR TROPICAL WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0310",
+     "title": "72HR TROPICAL WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0320",
+     "title": "rebroadcast/SEA STATE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0330",
+     "title": "SURFACE ANALYSIS(PART 1 NE PAC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0343",
+     "title": "SURFACE ANALYSIS(PART 2 NW PAC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0356",
+     "title": "TROPICAL SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0519",
+     "title": "TEST PATTERN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0535",
+     "title": "CYCLONE DANGER AREA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0555",
+     "title": "STREAMLINE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0615",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0635",
+     "title": "EAST PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0649",
+     "title": "SW PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0701",
+     "title": "24HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0714",
+     "title": "48HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0727",
+     "title": "72HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0740",
+     "title": "WIND/WAVE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0753",
+     "title": "24HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0806",
+     "title": "24HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0816",
+     "title": "48HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0826",
+     "title": "48HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0836",
+     "title": "48/96HR WAVE PERIOD,SWELL DIRECTION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0846",
+     "title": "rebroadcast/ 96HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0856",
+     "title": "rebroadcast/ 96HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0906",
+     "title": "PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0917",
+     "title": "SURFACE ANALYSIS (PART 1 NE PACIFIC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0930",
+     "title": "SURFACE ANALYSIS (PART 2 NW PACIFIC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0943",
+     "title": "TROPICAL GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0954",
+     "title": "TROPICAL SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1008",
+     "title": "24HR TROPICAL WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1042",
+     "title": "CYCLONE DANGER AREA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1102",
+     "title": "48HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1115",
+     "title": "72HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1128",
+     "title": "SEA SURFACE TEMPS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1141",
+     "title": "rebroadcast 24HR WIND/WAVE FORECASTS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1154",
+     "title": "STREAMLINE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1214",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1234",
+     "title": "EAST PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1248",
+     "title": "SW PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1300",
+     "title": "SCHEDULE PART I",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1320",
+     "title": "SCHEDULE PART II",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1340",
+     "title": "SYMBOLS OR PRODUCT NOTICE BULLETIN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1400",
+     "title": "24HR TROPICAL SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1410",
+     "title": "48HR TROPICAL SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1420",
+     "title": "72HR TROPICAL SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1430",
+     "title": "48/72HR TROPICAL WAVE PERIOD,SWELL DIR",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1440",
+     "title": "TROPICAL SEA STATE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1450",
+     "title": "rebroadcast 24HR WIND/WAVE FORECASTS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1500",
+     "title": "48HR TROPICAL WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1510",
+     "title": "72HR TROPICAL WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1520",
+     "title": "rebroadcast/SEA STATE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1530",
+     "title": "SURFACE ANALYSIS(PART 1 NE PAC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1543",
+     "title": "SURFACE ANALYSIS(PART 2 NW PAC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1556",
+     "title": "TROPICAL SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1719",
+     "title": "TEST PATTERN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1735",
+     "title": "CYCLONE DANGER AREA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1755",
+     "title": "STREAMLINE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1815",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1835",
+     "title": "EAST PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1849",
+     "title": "SW PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1901",
+     "title": "24HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1914",
+     "title": "48HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1927",
+     "title": "72HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1940",
+     "title": "WIND/WAVE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1953",
+     "title": "24HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2006",
+     "title": "24HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2016",
+     "title": "48HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2026",
+     "title": "48HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2036",
+     "title": "48/96HR WAVE PERIOD,SWELL DIRECTION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2046",
+     "title": "rebroadcast/ 96HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2056",
+     "title": "rebroadcast/ 96HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2106",
+     "title": "PACIFIC GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2117",
+     "title": "SURFACE ANALYSIS (PART 1 NE PACIFIC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2130",
+     "title": "SURFACE ANALYSIS (PART 2 NW PACIFIC)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2143",
+     "title": "TROPICAL GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2154",
+     "title": "TROPICAL SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2208",
+     "title": "24HR TROPICAL WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2242",
+     "title": "CYCLONE DANGER AREA",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2302",
+     "title": "48HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2315",
+     "title": "72HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2328",
+     "title": "SEA SURFACE TEMPS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2341",
+     "title": "rebroadcast 24HR WIND/WAVE FORECASTS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2354",
+     "title": "STREAMLINE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "from": "HONOLULU, HAWAII, U.S.A. From https://www.weather.gov/media/marine/hfhi.txt Schedule effective February 11, 2020; information dated Dec. 12, 2024. All 120/576 (two rows say 120/570 in the source, taken as a misprint)."
   },
   {
    "id": "NMC",
@@ -1086,25 +1679,25 @@
     },
     {
      "utc": "0657",
-     "title": "1953Z REBROADCAST (96HR 500MB)",
+     "title": "REBROADCAST (96HR 500MB)",
      "lpm": 120,
      "ioc": 576
     },
     {
      "utc": "0707",
-     "title": "1933Z REBROADCAST (96HR SURFACE)",
+     "title": "REBROADCAST (96HR SURFACE)",
      "lpm": 120,
      "ioc": 576
     },
     {
      "utc": "0717",
-     "title": "1943Z REBROADCAST (96HR WIND/WAVE)",
+     "title": "REBROADCAST (96HR WIND/WAVE)",
      "lpm": 120,
      "ioc": 576
     },
     {
      "utc": "0727",
-     "title": "2003Z REBROADCAST (96HR WAVE PERIOD)",
+     "title": "2103Z REBROADCAST (96HR WAVE PERIOD)",
      "lpm": 120,
      "ioc": 576
     },
@@ -1498,7 +2091,8 @@
      "lpm": 120,
      "ioc": 576
     }
-   ]
+   ],
+   "from": "PT. REYES, CALIFORNIA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfreyes.txt Schedule effective Sep 04, 2018; information dated December 12, 2024. All 120/576. ---- = not sent at that time. The four 0657-0727 rebroadcast rows: the hour of the original given in the source is left out (two readings of it disagreed)."
   },
   {
    "id": "NMF",
@@ -1960,7 +2554,8 @@
      "lpm": 120,
      "ioc": 576
     }
-   ]
+   ],
+   "from": "BOSTON, MASSACHUSETTS, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfmarsh.txt Schedule effective Sep 04, 2018; information dated December 12, 2024. All 120/576. ---- = not sent at that time."
   },
   {
    "id": "NMG",
@@ -2044,7 +2639,7 @@
     },
     {
      "utc": "0135",
-     "title": "CYCLONE DANGER AREA or 48 HR HIGH WIND/WAVES",
+     "title": "CYCLONE DANGER AREA or HIGH WIND/WAVES",
      "lpm": 120,
      "ioc": 576
     },
@@ -2134,7 +2729,7 @@
     },
     {
      "utc": "0735",
-     "title": "CYCLONE DANGER AREA or 48HR HIGH WIND/WAVES",
+     "title": "CYCLONE DANGER AREA or HIGH WIND/WAVES",
      "lpm": 120,
      "ioc": 576
     },
@@ -2230,7 +2825,7 @@
     },
     {
      "utc": "1335",
-     "title": "CYCLONE DANGER AREA or 48 HR HIGH WIND/WAVES",
+     "title": "CYCLONE DANGER AREA or HIGH WIND/WAVES",
      "lpm": 120,
      "ioc": 576
     },
@@ -2320,7 +2915,7 @@
     },
     {
      "utc": "1935",
-     "title": "CYCLONE DANGER AREA or 48HR HIGH WIND/WAVES",
+     "title": "CYCLONE DANGER AREA or HIGH WIND/WAVES",
      "lpm": 120,
      "ioc": 576
     },
@@ -2354,7 +2949,353 @@
      "lpm": 120,
      "ioc": 576
     }
-   ]
+   ],
+   "from": "NEW ORLEANS, LOUISIANA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfgulf.txt Schedule effective Apr 03, 2012; information dated December 12, 2024. All 120/576. ---- = not sent at that time."
+  },
+  {
+   "id": "NOJ",
+   "name": "Kodiak",
+   "country": "United States",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 2054.0,
+     "call": "NOJ"
+    },
+    {
+     "khz": 4298.0,
+     "call": "NOJ"
+    },
+    {
+     "khz": 8459.0,
+     "call": "NOJ"
+    },
+    {
+     "khz": 12412.5,
+     "call": "NOJ"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0008",
+     "title": "96HR WAVE PERIOD, SWELL DIRECTION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0018",
+     "title": "96HR 500 MB FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0340",
+     "title": "TEST PATTERN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0343",
+     "title": "SEA ICE ANALYSIS/REBROADCAST 1057",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0403",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0427",
+     "title": "REBROADCAST 24HR SURFACE F'CAST 2203/1017",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0437",
+     "title": "REBROADCAST 48HR SURFACE F'CAST 2227/1037",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0447",
+     "title": "REBROADCAST 96HR SURFACE F'CAST 2348",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0456",
+     "title": "SEA STATE ANALYSIS/REBROADCAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0506",
+     "title": "GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0517",
+     "title": "500 MB ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0527",
+     "title": "SYMBOLS AND CONTRACTIONS/SCHEDULE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0548",
+     "title": "REQUEST FOR COMMENTS/PRODUCT NOTICE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0558",
+     "title": "24HR 500 MB FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0950",
+     "title": "TEST PATTERN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0953",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1017",
+     "title": "24HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1027",
+     "title": "24HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1037",
+     "title": "48HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1047",
+     "title": "48HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1057",
+     "title": "5-DAY SEA ICE FORECAST/REBROADCAST 0343",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1117",
+     "title": "GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1128",
+     "title": "48HR WAVE PERIOD, SWELL DIRECTION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1138",
+     "title": "48HR 500 MB FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1148",
+     "title": "SEA SURFACE TEMPERATURE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1159",
+     "title": "COOK INLET SEA ICE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1540",
+     "title": "TEST PATTERN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1543",
+     "title": "SEA ICE ANALYSIS/REBROADCAST 1057",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1603",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1627",
+     "title": "REBROADCAST 24HR SURFACE F'CAST 2203/1017",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1637",
+     "title": "REBROADCAST 48HR SURFACE F'CAST 2227/1037",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1647",
+     "title": "REBROADCAST 96HR SURFACE F'CAST 2348",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1656",
+     "title": "SEA STATE ANALYSIS/REBROADCAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1706",
+     "title": "GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1717",
+     "title": "500 MB ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1727",
+     "title": "SYMBOLS AND CONTRACTIONS/SCHEDULE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1748",
+     "title": "REQUEST FOR COMMENTS/PRODUCT NOTICE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1758",
+     "title": "24HR 500 MB FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1808",
+     "title": "48HR 500 MB FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2150",
+     "title": "TEST PATTERN",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2153",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2203",
+     "title": "24HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2217",
+     "title": "24HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2227",
+     "title": "48HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2237",
+     "title": "48HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2247",
+     "title": "48HR WAVE PERIOD, SWELL DIRECTION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2257",
+     "title": "5-DAY SEA ICE FORECAST/REBROADCAST 0343",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2307",
+     "title": "GOES IR SATELLITE IMAGE",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2317",
+     "title": "72HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2328",
+     "title": "72HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2338",
+     "title": "72HR WAVE PERIOD, SWELL DIRECTION",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2348",
+     "title": "96HR SURFACE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "2358",
+     "title": "96HR WIND/WAVE FORECAST",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "from": "KODIAK, ALASKA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfak.txt Schedule effective Sep 04, 2018; information dated Dec. 12, 2024. All 120/576. A row with two times is sent at both; ---- = not sent."
   }
  ]
 }
