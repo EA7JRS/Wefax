@@ -9,6 +9,7 @@
  *   GET  /api/status                 what the receiver is doing
  *   GET  /api/charts?since=&limit=   the charts received, newest first
  *   GET  /api/about                  the version of the program
+ *   GET  /api/gps                    the position gpsd gives (WEFAX_GPSD=host:port; empty, none)
  *   GET  /api/next                   the broadcast in progress or the next one
  *   GET  /api/settings               the settings
  *   POST /api/settings/<name>/<value>      changes one (header X-Wefax needed)
@@ -35,6 +36,7 @@
 #include <cjson/cJSON.h>
 #include "../receiver/store.h"
 #include "../receiver/schedule.h"
+#include "gps.h"
 
 #ifndef PACKAGE_VERSION
 #define PACKAGE_VERSION "?"
@@ -190,6 +192,7 @@ static enum MHD_Result handler(void *cls, struct MHD_Connection *c, const char *
 
     if (strcmp(url, "/api/status") == 0) return send_json_free(c, store_status_json());
     if (strcmp(url, "/api/about") == 0) return send_text(c, MHD_HTTP_OK, "{\"version\":\"" PACKAGE_VERSION "\"}", JSON);
+    if (strcmp(url, "/api/gps") == 0) return send_json_free(c, gps_json());
     if (strcmp(url, "/api/next") == 0) return send_json_free(c, next_json());
     if (strcmp(url, "/api/charts") == 0) {
         const char *since = MHD_lookup_connection_value(c, MHD_GET_ARGUMENT_KIND, "since");
@@ -256,7 +259,7 @@ int main(int argc, char *const *argv)
     if (argc > 3 || (argc >= 2 && argv[1][0] == '-')) {
         fprintf(stderr, "Usage: %s [port] [listen address]\n  port            TCP port (8081)\n"
                         "  listen address  IPv4 address to listen on (all), e.g. 127.0.0.1\n"
-                        "Environment: WEFAX_DATA_DIR (%s), WEFAX_WEB_ROOT (%s)\n", argv[0], DATA_DIR, WEB_ROOT);
+                        "Environment: WEFAX_DATA_DIR (%s), WEFAX_WEB_ROOT (%s), WEFAX_GPSD (127.0.0.1:2947; empty: no GPS)\n", argv[0], DATA_DIR, WEB_ROOT);
         return 1;
     }
     if (argc >= 2 && ((port = atoi(argv[1])) < 1 || port > 65535)) { fprintf(stderr, "Error: invalid port '%s'\n", argv[1]); return 1; }
@@ -265,6 +268,13 @@ int main(int argc, char *const *argv)
     if (store_init() != 0) { fprintf(stderr, "Error: the database in %s cannot be used\n", store_dir()); return 1; }
     if (chdir(root) != 0) { perror("the folder of the interface"); return 1; }
     if (schedule_load("estaciones.json") < 0) printf("no schedule: %s/estaciones.json cannot be read\n", root);
+
+    {
+        const char *gpsd = getenv("WEFAX_GPSD");
+        if (gpsd == NULL) gpsd = "127.0.0.1:2947";
+        gps_start(gpsd);
+        printf(gpsd[0] != '\0' ? "Position from gpsd at %s\n" : "Position from gpsd disabled%s\n", gpsd);
+    }
 
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;

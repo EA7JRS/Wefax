@@ -20,7 +20,7 @@
   function coma(n, dec) { var s = Number(n).toFixed(dec); return I18N.idioma === 'en' ? s : s.replace('.', ','); }
   function khz(k) { return coma(k, Math.abs(k * 10 - Math.round(k * 10)) < 0.01 && Math.round(k * 10) % 10 === 0 ? 0 : 1) + ' kHz'; }
 
-  var estado = {}, ajustes = {}, cartas = [], datos = { stations: [] }, version = '';
+  var estado = {}, ajustes = {}, cartas = [], datos = { stations: [] }, version = '', gps = null;
   var filtro = { estacion: '', texto: '', guardadas: false };
   var repintarAspecto = function () {};
 
@@ -75,6 +75,43 @@
     return tr('hace ') + Math.round(s / 86400) + tr(' días');
   }
 
+  // ---- posición del GPS (gpsd), como en Navtex
+  function posicionGps() {
+    return gps && gps.connected && typeof gps.lat === 'number' && typeof gps.lon === 'number' && !(gps.age > 120) ? { lat: gps.lat, lon: gps.lon } : null;
+  }
+  function localizador(p) {
+    var lo = p.lon + 180, la = p.lat + 90;
+    if (!(lo >= 0 && lo < 360 && la >= 0 && la < 180)) return '';
+    return String.fromCharCode(65 + Math.floor(lo / 20)) + String.fromCharCode(65 + Math.floor(la / 10))
+      + Math.floor((lo % 20) / 2) + Math.floor(la % 10)
+      + String.fromCharCode(97 + Math.floor((lo % 2) * 12)) + String.fromCharCode(97 + Math.floor((la % 1) * 24));
+  }
+  // "37° 36,46' N  000° 59,09' O": como se lee en una carta
+  function gradosMinutos(v, positivo, negativo, ancho) {
+    var a = Math.abs(v), g = Math.floor(a), m = (a - g) * 60;
+    if (m >= 59.995) { g += 1; m = 0; }
+    var gs = String(g); while (gs.length < ancho) gs = '0' + gs;
+    return gs + '° ' + (m < 10 ? '0' : '') + coma(m, 2) + "' " + (v >= 0 ? positivo : negativo);
+  }
+  function enCarta(p) { return gradosMinutos(p.lat, 'N', 'S', 2) + '\n' + gradosMinutos(p.lon, 'E', I18N.idioma === 'en' ? 'W' : 'O', 3); }
+  function datoGps() {
+    var p = posicionGps(), v, x = '';
+    if (!gps) v = '—';
+    else if (!gps.enabled) { v = tr('sin GPS'); x = tr('no hay gpsd configurado'); }
+    else if (!gps.connected) { v = tr('sin GPS'); x = tr('gpsd no contesta'); }
+    else {
+      var sat = typeof gps.used === 'number' ? tr('{a} de {b} satélites').replace('{a}', gps.used).replace('{b}', gps.visible) : '';
+      if (!p) { v = tr('sin posición'); x = tr('buscando satélites') + (sat ? ' · ' + sat : ''); }
+      else {
+        v = enCarta(p);
+        x = localizador(p) + ' · ' + (gps.fix >= 3 ? '3D' : '2D') + (sat ? ' · ' + sat : '') + (typeof gps.alt === 'number' ? ' · ' + Math.round(gps.alt) + ' m' : '');
+      }
+    }
+    var d = dato(tr('Posición GPS'), v, x);
+    d.querySelector('.valor').className = 'valor mono gps';
+    return d;
+  }
+
   // ---- estado
   var ESTADOS = {
     'off': 'Apagado', 'stopped': 'Parado', 'listening': 'A la escucha', 'receiving a chart': 'Recibiendo una carta',
@@ -112,6 +149,7 @@
       c.appendChild(dato(tr('Próxima emisión'), horaUtc(d) + ' UTC · ' + nombreEstacion(st('next_station')), st('next_title') + (Number(st('next_khz')) ? ' · ' + khz(Number(st('next_khz'))) : '')));
     } else c.appendChild(dato(tr('Próxima emisión'), '—', ''));
     c.appendChild(dato(tr('Cartas guardadas'), String(cartas.length), cartas.length ? tr('la última, ') + haceCuanto(Date.parse(cartas[0].received)) : ''));
+    c.appendChild(datoGps());
   }
 
   // ---- cartas
@@ -308,7 +346,10 @@
 
   // ---- todo
   function leerTodo() {
-    return Promise.all([leer('/api/status'), leer('/api/charts?limit=500'), leer('/api/settings')]).then(function (r) {
+    return Promise.all([leer('/api/status'), leer('/api/charts?limit=500'), leer('/api/settings'), leer('/api/gps').catch(function () { return null; })]).then(function (r) {
+      gps = r[3] && typeof r[3] === 'object' ? r[3] : null;
+      var pg = posicionGps();
+      if (pg) { window.WEFAX_TEMA.ponerPosicion(pg.lat, pg.lon); repintarAspecto(); }
       var antes = cartas.length ? cartas[0].id : -1, antesAj = JSON.stringify(ajustes);
       estado = r[0]; cartas = r[1]; 
       $('error-general').hidden = true;

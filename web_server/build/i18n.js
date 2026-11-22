@@ -8,6 +8,15 @@
 window.WEFAX_I18N = (function () {
   'use strict';
   var EN = {
+ "por el sol en la posición del GPS; sin ella, claro de 8 a 20 h": "by the sun at the GPS position; without it, light 8-20 h",
+ "Posición GPS": "GPS position",
+ "sin GPS": "no GPS",
+ "no hay gpsd configurado": "no gpsd configured",
+ "gpsd no contesta": "gpsd does not answer",
+ "{a} de {b} satélites": "{a} of {b} satellites",
+ "sin posición": "no position",
+ "buscando satélites": "searching for satellites",
+ "claro de día y oscuro de noche (el sol en la posición del receptor)": "light by day, dark at night (the sun at the receiver's position)",
  "Cartas meteorológicas por onda corta": "Weather charts on short wave",
  "Secciones": "Sections",
  "Cartas": "Charts",

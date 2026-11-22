@@ -41,6 +41,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
 | Interfaz web | Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
 | Solo onda corta | No recibe imágenes de satélite: el WEFAX de los geoestacionarios ya no se emite y lo que hay hoy (LRPT, HRIT) es digital, otro sistema |
+| Posición del GPS | La toma de gpsd (como Navtex) y la muestra; con ella el aspecto automático cambia con el sol |
 | Descodifica grabaciones | Para probar y para repasar una recepción dudosa |
 
 ## Estado
@@ -186,6 +187,7 @@ wefaxwebserver [puerto] [dirección]     # de serie: 8081, todas las direcciones
 | `GET /api/next` | La emisión en curso o la siguiente |
 | `GET /api/settings` | Los ajustes |
 | `GET /api/about` | La versión |
+| `GET /api/gps` | La posición que da gpsd |
 | `GET /chart/<id>.png`, `GET /live.png` | Una carta; la que se está recibiendo |
 | `POST /api/settings/<nombre>/<valor>` | Cambia un ajuste (con la cabecera `X-Wefax`) |
 | `POST /api/charts/keep/<id>/<0\|1>` | Marca una carta para conservarla |

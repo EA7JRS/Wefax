@@ -9,6 +9,7 @@ Type=simple
 User=@USUARIO@
 Environment=WEB_PORT=8081
 Environment=WEB_ADDRESS=0.0.0.0
+Environment=WEFAX_GPSD=127.0.0.1:2947
 EnvironmentFile=-/etc/default/wefax
 ExecStart=/usr/local/bin/wefaxwebserver $WEB_PORT $WEB_ADDRESS
 Restart=on-failure

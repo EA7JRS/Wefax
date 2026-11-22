@@ -10,3 +10,6 @@
 # Navtex usa el 8080 y Wefax el 8081.
 WEB_PORT=8081
 WEB_ADDRESS=0.0.0.0
+
+# Posición propia: gpsd del que se toma (equipo:puerto). Vacío, sin GPS.
+WEFAX_GPSD=127.0.0.1:2947
