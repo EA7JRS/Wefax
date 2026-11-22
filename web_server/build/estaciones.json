@@ -3296,6 +3296,146 @@
     }
    ],
    "from": "KODIAK, ALASKA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfak.txt Schedule effective Sep 04, 2018; information dated Dec. 12, 2024. All 120/576. A row with two times is sent at both; ---- = not sent."
+  },
+  {
+   "id": "RBW",
+   "name": "Murmansk",
+   "country": "Russia",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 6328.5,
+     "call": "RKS72"
+    },
+    {
+     "khz": 8444.0,
+     "call": "RGS47"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0700",
+     "title": "36HR SURFACE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0800",
+     "title": "SEA STATE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1400",
+     "title": "SURFACE TEMP ANALYSIS/ICEBERG POSITIONS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1430",
+     "title": "24HR SEA STATE PROG",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1850",
+     "title": "BROADCAST SCHEDULE",
+     "lpm": 90,
+     "ioc": 576
+    },
+    {
+     "utc": "2000",
+     "title": "ICEBERG PROGNOSIS",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "from": "MURMANSK, RUSSIA. DOUBTFUL STATION. Schedule from \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025), which warns that the schedule \"may no longer be transmitted on-air\" and whose frequencies (5336, 6445.5, 7908.8, 10130 kHz) are old. Frequencies used here: 6328.5 and 8444 kHz, the ones the DX Info Centre list (W. R. Hepburn, 2025-03-17) gives as active or reported active, with the same times on the air as this schedule. The 1850 schedule is sent at 90 lines per minute; the rest 120/576."
+  },
+  {
+   "id": "SVJ4",
+   "name": "Athens",
+   "country": "Greece",
+   "deviation": 400,
+   "freqs": [
+    {
+     "khz": 4482.9,
+     "call": "SVJ4"
+    },
+    {
+     "khz": 8106.9,
+     "call": "SVJ4"
+    }
+   ],
+   "broadcasts": [
+    {
+     "utc": "0845",
+     "title": "SURFACE ANALYSIS",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0857",
+     "title": "SURFACE PROG (H+42)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0909",
+     "title": "SURFACE PROG (H+66)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0921",
+     "title": "WAVE HEIGHT PROG (H+30)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0933",
+     "title": "WAVE HEIGHT PROG (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0945",
+     "title": "WAVE HEIGHT PROG (H+42)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "0957",
+     "title": "WAVE HEIGHT PROG (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1009",
+     "title": "WAVE HEIGHT PROG (H+30)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1021",
+     "title": "WAVE HEIGHT PROG (H+36)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1033",
+     "title": "WAVE HEIGHT PROG (H+42)",
+     "lpm": 120,
+     "ioc": 576
+    },
+    {
+     "utc": "1044",
+     "title": "WAVE HEIGHT PROG (H+48)",
+     "lpm": 120,
+     "ioc": 576
+    }
+   ],
+   "from": "ATHENS, GREECE. Hellenic National Meteorological Service. From \"Worldwide Marine Radiofacsimile Broadcast Schedules\" (NOAA, edition of March 7, 2025); information dated 01/2019. The source lists 4481 and 8105 kHz with the note \"Center Frequency is 1.9 khz higher\": the centres used here are 4482.9 and 8106.9 kHz. Other lists give 4481 and 8105 as the centres: if nothing is received, try those as a fixed frequency. The source prints this entry next to Murmansk's and the reader mixed them: the rows from 0845 to 1044 are taken as Athens' (they match the 0845-1055 window other lists give for it). All 120/576."
   }
  ]
 }

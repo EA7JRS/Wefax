@@ -8,7 +8,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Aviso.** Este programa es una ayuda. No sustituye a los equipos ni a las publicaciones oficiales, y las cartas recibidas pueden llegar incompletas o deformadas.
 
-> **Estado: versión 0.2.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de siete estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
+> **Estado: versión 0.2.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de nueve estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
 📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.2.0](docs/releases/v0.2.0.md)
 
@@ -47,7 +47,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 91 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 93 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
@@ -65,7 +65,8 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 
 **Sin hacer todavía:**
 
-- más estaciones: la lista trae Hamburgo / Pinneberg, Northwood, Boston, Nueva Orleans, Point Reyes, Kodiak y Honolulu. Atenas no publica horario; faltan las de Asia, Chile, Canadá y Australia;
+- más estaciones: la lista trae Hamburgo / Pinneberg, Northwood, Atenas, Múrmansk, Boston, Nueva Orleans, Point Reyes, Kodiak y Honolulu. Faltan las de Asia, Chile y Australia;
+- **Atenas y Múrmansk son dudosas**: de Atenas no está claro si las frecuencias publicadas (4481 y 8105 kHz) son el centro del canal o la portadora (la lista usa 4482,9 y 8106,9, como dice la NOAA); de Múrmansk la propia NOAA duda de que siga emitiendo, y las frecuencias salen de otra lista;
 - el enfasado simétrico (mitad blanco, mitad negro), que algunas estaciones pueden usar: esas cartas saldrían desplazadas.
 
 ## Qué hace falta
@@ -240,7 +241,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (91 comprobaciones) |
+| `make check` | Pasa las pruebas (93 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -270,7 +271,7 @@ ss -tulpn | grep -E "8081|wefax"                          # ¿está escuchando?
 
 ### Lista de estaciones
 
-`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Hamburgo y Northwood, de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025). Cada archivo dice su origen y su fecha. Para ver qué otras estaciones hay en el mundo y cuáles han dejado de emitir, la [lista de radiofacsímil de DX Info Centre](https://www.dxinfocentre.com/rafax.htm) (W. R. Hepburn) está al día; no se copia aquí, pero las frecuencias de las siete estaciones se han contrastado con ella. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
+`web_server/build/estaciones.json` se hace con `python3 tools/estaciones/generar.py` a partir de los archivos de texto de `tools/estaciones`, uno por estación. Las cinco de EE. UU. se transcribieron de los [horarios por estación del National Weather Service](https://www.weather.gov/marine/radiofax_charts) (`hfmarsh.txt`, `hfgulf.txt`, `hfreyes.txt`, `hfak.txt`, `hfhi.txt`; datos del 12 de diciembre de 2024); Hamburgo y Northwood, de [«Worldwide Marine Radiofacsimile Broadcast Schedules»](https://www.weather.gov/media/marine/rfax.pdf) (edición del 7 de marzo de 2025). Cada archivo dice su origen y su fecha. Para ver qué otras estaciones hay en el mundo y cuáles han dejado de emitir, la [lista de radiofacsímil de DX Info Centre](https://www.dxinfocentre.com/rafax.htm) (W. R. Hepburn) está al día; no se copia aquí, pero las frecuencias de las estaciones se han contrastado con ella. Para corregir una hora o añadir una estación, edite su archivo y vuelva a generar.
 
 ### Probar sin radio
 

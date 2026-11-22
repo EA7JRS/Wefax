@@ -132,7 +132,7 @@ int main(void)
     schedule_free();
 
     /* the list that is installed: transcribed from the NOAA schedule */
-    CHECK(schedule_load(STATIONS_SRC) == 7, "the installed list loads: seven stations");
+    CHECK(schedule_load(STATIONS_SRC) == 9, "the installed list loads: nine stations");
     CHECK(schedule_next(day + 4 * 3600, "DDH", "", &b) && b.start == day + 4 * 3600 + 30 * 60 && b.deviation == 425 && b.nfreqs == 3 && b.suggested_khz == 7880,
           "Hamburg: 04:30, 425 Hz, three frequencies");
     CHECK(schedule_next(day + 3600, "GYA", "", &b) && b.nfreqs == 3 && b.freqs[0] == 2618.5 && b.end - b.start == 12 * 60, "Northwood at night: 2618.5 kHz on, 12 minute slots");
@@ -140,6 +140,8 @@ int main(void)
     CHECK(schedule_next(day + 15 * 3600, "NMF", "", &b) && b.nfreqs == 3 && b.freqs[0] == 6340.5, "Boston in the afternoon: 4235 kHz off");
     CHECK(schedule_next(day + 3600, "NOJ", "", &b) && b.start == day + 3 * 3600 + 40 * 60 && b.nfreqs == 4, "Kodiak: nothing until 03:40; four frequencies");
     CHECK(schedule_next(day + 12 * 3600 + 15 * 60, "KVM70", "", &b) && b.start == day + 12 * 3600 + 14 * 60 && b.nfreqs == 2 && b.freqs[0] == 9982.5, "Honolulu 12:14: the row sent at 1214 and 0014; 16135 kHz off");
+    CHECK(schedule_next(day + 8 * 3600, "SVJ4", "", &b) && b.start == day + 8 * 3600 + 45 * 60 && b.end - b.start == 12 * 60 && b.freqs[1] == 8106.9, "Athens: 08:45, 12 minute slots, centre 1.9 kHz above the listed frequency");
+    CHECK(schedule_next(day + 18 * 3600 + 40 * 60, "RBW", "", &b) && b.lpm == 90 && b.end - b.start == 30 * 60, "Murmansk 18:50: 90 lines per minute; 30 minutes at most");
     schedule_free();
 
     /* the address of Navtex */

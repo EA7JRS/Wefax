@@ -1,0 +1,12 @@
+# MURMANSK, RUSSIA. DOUBTFUL STATION. Schedule from "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025), which warns that the schedule "may no longer be transmitted on-air" and whose frequencies (5336, 6445.5, 7908.8, 10130 kHz) are old.
+# Frequencies used here: 6328.5 and 8444 kHz, the ones the DX Info Centre list (W. R. Hepburn, 2025-03-17) gives as active or reported active, with the same times on the air as this schedule.
+# The 1850 schedule is sent at 90 lines per minute; the rest 120/576.
+STATION|RBW|Murmansk|Russia|400
+FREQ|6328.5|RKS72|
+FREQ|8444|RGS47|
+0700|36HR SURFACE PROG
+0800|SEA STATE ANALYSIS
+1400|SURFACE TEMP ANALYSIS/ICEBERG POSITIONS
+1430|24HR SEA STATE PROG
+1850|BROADCAST SCHEDULE|90
+2000|ICEBERG PROGNOSIS

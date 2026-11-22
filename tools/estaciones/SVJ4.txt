@@ -1,0 +1,17 @@
+# ATHENS, GREECE. Hellenic National Meteorological Service. From "Worldwide Marine Radiofacsimile Broadcast Schedules" (NOAA, edition of March 7, 2025); information dated 01/2019.
+# The source lists 4481 and 8105 kHz with the note "Center Frequency is 1.9 khz higher": the centres used here are 4482.9 and 8106.9 kHz. Other lists give 4481 and 8105 as the centres: if nothing is received, try those as a fixed frequency.
+# The source prints this entry next to Murmansk's and the reader mixed them: the rows from 0845 to 1044 are taken as Athens' (they match the 0845-1055 window other lists give for it). All 120/576.
+STATION|SVJ4|Athens|Greece|400
+FREQ|4482.9|SVJ4|
+FREQ|8106.9|SVJ4|
+0845|SURFACE ANALYSIS
+0857|SURFACE PROG (H+42)
+0909|SURFACE PROG (H+66)
+0921|WAVE HEIGHT PROG (H+30)
+0933|WAVE HEIGHT PROG (H+36)
+0945|WAVE HEIGHT PROG (H+42)
+0957|WAVE HEIGHT PROG (H+48)
+1009|WAVE HEIGHT PROG (H+30)
+1021|WAVE HEIGHT PROG (H+36)
+1033|WAVE HEIGHT PROG (H+42)
+1044|WAVE HEIGHT PROG (H+48)
