@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+  Wefax · interfaz web
+  SPDX-License-Identifier: GPL-3.0-or-later
+  Copyright (c) 2026 Manuel - EA7JRS
+  Sin recursos externos: funciona sin Internet.
+-->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Wefax</title>
+  <script src="tema.js"></script>
+  <script src="i18n.js"></script>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="logo" aria-hidden="true">FAX</span>
+      <div>
+        <h1>Wefax</h1>
+        <p class="sub">Cartas meteorológicas por onda corta</p>
+      </div>
+    </div>
+    <nav class="pestanas" aria-label="Secciones">
+      <button type="button" class="pestana activa" data-vista="cartas">Cartas</button>
+      <button type="button" class="pestana" data-vista="horario">Horario</button>
+      <button type="button" class="pestana" data-vista="estaciones">Estaciones</button>
+      <button type="button" class="pestana" data-vista="receptor">Receptor</button>
+      <div class="ajustes-vista">
+        <div class="tema-elegir">
+          <button type="button" class="boton-icono" id="tema-boton" aria-haspopup="true" aria-expanded="false" aria-label="Aspecto"></button>
+          <div class="tema-menu" id="tema-menu" role="menu">
+            <button type="button" role="menuitemradio" data-modo="sistema"><span class="ti"></span><span>Sistema</span><small>el del equipo</small></button>
+            <button type="button" role="menuitemradio" data-modo="auto"><span class="ti"></span><span>Automático</span><small>claro de 8 a 20 h y oscuro el resto</small></button>
+            <button type="button" role="menuitemradio" data-modo="claro"><span class="ti"></span><span>Claro</span></button>
+            <button type="button" role="menuitemradio" data-modo="oscuro"><span class="ti"></span><span>Oscuro</span></button>
+            <button type="button" role="menuitemradio" data-modo="noche"><span class="ti"></span><span>Noche</span><small>rojo, conserva la visión nocturna</small></button>
+          </div>
+        </div>
+        <button type="button" class="boton-icono" id="idioma-boton" aria-label="Idioma"></button>
+      </div>
+      <button type="button" class="pestana" data-vista="acerca">Acerca de</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="estado" aria-label="Estado" id="estado"></section>
+    <p class="aviso" id="error-general" hidden></p>
+
+    <section id="vista-cartas" aria-label="Cartas">
+      <div class="directo" id="directo" hidden>
+        <h2>Recibiendo ahora</h2>
+        <p class="nota" id="directo-texto"></p>
+        <img id="directo-img" alt="Carta que se está recibiendo">
+      </div>
+      <div class="filtros">
+        <div class="grupo" role="group" aria-label="Estación" id="filtro-estaciones"></div>
+        <label class="campo crece">
+          <span class="oculto">Buscar en el título</span>
+          <input type="search" id="filtro-texto" placeholder="Buscar en el título" autocomplete="off">
+        </label>
+        <label class="casilla"><input type="checkbox" id="filtro-guardadas"> Solo las conservadas</label>
+      </div>
+      <p class="nota" id="resumen"></p>
+      <ol class="cartas" id="cartas"></ol>
+      <p class="vacio" id="vacio" hidden></p>
+    </section>
+
+    <section id="vista-horario" aria-label="Horario" hidden>
+      <p class="nota">Emisiones de las próximas 24 horas de las estaciones que sigo, en hora UTC. El receptor sintoniza un minuto antes de cada una. Quite la marca de las que no quiera recibir. Solo se puede recibir una emisión a la vez: si dos estaciones coinciden, se recibe la que empieza antes.</p>
+      <div class="tabla-caja">
+        <table class="horario">
+          <thead><tr><th>UTC</th><th>Local</th><th>Estación</th><th>Carta</th><th>Recibir</th></tr></thead>
+          <tbody id="horario"></tbody>
+        </table>
+      </div>
+      <p class="vacio" id="horario-vacio" hidden></p>
+      <p class="aviso" id="estado-horario" hidden></p>
+    </section>
+
+    <section id="vista-estaciones" aria-label="Estaciones" hidden>
+      <p class="nota">Elija las estaciones que quiere recibir. La frecuencia «automática» es la central de las que están en el aire a esa hora; si una llega mejor, elíjala. Desde España, las de 8 a 17 MHz suelen llegar mejor de día y las de 2 a 6 MHz de noche.</p>
+      <div class="tarjetas" id="estaciones"></div>
+      <p class="aviso" id="estado-estaciones" hidden></p>
+      <p class="nota" id="fuente-estaciones"></p>
+    </section>
+
+    <section id="vista-receptor" aria-label="Receptor" hidden>
+      <p class="nota">El receptor usa un equipo SDRplay o RTL-SDR y sigue el horario de las estaciones elegidas. Los cambios se aplican solos en unos segundos.</p>
+      <div class="tarjetas" id="receptor"></div>
+      <p class="aviso" id="estado-receptor" hidden></p>
+      <p class="nota">Un equipo solo lo puede usar un programa a la vez. Si el receptor dice «sin equipo», puede estar desconectado o en uso por otro programa (por ejemplo, SDRconnect o SDR++): se sigue intentando cada 15 segundos. Esta página no tiene contraseña: solo en una red de confianza.</p>
+    </section>
+
+    <section id="vista-acerca" aria-label="Acerca de" hidden>
+      <div class="tarjeta acerca">
+        <h2>Wefax</h2>
+        <p>Receptor de radiofacsímil meteorológico (WEFAX) por software para SDRplay y RTL-SDR: sigue el horario de las estaciones de onda corta, recibe sus cartas en segundo plano y las guarda como imágenes.</p>
+        <p>Wefax <span id="version"></span> · © 2026 Manuel - EA7JRS</p>
+        <p>Horarios: «Worldwide Marine Radiofacsimile Broadcast Schedules», NOAA / National Weather Service. Los horarios cambian: compruebe la edición vigente.</p>
+        <p>La capa del receptor deriva de <a href="https://github.com/bartelvdh/Navtex" rel="noopener">Navtex</a>, de bartelvdh (MIT). Este programa es software libre, bajo licencia GPL-3.0 o posterior, y se ofrece sin ninguna garantía.</p>
+        <p>La señal sigue el Manual del Sistema Mundial de Telecomunicación de la OMM (n.º 386). El detalle está en <a href="https://github.com/EA7JRS/Wefax/blob/main/docs/NORMAS.md" rel="noopener">docs/NORMAS.md</a>.</p>
+        <p><a href="https://github.com/EA7JRS/Wefax" rel="noopener">github.com/EA7JRS/Wefax</a> · parte del ecosistema APRS LoRa+</p>
+        <p><a class="boton" href="https://paypal.me/ea7jrs" rel="noopener">Donar con PayPal</a></p>
+        <p class="nota">Las cartas se muestran tal como se reciben. Este programa es una ayuda y no sustituye a la información meteorológica oficial ni a los equipos obligatorios a bordo.</p>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="visor" id="visor">
+    <div class="barra">
+      <h2 id="visor-titulo"></h2>
+      <div class="fila">
+        <label class="casilla"><input type="checkbox" id="visor-conservar"> Conservar</label>
+        <a class="boton pequeno" id="visor-descargar" download>Guardar</a>
+        <button type="button" class="boton pequeno" id="visor-cerrar">Cerrar</button>
+      </div>
+    </div>
+    <img id="visor-img" alt="">
+    <p class="datos" id="visor-datos"></p>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

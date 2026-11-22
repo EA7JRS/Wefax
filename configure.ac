@@ -25,6 +25,7 @@ AC_SUBST([RECEIVER_LIBS])
 if test "$have_sdrplay" = no && test "$have_rtlsdr" = no; then
   AC_MSG_WARN([neither the SDRplay API nor librtlsdr were found: wefaxreceiver will only decode recordings])
 fi
-AC_CONFIG_FILES([Makefile receiver/Makefile])
+AC_CHECK_LIB(microhttpd,MHD_start_daemon,[true],[AC_MSG_ERROR([libmicrohttpd is missing: install libmicrohttpd-dev])])
+AC_CONFIG_FILES([Makefile receiver/Makefile web_server/Makefile])
 AC_OUTPUT
 AC_MSG_NOTICE([receivers: SDRplay $have_sdrplay, RTL-SDR $have_rtlsdr])

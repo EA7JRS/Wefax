@@ -1,0 +1,54 @@
+# HAMBURG/PINNEBERG, GERMANY. Deutscher Wetterdienst. Information dated 24 July 2024.
+# Note in the source: "white + 425 Hz, black - 425 Hz". All charts 120/576. Voice transmissions (not facsimile) left out.
+STATION|DDH|Hamburg / Pinneberg|Germany|425
+FREQ|3855|DDH3|
+FREQ|7880|DDK3|
+FREQ|13882.5|DDK6|
+0430|Surface Analysis North Atlantic, Europe
+0512|36HR-forecast surface pressure
+0525|Surface pressure analysis, arrows showing the movement of pressure systems, significant weather, ice
+0638|Information of tropical storms, North Atlantic (during season only)
+0651|12HR, 24HR 500 hPa H+T, surface pressure
+0704|12HR, 24HR 850 hPa H+T, 700 hPa relative humidity
+0717|Repetition chart 05.12 UTC
+0730|48HR-forecast surface pressure
+0743|60HR-forecast surface pressure
+0804|84HR-forecast surface pressure
+0817|108HR-forecast surface pressure
+0830|24HR-forecast significant height of combined wind waves and swell, wind 10m
+0842|48HR-forecast significant height of combined wind waves and swell, wind 10m
+0854|72HR-forecast significant height of combined wind waves and swell, wind 10m
+0906|96HR-forecast significant height of combined wind waves and swell, wind 10m
+0930|36HR, 48HR 500 hPa H+T, surface pressure
+0945|Sea surface temperature North Sea
+1007|Ice conditions chart Western Baltic Sea or special area if ice situation requires
+1029|48HR wave prediction North Atlantic
+1050|Surface Analysis North Atlantic, Europe
+1111|36HR, 48HR 850 hPa H+T, 700 hPa relative humidity
+1123|60HR, 72HR 500 hPa H+T, surface pressure
+1135|60HR, 72HR 850 hPa H+T, 700 hPa relative humidity
+1236|Repetition chart 10.50 UTC
+1256|Repetition chart 05.12 UTC
+1308|Repetition chart 07.30 UTC
+1320|Repetition chart 07.43 UTC
+1332|Repetition chart 08.04 UTC
+1344|Repetition chart 08.17 UTC
+1356|Repetition chart 10.50 UTC
+1425|Transmission schedule part 1
+1445|Transmission schedule part 2
+1508|Ice conditions chart Northwest Atlantic, Canadian Ice serv., or int. Ice Patrol
+1520|Ice conditions chart Baltic Sea or special area
+1540|Ice conditions chart European Arctic Sea or special area
+1636|Surface Analysis North Atlantic, Europe
+1800|Surface pressure analysis, arrows showing the movement of pressure systems, significant weather, ice
+1821|Information of tropical storms, North Atlantic (during season only)
+1834|36HR-forecast surface pressure
+1847|48HR-forecast surface pressure
+1900|84HR-forecast surface pressure
+1913|24HR-forecast significant height of combined wind waves and swell, wind 10m
+1926|48HR-forecast significant height of combined wind waves and swell, wind 10m
+1939|72HR-forecast significant height of combined wind waves and swell, wind 10m
+2100|Ice conditions chart Northwest Atlantic
+2115|Ice conditions chart Baltic Sea or special area
+2136|48HR wave prediction, surface weather chart North Atlantic
+2200|Surface Analysis North Atlantic, Europe
