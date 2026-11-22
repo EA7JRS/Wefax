@@ -48,7 +48,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 127 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 128 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
@@ -93,7 +93,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 **1. Dependencias.** Si va a usar un SDRplay, instale antes su API.
 
 ```bash
-sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev libmicrohttpd-dev librtlsdr-dev
+sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev libmicrohttpd-dev librtlsdr-dev curl
 ```
 
 **2. Descargar el código.** En su carpeta personal, no en `/opt/Wefax`: ahí van la interfaz instalada, las cartas y la base de datos.
@@ -169,6 +169,7 @@ sudo make uninstall                              # quita los programas de /usr/l
 | :--- | :--- |
 | `wefax-web` | La interfaz web y la API, en el puerto 8081 |
 | `wefax-receiver` | El receptor: siempre en marcha, pero no toca ningún equipo hasta que se enciende en la web |
+| `wefax-manchas.timer` | Una vez al día lee de la NOAA el número de manchas solares para VOACAP (necesita Internet y `curl`) |
 
 Ninguno se ejecuta como `root`. El puerto, la dirección de escucha y el gpsd de la interfaz web están en `/etc/default/wefax`. Navtex usa el puerto 8080 y Wefax el 8081: pueden convivir en el mismo equipo.
 
@@ -242,7 +243,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (127 comprobaciones) |
+| `make check` | Pasa las pruebas (128 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -318,7 +319,7 @@ Opcional. [VOACAP](https://www.voacap.com) es el programa de predicción de onda
 sudo sh tools/instalar-voacap.sh        # como root sin sudo: --usuario <nombre>
 ```
 
-Después, en la pestaña **Receptor**, escriba el **número de manchas solares suavizado** del mes (lo publican el [SILSO](https://www.sidc.be/SILSO/forecasts) y el SWPC de la NOAA; `sh tools/actualizar-manchas.sh` intenta ponerlo solo). Con eso y la posición, en medio minuto:
+El **número de manchas solares** que necesita VOACAP se lee solo, una vez al día, de los índices solares diarios del SWPC de la NOAA (la misma fuente que S.A.T.-APRS+): se toma la media de los cerca de 30 días que trae ese archivo, y si no hubiera número de manchas se estima con el flujo de 10,7 cm, (flujo − 64) × 0,9, como hace S.A.T.-APRS+. Lo hace `wefax-manchas.timer`, que monta el instalador de servicios; a mano, `sh tools/actualizar-manchas.sh`. No es el número suavizado de 12 meses que VOACAP pide en rigor, sino la media observada del último mes; quien quiera el suavizado puede escribirlo en la pestaña **Receptor**, y manda ese. Con eso y la posición, en medio minuto:
 
 - cada frecuencia de cada estación enseña una tira de 24 casillas, de las 00 a las 23 UTC: cuanto más llena, más días del mes llega bien a esa hora;
 - la frecuencia «automática» pasa a ser la más fiable a la hora de cada emisión (entre iguales, la de señal más fuerte), y el estado dice su porcentaje;

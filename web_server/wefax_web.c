@@ -212,7 +212,9 @@ static const char *prop_ready(struct voacap_in *in)
     struct tm tm;
     memset(in, 0, sizeof(*in));
     if (!voacap_available()) return "voacap not installed";
+    /* the number written by hand first; else the one read from NOAA every day */
     store_get("prop.ssn", pos, sizeof(pos), "");
+    if (pos[0] == '\0') store_get("prop.ssn_auto", pos, sizeof(pos), "");
     if (pos[0] == '\0') return "no sunspot number";
     in->ssn = atof(pos);
     store_get("position", pos, sizeof(pos), "");

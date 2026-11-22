@@ -1,0 +1,12 @@
+# Wefax: once a day, and a few minutes after starting up (EA7JRS/Wefax)
+[Unit]
+Description=Wefax: sunspot number from NOAA, once a day
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1d
+RandomizedDelaySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

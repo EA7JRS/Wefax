@@ -8,6 +8,12 @@
 window.WEFAX_I18N = (function () {
   'use strict';
   var EN = {
+ "Número de manchas solares (vacío: el automático)": "Sunspot number (empty: the automatic one)",
+ "automático: ": "automatic: ",
+ "Manchas solares leídas de la NOAA: ": "Sunspot number read from NOAA: ",
+ " (media de unos 30 días hasta el ": " (mean of about 30 days up to ",
+ "Se usa el valor escrito a mano.": "The value written by hand is used.",
+ "Falta el número de manchas solares: se lee solo de la NOAA una vez al día (sh tools/actualizar-manchas.sh lo lee ahora), o escríbalo.": "The sunspot number is missing: it is read from NOAA once a day (sh tools/actualizar-manchas.sh reads it now), or write it.",
  "Hora UTC": "UTC time",
  "local ": "local ",
  "Predicción de propagación (VOACAP)": "Propagation prediction (VOACAP)",
@@ -25,7 +31,7 @@ window.WEFAX_I18N = (function () {
  "Rural": "Rural",
  "Lugar tranquilo, en la mar": "Quiet place, at sea",
  "Señal sobre ruido necesaria (dB-Hz)": "Signal to noise ratio needed (dB-Hz)",
- "VOACAP calcula, para cada estación, frecuencia y hora, en qué parte de los días del mes la señal llegará con esa relación sobre el ruido. Es la mediana del mes: no ve una tormenta geomagnética ni un apagón de hoy. Supone un transmisor sin ganancia con la potencia publicada (5 kW si no se publica) y una antena corta de látigo en recepción. El número de manchas es el suavizado que publican el SILSO o el SWPC de la NOAA para este mes; cámbielo una vez al mes.": "VOACAP computes, for each station, frequency and hour, on what share of the days of the month the signal will arrive with that ratio over the noise. It is the median of the month: it does not see today's geomagnetic storm or radio blackout. It assumes a transmitter without gain with the published power (5 kW when not published) and a short whip for reception. The sunspot number is the smoothed one SILSO or NOAA's SWPC publish for this month; change it once a month.",
+ "VOACAP calcula, para cada estación, frecuencia y hora, en qué parte de los días del mes la señal llegará con esa relación sobre el ruido. Es la mediana del mes: no ve una tormenta geomagnética ni un apagón de hoy. Supone un transmisor sin ganancia con la potencia publicada (5 kW si no se publica) y una antena corta de látigo en recepción. El número de manchas se lee solo, una vez al día, de los índices solares de la NOAA (la media de sus últimos 30 días, como referencia la misma fuente que S.A.T.-APRS+); si escribe uno, manda el suyo.": "VOACAP computes, for each station, frequency and hour, on what share of the days of the month the signal will arrive with that ratio over the noise. It is the median of the month: it does not see today's geomagnetic storm or radio blackout. It assumes a transmitter without gain with the published power (5 kW when not published) and a short whip for reception. The sunspot number is read by itself, once a day, from NOAA's solar indices (the mean of their last 30 days, the same source as S.A.T.-APRS+); if you write one, yours is used.",
  "noche": "night",
  "crepúsculo": "twilight",
  "día": "day",

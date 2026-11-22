@@ -1,0 +1,14 @@
+# Wefax: reads the sunspot number VOACAP needs from NOAA (EA7JRS/Wefax). Installed by
+# tools/instalar-servicios.sh, which replaces @USUARIO@ and @DIR@. Run by wefax-manchas.timer.
+[Unit]
+Description=Wefax: sunspot number from NOAA
+After=network-online.target wefax-web.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@USUARIO@
+Environment=WEB_PORT=8081
+EnvironmentFile=-/etc/default/wefax
+ExecStart=/bin/sh /usr/local/share/wefax/actualizar-manchas.sh http://127.0.0.1:${WEB_PORT}
+NoNewPrivileges=yes

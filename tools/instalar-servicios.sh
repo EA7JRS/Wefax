@@ -34,8 +34,9 @@ UNIDADES=/etc/systemd/system
 paso() { printf '\n== %s\n' "$*"; }
 
 if [ "$QUITAR" = 1 ]; then
-  systemctl disable --now wefax-receiver.service wefax-web.service 2>/dev/null || true
-  rm -f "$UNIDADES/wefax-receiver.service" "$UNIDADES/wefax-web.service"
+  systemctl disable --now wefax-receiver.service wefax-web.service wefax-manchas.timer 2>/dev/null || true
+  rm -f "$UNIDADES/wefax-receiver.service" "$UNIDADES/wefax-web.service" "$UNIDADES/wefax-manchas.service" "$UNIDADES/wefax-manchas.timer"
+  rm -rf /usr/local/share/wefax
   systemctl daemon-reload
   echo "Servicios retirados. Se conservan /opt/Wefax (cartas y ajustes), /etc/default/wefax y los programas."
   exit 0
@@ -69,7 +70,14 @@ paso "Servicios"
 sed "s/@USUARIO@/$USUARIO/" "$DIR/systemd/wefax-receiver.service" > "$UNIDADES/wefax-receiver.service"
 sed "s/@USUARIO@/$USUARIO/" "$DIR/systemd/wefax-web.service" > "$UNIDADES/wefax-web.service"
 chmod 644 "$UNIDADES/wefax-receiver.service" "$UNIDADES/wefax-web.service"
+# Número de manchas solares para VOACAP: se lee de la NOAA una vez al día (necesita curl e Internet)
+mkdir -p /usr/local/share/wefax
+install -m 644 "$DIR/tools/actualizar-manchas.sh" /usr/local/share/wefax/actualizar-manchas.sh
+sed "s/@USUARIO@/$USUARIO/" "$DIR/systemd/wefax-manchas.service" > "$UNIDADES/wefax-manchas.service"
+install -m 644 "$DIR/systemd/wefax-manchas.timer" "$UNIDADES/wefax-manchas.timer"
 systemctl daemon-reload
+systemctl enable --now wefax-manchas.timer
+command -v curl >/dev/null 2>&1 || echo "Falta curl para leer el número de manchas solares: sudo apt install curl"
 # restart, y no solo arrancar: si ya estaba en marcha seguiría con el programa anterior
 systemctl enable wefax-web.service wefax-receiver.service
 systemctl restart wefax-web.service wefax-receiver.service
@@ -86,4 +94,6 @@ if command -v ufw >/dev/null 2>&1 && ufw status 2>/dev/null | grep -q '^Status: 
     echo "  sudo ufw allow from 192.168.0.0/16 to any port ${PUERTO:-8081} proto tcp"
   fi
 fi
+# la primera lectura, ya; si no hay Internet se reintenta mañana, o a mano con el guion
+systemctl start wefax-manchas.service 2>/dev/null || true
 echo "Registro:  journalctl -u wefax-receiver -f"

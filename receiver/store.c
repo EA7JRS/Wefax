@@ -108,6 +108,9 @@ int store_setting_valid(const char *name, const char *value)
     /* VOACAP predictions: smoothed sunspot number of the month (empty: not known, no predictions),
        man-made noise at 3 MHz in -dBW and signal to noise ratio needed in dB-Hz */
     if (strcmp(name, "prop.ssn") == 0) return value[0] == '\0' || (is_number(value, 0, 300) && value[0] != '-');
+    /* the one tools/actualizar-manchas.sh reads from NOAA every day, used while prop.ssn is empty, and its date */
+    if (strcmp(name, "prop.ssn_auto") == 0) return value[0] == '\0' || (is_number(value, 0, 300) && value[0] != '-');
+    if (strcmp(name, "prop.ssn_date") == 0) return all_of(value, DIGITS "-", 10);
     if (strcmp(name, "prop.noise") == 0) return is_number(value, 110, 170) && strchr(value, '.') == NULL && value[0] != '-';
     if (strcmp(name, "prop.snr") == 0) return is_number(value, 10, 80) && strchr(value, '.') == NULL && value[0] != '-';
     /* where the receiver is: "lat,lon" in decimal degrees, or empty */

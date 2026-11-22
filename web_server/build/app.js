@@ -458,16 +458,17 @@
     c.appendChild(t);
 
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Predicción de propagación (VOACAP)')));
-    var MOTIVO = { 'voacap not installed': 'VOACAP no está instalado en este equipo: ejecute tools/instalar-voacap.sh.', 'no sunspot number': 'Falta el número de manchas solares del mes.', 'no position': 'Falta la posición (pestaña Estaciones).' };
+    var MOTIVO = { 'voacap not installed': 'VOACAP no está instalado en este equipo: ejecute tools/instalar-voacap.sh.', 'no sunspot number': 'Falta el número de manchas solares: se lee solo de la NOAA una vez al día (sh tools/actualizar-manchas.sh lo lee ahora), o escríbalo.', 'no position': 'Falta la posición (pestaña Estaciones).' };
     t.appendChild(el('p', 'nota', !tablaEstado ? '' : tablaEstado.ok
       ? (tablaVale() ? tr('En uso: tabla de ') + dos(tabla.month) + '/' + tabla.year + tr(', manchas solares ') + tabla.ssn + '.' : tr('Calculando la tabla…'))
       : tr(MOTIVO[tablaEstado.why] || tablaEstado.why)));
     r = el('div', 'rejilla');
-    r.appendChild(campo(tr('Número de manchas solares suavizado del mes'), texto('prop.ssn', '', tr('sin dato'))));
+    r.appendChild(campo(tr('Número de manchas solares (vacío: el automático)'), texto('prop.ssn', '', ajuste('prop.ssn_auto', '') ? tr('automático: ') + ajuste('prop.ssn_auto', '') : tr('sin dato'))));
     r.appendChild(campo(tr('Ruido en su antena'), selector('prop.noise', '145', [['136', tr('Ciudad, mucho ruido')], ['145', tr('Residencial')], ['150', tr('Rural')], ['160', tr('Lugar tranquilo, en la mar')]])));
     r.appendChild(campo(tr('Señal sobre ruido necesaria (dB-Hz)'), texto('prop.snr', '40')));
     t.appendChild(r);
-    t.appendChild(el('p', 'nota', tr('VOACAP calcula, para cada estación, frecuencia y hora, en qué parte de los días del mes la señal llegará con esa relación sobre el ruido. Es la mediana del mes: no ve una tormenta geomagnética ni un apagón de hoy. Supone un transmisor sin ganancia con la potencia publicada (5 kW si no se publica) y una antena corta de látigo en recepción. El número de manchas es el suavizado que publican el SILSO o el SWPC de la NOAA para este mes; cámbielo una vez al mes.')));
+    if (ajuste('prop.ssn_auto', '')) t.appendChild(el('p', 'nota', tr('Manchas solares leídas de la NOAA: ') + ajuste('prop.ssn_auto', '') + tr(' (media de unos 30 días hasta el ') + ajuste('prop.ssn_date', '?') + ').' + (ajuste('prop.ssn', '') ? ' ' + tr('Se usa el valor escrito a mano.') : '')));
+    t.appendChild(el('p', 'nota', tr('VOACAP calcula, para cada estación, frecuencia y hora, en qué parte de los días del mes la señal llegará con esa relación sobre el ruido. Es la mediana del mes: no ve una tormenta geomagnética ni un apagón de hoy. Supone un transmisor sin ganancia con la potencia publicada (5 kW si no se publica) y una antena corta de látigo en recepción. El número de manchas se lee solo, una vez al día, de los índices solares de la NOAA (la media de sus últimos 30 días, como referencia la misma fuente que S.A.T.-APRS+); si escribe uno, manda el suyo.')));
     c.appendChild(t);
 
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Compartir el equipo con Navtex')));
