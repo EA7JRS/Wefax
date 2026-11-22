@@ -90,6 +90,7 @@ sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev l
 ```
 
 ```bash
+cd ~
 git clone https://github.com/EA7JRS/Wefax.git
 cd Wefax
 autoreconf -i && automake --add-missing; autoreconf
@@ -105,6 +106,10 @@ Para que arranquen solos como servicios (con su usuario, no con root):
 ```bash
 sudo sh tools/instalar-servicios.sh
 ```
+
+Si trabaja como `root` (sin `sudo`), diga qué usuario los ejecutará: `sh tools/instalar-servicios.sh --usuario <nombre>`.
+
+> Descargue el código en su carpeta personal, no en `/opt/Wefax`: ahí van la interfaz instalada, las cartas y la base de datos.
 
 Después abra `http://<equipo>:8081/`, elija las estaciones en **Estaciones** y encienda el receptor en **Receptor**. Hasta entonces el receptor no toca ningún equipo. El puerto se cambia en `/etc/default/wefax` (Navtex usa el 8080).
 
