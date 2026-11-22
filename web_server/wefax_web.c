@@ -22,6 +22,7 @@
  * a header a page of another site cannot send; files cannot be asked outside their folders.
  */
 #include <stdlib.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -159,6 +160,11 @@ static char *next_json(void)
     if (o == NULL) return NULL;
     store_get("follow", follow, sizeof(follow), "");
     store_get("skip", skip, sizeof(skip), "");
+    {
+        char pos[40]; double la, lo;
+        store_get("position", pos, sizeof(pos), "");
+        schedule_set_position(sscanf(pos, "%lf,%lf", &la, &lo) == 2, la, lo);
+    }
     if (schedule_next(time(NULL), follow, skip, &b)) {
         cJSON *f = cJSON_AddArrayToObject(o, "freqs");
         cJSON_AddStringToObject(o, "station", b.station);
@@ -169,6 +175,8 @@ static char *next_json(void)
         cJSON_AddNumberToObject(o, "lpm", b.lpm);
         cJSON_AddNumberToObject(o, "ioc", b.ioc);
         cJSON_AddNumberToObject(o, "suggested_khz", b.suggested_khz);
+        { char w[2] = { b.why ? b.why : 'm', 0 }; cJSON_AddStringToObject(o, "why", w); }
+        cJSON_AddNumberToObject(o, "distance_km", b.distance_km);
         for (i = 0; i < b.nfreqs; i++) cJSON_AddItemToArray(f, cJSON_CreateNumber(b.freqs[i]));
     }
     s = cJSON_PrintUnformatted(o);
@@ -286,7 +294,27 @@ int main(int argc, char *const *argv)
     if (d == NULL) { fprintf(stderr, "Error: the web server could not start on port %d\n", port); return 1; }
     printf("Wefax web interface on %s port %d\n", address != NULL ? address : "all addresses", port);
     fflush(stdout);
-    for (;;) sleep(60);
+    sleep(3);
+    for (;;) {
+        /* the position gpsd gives goes to the settings, where the receiver reads it; not when the user chose a written one */
+        char src[16], old[40], now_pos[40];
+        char *g = gps_json();
+        cJSON *j = g != NULL ? cJSON_Parse(g) : NULL;
+        const cJSON *la = cJSON_GetObjectItemCaseSensitive(j, "lat"), *lo = cJSON_GetObjectItemCaseSensitive(j, "lon"), *age = cJSON_GetObjectItemCaseSensitive(j, "age");
+        store_get("position_source", src, sizeof(src), "gps");
+        if (strcmp(src, "gps") == 0 && cJSON_IsNumber(la) && cJSON_IsNumber(lo) && !(cJSON_IsNumber(age) && age->valuedouble > 120)) {
+            double a, b;
+            store_get("position", old, sizeof(old), "");
+            /* only when it moved more than about 10 km: the choice of frequency does not need more */
+            if (sscanf(old, "%lf,%lf", &a, &b) != 2 || fabs(a - la->valuedouble) > 0.1 || fabs(b - lo->valuedouble) > 0.1) {
+                snprintf(now_pos, sizeof(now_pos), "%.2f,%.2f", la->valuedouble, lo->valuedouble);
+                store_set("position", now_pos);
+            }
+        }
+        cJSON_Delete(j);
+        free(g);
+        sleep(20);
+    }
     MHD_stop_daemon(d);
     return 0;
 }

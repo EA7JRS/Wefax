@@ -6,6 +6,7 @@
  */
 #include "schedule.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +17,54 @@
 #define MIN_BROADCAST_MIN 8
 
 static cJSON *root;
+
+static int have_pos;
+static double pos_lat, pos_lon;
+#define RAD (3.14159265358979323846 / 180.0)
+
+void schedule_set_position(int have, double lat, double lon) { have_pos = have; pos_lat = lat; pos_lon = lon; }
+
+double schedule_sun_elevation(double lat, double lon, time_t when)
+{
+    double n = (double) when / 86400.0 + 2440587.5 - 2451545.0;
+    double L = fmod(280.46 + 0.9856474 * n, 360.0), g = fmod(357.528 + 0.9856003 * n, 360.0) * RAD;
+    double lam = (L + 1.915 * sin(g) + 0.02 * sin(2 * g)) * RAD, eps = (23.439 - 0.0000004 * n) * RAD;
+    double dec = asin(sin(eps) * sin(lam)), ra = atan2(cos(eps) * sin(lam), cos(lam));
+    double gmst = fmod(18.697374558 + 24.06570982441908 * n, 24.0), ha = (gmst * 15.0 + lon) * RAD - ra;
+    return asin(sin(lat * RAD) * sin(dec) + cos(lat * RAD) * cos(dec) * cos(ha)) / RAD;
+}
+
+double schedule_distance_km(double lat1, double lon1, double lat2, double lon2)
+{
+    double a = sin((lat2 - lat1) * RAD / 2), b = sin((lon2 - lon1) * RAD / 2);
+    double h = a * a + cos(lat1 * RAD) * cos(lat2 * RAD) * b * b;
+    return 2.0 * 6371.0 * asin(sqrt(h > 1 ? 1 : h));
+}
+
+double schedule_pick(const double *khz, int n, double lat1, double lon1, double lat2, double lon2, time_t when, char *why)
+{
+    /* the middle of the great circle, through the sum of the two unit vectors */
+    double x = cos(lat1 * RAD) * cos(lon1 * RAD) + cos(lat2 * RAD) * cos(lon2 * RAD);
+    double y = cos(lat1 * RAD) * sin(lon1 * RAD) + cos(lat2 * RAD) * sin(lon2 * RAD);
+    double z = sin(lat1 * RAD) + sin(lat2 * RAD);
+    double mid_lat = atan2(z, sqrt(x * x + y * y)) / RAD, mid_lon = atan2(y, x) / RAD;
+    double sun = schedule_sun_elevation(mid_lat, mid_lon, when), km = schedule_distance_km(lat1, lon1, lat2, lon2);
+    double sorted[SCHEDULE_MAX_FREQS], best;
+    int i, j;
+    if (n <= 0) { *why = 'm'; return 0; }
+    if (n > SCHEDULE_MAX_FREQS) n = SCHEDULE_MAX_FREQS;
+    for (i = 0; i < n; i++) sorted[i] = khz[i];
+    for (i = 1; i < n; i++) for (j = i; j > 0 && sorted[j - 1] > sorted[j]; j--) { double t = sorted[j]; sorted[j] = sorted[j - 1]; sorted[j - 1] = t; }
+    if (sun < -6.0) {
+        *why = 'n'; best = sorted[0];
+        for (i = 0; i < n; i++) if (sorted[i] >= 3000.0) { best = sorted[i]; break; }
+        return best;
+    }
+    if (sun <= 6.0) { *why = 't'; return sorted[n / 2]; }
+    *why = 'd'; best = sorted[n - 1];
+    if (km < 3000.0) for (i = n - 1; i >= 0; i--) { best = sorted[i]; if (sorted[i] <= 14500.0) break; }
+    return best;
+}
 
 void schedule_free(void) { cJSON_Delete(root); root = NULL; }
 
@@ -121,6 +170,15 @@ int schedule_next(time_t now, const char *follow, const char *skip, struct broad
                     out->freqs[out->nfreqs++] = k->valuedouble;
                 }
                 out->suggested_khz = out->nfreqs > 0 ? out->freqs[out->nfreqs / 2] : 0;
+                out->why = 'm'; out->distance_km = -1;
+                {
+                    const cJSON *la = cJSON_GetObjectItemCaseSensitive(st, "lat"), *lo = cJSON_GetObjectItemCaseSensitive(st, "lon");
+                    if (have_pos && cJSON_IsNumber(la) && cJSON_IsNumber(lo) && out->nfreqs > 0) {
+                        time_t t = start > now ? start : now;
+                        out->suggested_khz = schedule_pick(out->freqs, out->nfreqs, pos_lat, pos_lon, la->valuedouble, lo->valuedouble, t, &out->why);
+                        out->distance_km = schedule_distance_km(pos_lat, pos_lon, la->valuedouble, lo->valuedouble);
+                    }
+                }
             }
         }
     }

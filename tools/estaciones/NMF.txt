@@ -1,6 +1,7 @@
 # BOSTON, MASSACHUSETTS, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfmarsh.txt
 # Schedule effective Sep 04, 2018; information dated December 12, 2024. All 120/576. ---- = not sent at that time.
 STATION|NMF|Boston|United States|400
+POS|41.71|-70.5|Cape Cod, the transmitting site of Boston
 FREQ|4235|NMF|0230-1039
 FREQ|6340.5|NMF|
 FREQ|9110|NMF|

@@ -112,6 +112,70 @@
     return d;
   }
 
+  // ---- posición propia: la del GPS o la escrita; distancia, rumbo y sol en el camino
+  function leerPosicion(texto) {
+    var t = String(texto).trim();
+    var m = /^(-?\d{1,2}(?:[.,]\d+)?)\s*[,; ]\s*(-?\d{1,3}(?:[.,]\d+)?)$/.exec(t);
+    if (m) {
+      var lat = parseFloat(m[1].replace(',', '.')), lon = parseFloat(m[2].replace(',', '.'));
+      return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180 ? { lat: lat, lon: lon } : null;
+    }
+    var g = /^([A-Ra-r])([A-Ra-r])(\d)(\d)(?:([A-Xa-x])([A-Xa-x])(?:(\d)(\d))?)?$/.exec(t);
+    if (!g) return null;
+    var c = function (x) { return x.toUpperCase().charCodeAt(0) - 65; };
+    var lo = c(g[1]) * 20 - 180 + Number(g[3]) * 2, la = c(g[2]) * 10 - 90 + Number(g[4]);
+    var anchoLo = 2, anchoLa = 1;
+    if (g[5]) { lo += c(g[5]) * (2 / 24); la += c(g[6]) * (1 / 24); anchoLo = 2 / 24; anchoLa = 1 / 24; }
+    if (g[7]) { lo += Number(g[7]) * (2 / 240); la += Number(g[8]) * (1 / 240); anchoLo = 2 / 240; anchoLa = 1 / 240; }
+    return { lat: la + anchoLa / 2, lon: lo + anchoLo / 2 };   // centro del cuadro
+  }
+  function posicion() {
+    var g = posicionGps(), m = /^(-?[0-9.]+),(-?[0-9.]+)$/.exec(ajuste('position', ''));
+    if (ajuste('position_source', 'gps') === 'gps' && g) return g;
+    return m ? { lat: Number(m[1]), lon: Number(m[2]) } : null;
+  }
+  var RAD = Math.PI / 180;
+  function distanciaKm(a, b) {
+    var x = Math.sin((b.lat - a.lat) * RAD / 2), y = Math.sin((b.lon - a.lon) * RAD / 2);
+    return 2 * 6371 * Math.asin(Math.sqrt(Math.min(1, x * x + Math.cos(a.lat * RAD) * Math.cos(b.lat * RAD) * y * y)));
+  }
+  function rumbo(a, b) {
+    var dl = (b.lon - a.lon) * RAD;
+    var r = Math.atan2(Math.sin(dl) * Math.cos(b.lat * RAD), Math.cos(a.lat * RAD) * Math.sin(b.lat * RAD) - Math.sin(a.lat * RAD) * Math.cos(b.lat * RAD) * Math.cos(dl)) / RAD;
+    return (Math.round(r) + 360) % 360;
+  }
+  // Altura del sol en grados (fórmulas simplificadas de la NOAA): las mismas que usa el receptor
+  function alturaSol(lat, lon, ms) {
+    var n = ms / 86400000 + 2440587.5 - 2451545.0;
+    var L = (280.46 + 0.9856474 * n) % 360, g = ((357.528 + 0.9856003 * n) % 360) * RAD;
+    var lam = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * RAD, eps = (23.439 - 0.0000004 * n) * RAD;
+    var dec = Math.asin(Math.sin(eps) * Math.sin(lam)), ra = Math.atan2(Math.cos(eps) * Math.sin(lam), Math.cos(lam));
+    var gmst = (18.697374558 + 24.06570982441908 * n) % 24, ha = (gmst * 15 + lon) * RAD - ra;
+    return Math.asin(Math.sin(lat * RAD) * Math.sin(dec) + Math.cos(lat * RAD) * Math.cos(dec) * Math.cos(ha)) / RAD;
+  }
+  // La regla del receptor (schedule_pick): devuelve { khz, por } con por = 'n', 't', 'd' o 'm'
+  function elegir(frecs, p, s, ms) {
+    var f = frecs.slice().sort(function (a, b) { return a - b; }), i;
+    if (!f.length) return { khz: 0, por: 'm' };
+    if (!p || typeof s.lat !== 'number') return { khz: frecs[Math.floor(frecs.length / 2)], por: 'm' };
+    var x = Math.cos(p.lat * RAD) * Math.cos(p.lon * RAD) + Math.cos(s.lat * RAD) * Math.cos(s.lon * RAD);
+    var y = Math.cos(p.lat * RAD) * Math.sin(p.lon * RAD) + Math.cos(s.lat * RAD) * Math.sin(s.lon * RAD);
+    var z = Math.sin(p.lat * RAD) + Math.sin(s.lat * RAD);
+    var sol = alturaSol(Math.atan2(z, Math.sqrt(x * x + y * y)) / RAD, Math.atan2(y, x) / RAD, ms);
+    if (sol < -6) { for (i = 0; i < f.length; i++) if (f[i] >= 3000) return { khz: f[i], por: 'n' }; return { khz: f[0], por: 'n' }; }
+    if (sol <= 6) return { khz: f[Math.floor(f.length / 2)], por: 't' };
+    if (distanciaKm(p, s) < 3000) for (i = f.length - 1; i >= 0; i--) if (f[i] <= 14500 || i === 0) return { khz: f[i], por: 'd' };
+    return { khz: f[f.length - 1], por: 'd' };
+  }
+  var CORTO = { n: 'noche', t: 'crepúsculo', d: 'día' };
+  var POR = { n: 'de noche en el camino', t: 'crepúsculo en el camino', d: 'de día en el camino', m: 'la de en medio' };
+  function pintarPosicion() {
+    var g = posicionGps(), p = posicion(), a = $('posicion-actual');
+    $('usar-gps').checked = ajuste('position_source', 'gps') === 'gps';
+    if (!p) a.textContent = tr('Sin posición: escríbala aquí si no hay GPS.');
+    else a.textContent = (ajuste('position_source', 'gps') === 'gps' && g ? tr('En uso: la del GPS, ') : tr('En uso: la escrita, ')) + coma(p.lat, 2) + ', ' + coma(p.lon, 2) + ' (' + localizador(p) + ').';
+  }
+
   // ---- estado
   var ESTADOS = {
     'off': 'Apagado', 'stopped': 'Parado', 'listening': 'A la escucha', 'receiving a chart': 'Recibiendo una carta',
@@ -146,7 +210,8 @@
     var prox = st('next_start');
     if (prox) {
       var d = new Date(prox);
-      c.appendChild(dato(tr('Próxima emisión'), horaUtc(d) + ' UTC · ' + nombreEstacion(st('next_station')), st('next_title') + (Number(st('next_khz')) ? ' · ' + khz(Number(st('next_khz'))) : '')));
+      c.appendChild(dato(tr('Próxima emisión'), horaUtc(d) + ' UTC · ' + nombreEstacion(st('next_station')), st('next_title') + (Number(st('next_khz')) ? ' · ' + khz(Number(st('next_khz'))) : '')
+        + (POR[st('next_why')] && st('next_why') !== 'm' && ajuste('freq.' + st('next_station'), 'auto') === 'auto' ? ' (' + tr(POR[st('next_why')]) + ')' : '')));
     } else c.appendChild(dato(tr('Próxima emisión'), '—', ''));
     c.appendChild(dato(tr('Cartas guardadas'), String(cartas.length), cartas.length ? tr('la última, ') + haceCuanto(Date.parse(cartas[0].received)) : ''));
     c.appendChild(datoGps());
@@ -251,11 +316,17 @@
   // ---- estaciones
   function pintarEstaciones() {
     var c = $('estaciones'), sigue = lista('follow'), min = new Date().getUTCHours() * 60 + new Date().getUTCMinutes();
+    var yo = posicion(), ahoraMs = Date.now();
+    pintarPosicion();
     c.textContent = '';
-    datos.stations.forEach(function (s) {
+    datos.stations.map(function (s) {
+      return { s: s, d: yo && typeof s.lat === 'number' ? distanciaKm(yo, s) : null };
+    }).sort(function (a, b) { return a.d === null || b.d === null ? 0 : a.d - b.d; }).forEach(function (par) {
+      var s = par.s;
       var t = el('div', 'tarjeta'), lab = el('label', 'interruptor'), chk = el('input'), ul = el('ul', 'frecs'), aj = el('label', 'ajuste'), sel = el('select');
       t.appendChild(el('h2', '', s.name));
       t.appendChild(el('p', 'nota', s.country + ' · ' + s.id + ' · ' + s.broadcasts.length + tr(' emisiones al día') + (s.deviation !== 400 ? ' · ±' + s.deviation + ' Hz' : '')));
+      if (par.d !== null) t.appendChild(el('p', 'nota', '≈ ' + (Math.round(par.d / 50) * 50) + ' km · ' + tr('rumbo ') + ('00' + rumbo(yo, s)).slice(-3) + '° · ' + tr('posición aproximada del transmisor')));
       chk.type = 'checkbox'; chk.checked = sigue.indexOf(s.id) >= 0;
       chk.addEventListener('change', function () {
         var l = lista('follow').filter(function (x) { return x !== s.id; });
@@ -272,7 +343,9 @@
       });
       t.appendChild(ul);
       aj.appendChild(document.createTextNode(tr('Frecuencia que se usa')));
-      [['auto', tr('Automática')]].concat(s.freqs.map(function (f) { return [String(f.khz), khz(f.khz)]; })).forEach(function (o) {
+      var enAire = s.freqs.filter(function (f) { return enElAire(f, min); }).map(function (f) { return f.khz; });
+      var ele = elegir(enAire, yo, s, ahoraMs);
+      [['auto', tr('Automática') + (ele.khz ? ': ' + khz(ele.khz) + (ele.por !== 'm' ? ' · ' + tr(CORTO[ele.por]) : '') : '')]].concat(s.freqs.map(function (f) { return [String(f.khz), khz(f.khz)]; })).forEach(function (o) {
         var op = el('option', '', o[1]); op.value = o[0]; sel.appendChild(op);
       });
       sel.value = ajuste('freq.' + s.id, 'auto');
@@ -372,6 +445,17 @@
       if (v === 'estaciones') pintarEstaciones();
       try { history.replaceState(null, '', '#' + v); } catch (e) { /* da igual */ }
     });
+  });
+  $('usar-gps').addEventListener('change', function () {
+    guardar('position_source', $('usar-gps').checked ? 'gps' : 'manual', 'estado-estaciones').then(pintarEstaciones);
+  });
+  $('form-posicion').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var p = leerPosicion($('posicion').value);
+    if (!p) { avisar('estado-estaciones', false, tr('No entiendo esa posición. Ejemplos: 36.53, -6.29 o IM66uq.')); return; }
+    ajustes.position_source = 'manual';
+    enviar('/api/settings/position_source/manual').then(function () { return guardar('position', p.lat.toFixed(2) + ',' + p.lon.toFixed(2), 'estado-estaciones'); })
+      .then(function () { $('posicion').value = ''; pintarEstaciones(); });
   });
   $('filtro-texto').addEventListener('input', function (e) { filtro.texto = e.target.value; pintarCartas(); });
   $('filtro-guardadas').addEventListener('change', function (e) { filtro.guardadas = e.target.checked; pintarCartas(); });

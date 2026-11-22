@@ -98,7 +98,19 @@
     </section>
 
     <section id="vista-estaciones" aria-label="Estaciones" hidden>
-      <p class="nota">Elija las estaciones que quiere recibir. La frecuencia «automática» es la central de las que están en el aire a esa hora; si una llega mejor, elíjala. Desde España, las de 8 a 17 MHz suelen llegar mejor de día y las de 2 a 6 MHz de noche.</p>
+      <div class="tarjeta" id="tarjeta-posicion">
+        <h2>Mi posición</h2>
+        <p class="nota">Con la posición, las estaciones se ordenan por distancia y la frecuencia «automática» se elige según sea de día o de noche en el camino hasta cada una.</p>
+        <label class="interruptor"><input type="checkbox" id="usar-gps" checked> Usar la posición del GPS</label>
+        <form class="fila" id="form-posicion">
+          <label class="campo crece"><span class="oculto">Posición</span>
+            <input type="text" id="posicion" placeholder="36.53, -6.29  o  IM66uq" autocomplete="off" spellcheck="false">
+          </label>
+          <button type="submit" class="boton">Guardar</button>
+        </form>
+        <p class="nota" id="posicion-actual"></p>
+      </div>
+      <p class="nota">Elija las estaciones que quiere recibir. La frecuencia «automática» sigue una regla sencilla: de noche en el camino, la más baja; de día, la más alta; en el crepúsculo, la de en medio. Es una orientación, no una previsión de propagación: si otra llega mejor, elíjala. Sin posición se usa la de en medio. En onda corta la distancia no decide si una estación se recibe.</p>
       <div class="tarjetas" id="estaciones"></div>
       <p class="aviso" id="estado-estaciones" hidden></p>
       <p class="nota" id="fuente-estaciones"></p>

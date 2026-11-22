@@ -41,13 +41,13 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
 | Interfaz web | Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
 | Solo onda corta | No recibe imágenes de satélite: el WEFAX de los geoestacionarios ya no se emite y lo que hay hoy (LRPT, HRIT) es digital, otro sistema |
-| Posición del GPS | La toma de gpsd (como Navtex) y la muestra; con ella el aspecto automático cambia con el sol |
+| Posición propia | La del GPS (gpsd, como Navtex) o la que se escriba. Con ella las estaciones salen por distancia, con su rumbo, y la frecuencia «automática» se elige según sea de día o de noche en el camino |
 | Ayuda para leer la carta | Isobaras, viento, frentes, tipos de carta y escala Beaufort, en la pestaña Cartas |
 | Descodifica grabaciones | Para probar y para repasar una recepción dudosa |
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 93 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 103 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
@@ -289,7 +289,7 @@ Sin contraseña. Los cambios piden `POST` y la cabecera `X-Wefax` (así una pág
 | :--- | :--- |
 | `GET /api/about` | La versión |
 | `GET /api/status` | Qué hace el receptor: estado, frecuencia, descodificador, próxima emisión |
-| `GET /api/next` | La emisión en curso o la siguiente de las estaciones seguidas |
+| `GET /api/next` | La emisión en curso o la siguiente de las estaciones seguidas, con la frecuencia elegida, por qué (`n` noche, `t` crepúsculo, `d` día, `m` la de en medio) y la distancia |
 | `GET /api/charts?since=<id>&limit=<n>` | Las cartas recibidas, la más nueva primero |
 | `GET /api/settings` | Los ajustes |
 | `GET /api/gps` | La posición que da gpsd |
@@ -301,7 +301,9 @@ Sin contraseña. Los cambios piden `POST` y la cabecera `X-Wefax` (así una pág
 
 ## Posición por GPS
 
-La interfaz web lee la posición de gpsd: de serie, el del propio equipo (`127.0.0.1:2947`), el mismo que usa Navtex. Se cambia o se quita con `WEFAX_GPSD` en `/etc/default/wefax`. El servidor solo lee; no envía nada al GPS. La posición se muestra en el recuadro «Posición GPS» y decide el aspecto «Automático» (claro de día, oscuro de noche). Con un Leo Bodnar LBE-1420, véase lo que dice el [README de Navtex](https://github.com/EA7JRS/Navtex#posición-por-gps).
+La interfaz web lee la posición de gpsd: de serie, el del propio equipo (`127.0.0.1:2947`), el mismo que usa Navtex. Se cambia o se quita con `WEFAX_GPSD` en `/etc/default/wefax`. El servidor solo lee; no envía nada al GPS. La posición se muestra en el recuadro «Posición GPS» y decide el aspecto «Automático» (claro de día, oscuro de noche). Sin GPS se puede escribir en la pestaña Estaciones (grados decimales o localizador).
+
+**Para qué sirve la posición.** En onda corta la distancia no decide si una estación se recibe, así que Wefax no habla de «alcance». La usa para tres cosas: ordenar las estaciones de cerca a lejos, dar la distancia y el rumbo, y elegir la frecuencia «automática» con una regla sencilla según el sol en el punto medio del camino: de noche (sol más de 6° bajo el horizonte), la más baja desde 3 MHz; en el crepúsculo, la de en medio; de día, la más alta (hasta 14,5 MHz si el camino mide menos de 3000 km). Es una orientación, no una previsión de propagación; cada estación permite fijar otra frecuencia. La posición de cada transmisor es aproximada (a la décima de grado, la de su localidad): no viene en los horarios. Con un Leo Bodnar LBE-1420, véase lo que dice el [README de Navtex](https://github.com/EA7JRS/Navtex#posición-por-gps).
 
 ## Seguridad
 

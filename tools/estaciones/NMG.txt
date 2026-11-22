@@ -1,6 +1,7 @@
 # NEW ORLEANS, LOUISIANA, U.S.A. U.S. Coast Guard. From https://www.weather.gov/media/marine/hfgulf.txt
 # Schedule effective Apr 03, 2012; information dated December 12, 2024. All 120/576. ---- = not sent at that time.
 STATION|NMG|New Orleans|United States|400
+POS|29.88|-89.95|Belle Chasse, New Orleans
 FREQ|4317.9|NMG|
 FREQ|8503.9|NMG|
 FREQ|12789.9|NMG|

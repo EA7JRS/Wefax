@@ -34,11 +34,28 @@ struct broadcast {
     double freqs[SCHEDULE_MAX_FREQS];   /* kHz on the air at that time, in the order of the list */
     int nfreqs;
     double suggested_khz;       /* the one to use when the user has not chosen */
+    char why;                   /* how it was chosen: 'n' night, 't' twilight, 'd' day on the path; 'm' the middle one (no positions) */
+    double distance_km;         /* to the station, -1 when not known */
 };
 
 /* Loads the file. Returns the number of stations, or -1 (not found, not JSON, nothing usable). */
 int schedule_load(const char *path);
 void schedule_free(void);
+
+/* Where the receiver is, for the choice of frequency (see schedule_pick). have = 0: not known. */
+void schedule_set_position(int have, double lat, double lon);
+
+/* Elevation of the sun in degrees at a place and time (simplified NOAA formulas, about 1 degree) */
+double schedule_sun_elevation(double lat, double lon, time_t when);
+
+/* Which of n frequencies (kHz, ascending or not) to use for a path between two places at a time:
+   the sun at the middle of the path decides. By night the lowest from 3 MHz up (or the lowest),
+   in twilight (sun within 6 degrees of the horizon) the middle one, by day the highest (up to
+   14.5 MHz when the path is shorter than 3000 km). A rule of thumb, not a propagation forecast.
+   Sets *why to 'n', 't' or 'd'. */
+double schedule_pick(const double *khz, int n, double lat1, double lon1, double lat2, double lon2, time_t when, char *why);
+/* Great circle distance in km */
+double schedule_distance_km(double lat1, double lon1, double lat2, double lon2);
 
 /* The broadcast in progress or, if none, the next one, among the stations in `follow` (ids
    separated by commas) and not in `skip` ("ID:HHMM,..."). Returns 1 when there is one. */

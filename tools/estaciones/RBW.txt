@@ -2,6 +2,7 @@
 # Frequencies used here: 6328.5 and 8444 kHz, the ones the DX Info Centre list (W. R. Hepburn, 2025-03-17) gives as active or reported active, with the same times on the air as this schedule.
 # The 1850 schedule is sent at 90 lines per minute; the rest 120/576.
 STATION|RBW|Murmansk|Russia|400
+POS|68.99|33.09|Murmansk, as given by the user
 FREQ|6328.5|RKS72|
 FREQ|8444|RGS47|
 0700|36HR SURFACE PROG

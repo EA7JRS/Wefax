@@ -105,6 +105,14 @@ int store_setting_valid(const char *name, const char *value)
     if (strcmp(name, "follow") == 0) return all_of(value, LETTERS DIGITS ",_-", 400);
     /* broadcasts not wanted: STATION:HHMM, separated by commas */
     if (strcmp(name, "skip") == 0) return all_of(value, LETTERS DIGITS ",:_-", 4000);
+    /* where the receiver is: "lat,lon" in decimal degrees, or empty */
+    if (strcmp(name, "position") == 0) {
+        double la, lo; char extra;
+        if (value[0] == '\0') return 1;
+        return all_of(value, DIGITS ".,-", 24) && sscanf(value, "%lf,%lf%c", &la, &lo, &extra) == 2 && la >= -90 && la <= 90 && lo >= -180 && lo <= 180;
+    }
+    /* whether the position is the one gpsd gives (gps) or the one written (manual) */
+    if (strcmp(name, "position_source") == 0) return strcmp(value, "gps") == 0 || strcmp(value, "manual") == 0;
     if (strcmp(name, "retention_days") == 0) return is_number(value, 1, 3650) && strchr(value, '.') == NULL;
     /* sharing the receiver with Navtex: its address and which of its receivers is the shared one */
     if (strcmp(name, "share.url") == 0)

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (c) 2026 Manuel - EA7JRS
  */
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -142,6 +143,24 @@ int main(void)
     CHECK(schedule_next(day + 12 * 3600 + 15 * 60, "KVM70", "", &b) && b.start == day + 12 * 3600 + 14 * 60 && b.nfreqs == 2 && b.freqs[0] == 9982.5, "Honolulu 12:14: the row sent at 1214 and 0014; 16135 kHz off");
     CHECK(schedule_next(day + 8 * 3600, "SVJ4", "", &b) && b.start == day + 8 * 3600 + 45 * 60 && b.end - b.start == 12 * 60 && b.freqs[1] == 8106.9, "Athens: 08:45, 12 minute slots, centre 1.9 kHz above the listed frequency");
     CHECK(schedule_next(day + 18 * 3600 + 40 * 60, "RBW", "", &b) && b.lpm == 90 && b.end - b.start == 30 * 60, "Murmansk 18:50: 90 lines per minute; 30 minutes at most");
+    /* the frequency by the sun on the path: from Cadiz (36.53 N, 6.29 W), 22 November */
+    {
+        double f3[3] = { 3855, 7880, 13882.5 }, f4[4] = { 4235, 6340.5, 9110, 12750 };
+        char why;
+        CHECK(schedule_sun_elevation(36.53, -6.29, day + 12 * 3600 + 1500) > 30 && schedule_sun_elevation(36.53, -6.29, day) < -40, "the sun: high at noon, far below at midnight");
+        CHECK(fabs(schedule_distance_km(36.53, -6.29, 53.67, 9.80) - 2250) < 100, "Cadiz to Pinneberg: about 2250 km");
+        CHECK(schedule_pick(f3, 3, 36.53, -6.29, 53.67, 9.80, day + 12 * 3600, &why) == 13882.5 && why == 'd', "Hamburg at noon: the highest");
+        CHECK(schedule_pick(f3, 3, 36.53, -6.29, 53.67, 9.80, day + 3600, &why) == 3855 && why == 'n', "Hamburg at night: the lowest from 3 MHz");
+        CHECK(schedule_pick(f4, 4, 36.53, -6.29, 41.71, -70.50, day + 15 * 3600, &why) == 12750 && why == 'd', "Boston in the afternoon: the highest");
+        CHECK(schedule_pick(f4, 4, 36.53, -6.29, 41.71, -70.50, day + 4 * 3600, &why) == 4235 && why == 'n', "Boston before dawn: the lowest");
+        why = 0; schedule_pick(f3, 3, 36.53, -6.29, 53.67, 9.80, day + 7 * 3600 + 1800, &why);
+        CHECK(why == 't' || why == 'n' || why == 'd', "at dawn it still chooses one");
+        schedule_set_position(1, 36.53, -6.29);
+        CHECK(schedule_next(day + 12 * 3600, "DDH", "", &b) && b.suggested_khz == 13882.5 && b.why == 'd' && b.distance_km > 2000, "with a position the schedule chooses by the sun");
+        schedule_set_position(0, 0, 0);
+        CHECK(schedule_next(day + 12 * 3600, "DDH", "", &b) && b.suggested_khz == 7880 && b.why == 'm' && b.distance_km < 0, "without it, the middle one");
+        CHECK(store_setting_valid("position", "36.53,-6.29") && store_setting_valid("position", "") && !store_setting_valid("position", "91,0") && !store_setting_valid("position", "36.5") && store_setting_valid("position_source", "manual"), "the position setting");
+    }
     schedule_free();
 
     /* the address of Navtex */

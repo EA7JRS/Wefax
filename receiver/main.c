@@ -253,6 +253,7 @@ static void describe_next(const struct broadcast *b, double khz)
     store_status("next_station", b->station);
     store_status("next_title", b->title);
     store_status_num("next_khz", khz);
+    { char w[2] = { b->why ? b->why : 'm', 0 }; store_status("next_why", w); }
 }
 
 static int service(void)
@@ -299,6 +300,11 @@ static int service(void)
 
         store_get("follow", follow, sizeof(follow), "");
         store_get("skip", skip, sizeof(skip), "");
+        {
+            double la, lo;
+            store_get("position", v, sizeof(v), "");
+            schedule_set_position(sscanf(v, "%lf,%lf", &la, &lo) == 2, la, lo);
+        }
         if (!schedule_next(now, follow, skip, &b)) {
             if (shared_taken) { navtex_set_receiver(share_url, share_rx, 1); shared_taken = 0; }
             say(follow[0] == '\0' ? "no station followed" : "nothing in the schedule for the stations followed");

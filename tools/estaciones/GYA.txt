@@ -1,6 +1,7 @@
 # NORTHWOOD, UNITED KINGDOM. JOMOC HF-Fax Schedule (North Atlantic). Information dated Jan 05, 2022.
 # The source gives no RPM/IOC column for this station: 120/576 is assumed. Slots with no contents shown are left out.
 STATION|GYA|Northwood|United Kingdom|400
+POS|51.61|-0.42|Northwood
 FREQ|2618.5|GYA|2200-0500
 FREQ|4610|GYA|
 FREQ|8040|GYA|

@@ -8,8 +8,9 @@ Las entradas dicen también qué se probó y qué no.
 - Lista de estaciones `web_server/build/estaciones.json` con nueve estaciones, hecha con `tools/estaciones/generar.py`: Boston, Nueva Orleans, Point Reyes, Kodiak y Honolulu, de los horarios en texto por estación del National Weather Service (datos del 12 de diciembre de 2024); Hamburgo / Pinneberg, Northwood, Atenas y Múrmansk (estas dos, dudosas: véase el README), de «Worldwide Marine Radiofacsimile Broadcast Schedules» de la NOAA (edición del 7 de marzo de 2025). Transcrita con un lector automático: sin cotejar línea a línea con el original.
 - Posición del GPS: la interfaz la toma de gpsd (`WEFAX_GPSD`, de serie `127.0.0.1:2947`; el mismo lector que Navtex) y la muestra en un recuadro; el aspecto automático usa el sol en esa posición.
 - Ayuda «Cómo leer una carta» en la pestaña Cartas: isobaras, viento, frentes, tipos de carta y escala Beaufort (redacción propia).
+- **Posición propia** (GPS o escrita): estaciones por distancia, con rumbo, y frecuencia «automática» según el sol en el punto medio del camino (noche, la más baja; día, la más alta; crepúsculo, la de en medio). Regla orientativa, sin contrastar con recepciones reales. Las posiciones de los transmisores son aproximadas.
 - Servicios de systemd (`wefax-web`, `wefax-receiver`) y `tools/instalar-servicios.sh`; el receptor no toca ningún equipo hasta que se enciende en la web.
-- `make check` carga también la lista instalada (93 comprobaciones).
+- `make check` carga también la lista instalada (103 comprobaciones).
 - README con la instalación paso a paso, servicios, comandos, API, seguridad y solución de problemas, al modo de Navtex.
 - Comprobado en un equipo real (Debian 13, API de SDRplay y librtlsdr): compila, pasa `make check`, se instala y los servicios arrancan. **Sin probar con un receptor ni con una señal real.**
 

@@ -2,6 +2,7 @@
 # Schedule effective Sep 04, 2018; information dated December 12, 2024. All 120/576. ---- = not sent at that time.
 # The four 0657-0727 rebroadcast rows: the hour of the original given in the source is left out (two readings of it disagreed).
 STATION|NMC|Point Reyes|United States|400
+POS|37.92|-122.73|Bolinas, the transmitting site of Point Reyes
 FREQ|4346|NMC|0140-1608
 FREQ|8682|NMC|
 FREQ|12786|NMC|
