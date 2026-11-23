@@ -216,6 +216,7 @@ static int run_on(double khz, int lpm, int deviation)
     }
     if (strcmp(src, "file") == 0) r = file_source_run();
     else if (strcmp(src, "kiwi") == 0) r = kiwi_source_run();
+    else if (strcmp(src, "hackrf") == 0) r = hackrf_source_run();
     else if (strcmp(src, "rtlsdr") == 0) r = rtlsdr_source_run();
     else r = sdrplay_source_run();
     wefax_flush(dec);                  /* a chart half received is kept as far as it got */
@@ -235,7 +236,7 @@ static int read_settings(void)
     store_get("rx.enabled", v, sizeof(v), "0");
     if (strcmp(v, "1") != 0) return 0;
     store_get("rx.source", v, sizeof(v), "");
-    source_name = strcmp(v, "rtlsdr") == 0 ? "rtlsdr" : strcmp(v, "sdrplay") == 0 ? "sdrplay" : strcmp(v, "kiwi") == 0 ? "kiwi" : NULL;
+    source_name = strcmp(v, "rtlsdr") == 0 ? "rtlsdr" : strcmp(v, "sdrplay") == 0 ? "sdrplay" : strcmp(v, "kiwi") == 0 ? "kiwi" : strcmp(v, "hackrf") == 0 ? "hackrf" : NULL;
     store_get("rx.kiwi_host", kiwi_host_buf, sizeof(kiwi_host_buf), ""); iq_opt.kiwi_host = kiwi_host_buf;
     store_get("rx.kiwi_port", v, sizeof(v), "8073"); iq_opt.kiwi_port = atoi(v);
     store_get("rx.kiwi_pass", kiwi_pass_buf, sizeof(kiwi_pass_buf), ""); iq_opt.kiwi_password = kiwi_pass_buf;
@@ -245,6 +246,10 @@ static int read_settings(void)
     snprintf(rtl_serial_buf, sizeof(rtl_serial_buf), "%s", v); snprintf(sdr_serial_buf, sizeof(sdr_serial_buf), "%s", v);
     iq_opt.rtl_serial = v[0] != '\0' ? rtl_serial_buf : NULL;
     iq_opt.sdrplay_serial = v[0] != '\0' ? sdr_serial_buf : NULL;
+    iq_opt.hackrf_serial = v[0] != '\0' ? sdr_serial_buf : NULL;
+    store_get("rx.hackrf_lna", v, sizeof(v), "16"); iq_opt.hackrf_lna_db = atoi(v);
+    store_get("rx.hackrf_vga", v, sizeof(v), "20"); iq_opt.hackrf_vga_db = atoi(v);
+    store_get("rx.hackrf_amp", v, sizeof(v), "0"); iq_opt.hackrf_amp = v[0] == '1';
     store_get("rx.direct", v, sizeof(v), "a"); iq_opt.rtl_direct_sampling = v[0] == 'a' ? -1 : v[0] - '0';
     store_get("rx.upconv", v, sizeof(v), "0"); iq_opt.rtl_upconverter_hz = atol(v);
     store_get("rx.gain", v, sizeof(v), "auto"); iq_opt.rtl_gain_tenths = strcmp(v, "auto") == 0 ? -1 : (int) (atof(v) * 10.0 + 0.5);
@@ -372,7 +377,7 @@ static void usage(const char *prog)
 "Usage: %s [options]\n"
 "  -n          service: follow the schedule and the settings of the web interface\n"
 "  -k kHz      stay on this frequency (the assigned one: the centre of the channel)\n"
-"  -s source   sdrplay | rtlsdr | kiwi | file   (default: sdrplay when built in, else rtlsdr)\n"
+"  -s source   sdrplay | rtlsdr | hackrf | kiwi | file   (default: sdrplay when built in, else rtlsdr)\n"
 "  -K host[:port]  a KiwiSDR on the network as the receiver (port 8073)\n"
 "  -W password     its password, when it asks for one\n"
 "  -l lpm      lines per minute expected: 60, 90, 120 (default) or 240\n"
@@ -390,6 +395,11 @@ static void usage(const char *prog)
 "  -u hertz    local oscillator of an external upconverter, e.g. 125000000\n"
 "  -g gain     tuner gain in dB (default: automatic). Not used in direct sampling.\n"
 "  -P ppm      crystal correction\n"
+"HackRF One (1 MHz and up; it has no automatic gain):\n"
+"  -L dB       IF gain, 0 to 40 in steps of 8 (default 16)\n"
+"  -V dB       baseband gain, 0 to 62 in steps of 2 (default 20)\n"
+"  -A          RF amplifier on (not advised on HF with a big antenna)\n"
+"  -S serial   pick the HackRF by its serial number, or the end of it\n"
 "Recording:\n"
 "  -f file     decode a recording: complex samples at 252000 S/s, .wav (16 bit, I and Q) or raw\n"
 "              unsigned 8 bit I/Q (as written by rtl_sdr)\n"
@@ -407,7 +417,7 @@ int main(int argc, char **argv)
 
     setvbuf(stdout, NULL, _IOLBF, 0);
     opterr = 0;
-    while ((c = getopt(argc, argv, "nk:s:l:mI:o:bqp:S:i:D:u:g:P:f:O:tK:W:h")) != -1) {
+    while ((c = getopt(argc, argv, "nk:s:l:mI:o:bqp:S:i:D:u:g:P:f:O:tK:W:L:V:Ah")) != -1) {
         switch (c) {
         case 'n': service_mode = 1; break;
         case 'k': fixed_khz = atof(optarg); break;
@@ -426,6 +436,9 @@ int main(int argc, char **argv)
             if (colon != NULL && strchr(kiwi_host_buf, ':') == colon) { *colon = '\0'; iq_opt.kiwi_port = atoi(colon + 1); }
             iq_opt.kiwi_host = kiwi_host_buf; source_name = "kiwi"; break; }
         case 'W': iq_opt.kiwi_password = optarg; break;
+        case 'L': iq_opt.hackrf_lna_db = atoi(optarg); break;
+        case 'V': iq_opt.hackrf_vga_db = atoi(optarg); break;
+        case 'A': iq_opt.hackrf_amp = 1; break;
         case 'i': iq_opt.rtl_index = atoi(optarg); break;
         case 'D': iq_opt.rtl_direct_sampling = atoi(optarg); break;
         case 'u': iq_opt.rtl_upconverter_hz = atol(optarg); break;
@@ -438,9 +451,9 @@ int main(int argc, char **argv)
         }
     }
     (void) verbose;
-    if (source_name != NULL && strcmp(source_name, "sdrplay") != 0 && strcmp(source_name, "rtlsdr") != 0 && strcmp(source_name, "kiwi") != 0 && strcmp(source_name, "file") != 0) { usage(argv[0]); return 1; }
+    if (source_name != NULL && strcmp(source_name, "sdrplay") != 0 && strcmp(source_name, "rtlsdr") != 0 && strcmp(source_name, "kiwi") != 0 && strcmp(source_name, "hackrf") != 0 && strcmp(source_name, "file") != 0) { usage(argv[0]); return 1; }
     if (opt_lpm != 60 && opt_lpm != 90 && opt_lpm != 120 && opt_lpm != 240) { printf("-l: 60, 90, 120 or 240\n"); return 1; }
-    iq_opt.rtl_serial = serial; iq_opt.sdrplay_serial = serial;
+    iq_opt.rtl_serial = serial; iq_opt.sdrplay_serial = serial; iq_opt.hackrf_serial = serial;
 
     signal(SIGINT, on_signal);
     signal(SIGTERM, on_signal);

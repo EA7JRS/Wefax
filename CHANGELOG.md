@@ -2,6 +2,11 @@
 
 Las entradas dicen también qué se probó y qué no.
 
+## [Sin publicar]
+
+- **HackRF One como receptor.** Cuarto tipo de equipo (Receptor > Equipo, o `-s hackrf` con `-L`, `-V`, `-A` y `-S`). Recibe desde 1 MHz: las cartas de onda corta sin conversor; las de onda larga no. Se le piden 2 016 000 muestras por segundo y un filtro (64 coeficientes, ventana de Kaiser) deja una de cada ocho; lo que caería sobre el canal queda a más de 80 dB. Ganancias de FI y de banda base a mano, amplificador de RF y alimentación de antena. Ajustes `rx.hackrf_lna`, `rx.hackrf_vga`, `rx.hackrf_amp`. Es opcional: sin `libhackrf-dev` el programa compila igual. Solo recibe.
+- **Probado:** `make check`, 191 comprobaciones (el filtro, y una emisión entera de 8 bits con ruido y una emisora fuerte donde se plegaría sobre el canal); compila contra libhackrf 2023.01.1 y sin HackRF conectado lo dice y reintenta. **Sin probar con un HackRF de verdad.**
+
 ## [0.4.0] - 2026-11-22
 
 - **KiwiSDR como receptor.** Tercer tipo de equipo: un KiwiSDR de la red (Receptor > Equipo, o `-K equipo[:puerto]` y `-W contraseña`). Wefax abre su WebSocket, pide el canal en modo I/Q y lleva sus muestras (unas 12 000 por segundo, a la velocidad exacta que dice el KiwiSDR) a las 252 000 de los demás equipos. Siguiendo el horario solo se conecta un minuto antes de cada emisión; si está lleno o corta, lo dice y reintenta al minuto. La página enseña la posición que declara el KiwiSDR, con un botón para calcular desde ahí. Ajustes `rx.kiwi_host`, `rx.kiwi_port`, `rx.kiwi_pass`.

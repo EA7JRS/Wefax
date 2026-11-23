@@ -1,6 +1,6 @@
 # Wefax
 
-Receptor de radiofacsímil meteorológico (WEFAX, cartas del tiempo por onda corta) por software para Linux, con SDRplay, RTL-SDR o un KiwiSDR de la red. Sigue el horario de las estaciones, sintoniza solo cada emisión y guarda cada carta como imagen.
+Receptor de radiofacsímil meteorológico (WEFAX, cartas del tiempo por onda corta) por software para Linux, con SDRplay, RTL-SDR, HackRF One o un KiwiSDR de la red. Sigue el horario de las estaciones, sintoniza solo cada emisión y guarda cada carta como imagen.
 
 Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APRS LoRa+ · hermano de [Navtex](https://github.com/EA7JRS/Navtex)
 
@@ -35,7 +35,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Descodifica el radiofacsímil | Índice de cooperación 576 y 288; 60, 90, 120 y 240 líneas por minuto; negro y blanco a ±400 Hz del centro (±425 Hz en las estaciones que lo usan) |
 | Encuentra sola cada carta | Tono de inicio (300 o 675 Hz), enfasado y tono de parada (450 Hz); sin tono de parada, la carta acaba al perderse la señal o al cumplirse su hora |
 | Corrige el error del receptor | Mide en el tono de inicio cuánto se desvía de frecuencia el receptor (un RTL-SDR puede irse 700 Hz en 14 MHz) y, en el enfasado, el error de su reloj, para que la carta no salga inclinada |
-| Tres tipos de receptor | SDRplay (RSP1A, RSP1B, RSP2, RSPdx, RSPdx-R2), RTL-SDR (muestreo directo, conversor integrado o externo) y KiwiSDR por la red |
+| Cuatro tipos de receptor | SDRplay (RSP1A, RSP1B, RSP2, RSPdx, RSPdx-R2), RTL-SDR (muestreo directo, conversor integrado o externo), HackRF One (desde 1 MHz) y KiwiSDR por la red |
 | Sigue el horario | En modo servicio sintoniza cada emisión de las estaciones elegidas un minuto antes. También puede quedarse en una frecuencia fija |
 | Comparte el receptor con Navtex | Puede usar un equipo propio o turnarse con [Navtex](https://github.com/EA7JRS/Navtex): le pide que suelte el receptor antes de cada emisión y se lo devuelve al acabar |
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
@@ -62,6 +62,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 **Sin probar:**
 
 - una señal real del aire, con ningún receptor. El programa compila con RTL-SDR; la parte de SDRplay compila, pero **no se ha usado todavía con un receptor**;
+- **un HackRF de verdad**: compila contra su librería y la cadena pasa las pruebas con una emisión generada, pero no se ha abierto ninguno;
 - **un KiwiSDR de verdad**: el protocolo está leído del cliente de referencia (kiwiclient), pero no se ha conectado a ninguno;
 - el turno con Navtex contra un Navtex en marcha;
 - **la lista de estaciones contra el original**: se transcribió con un lector automático y no se ha cotejado línea a línea. Las de EE. UU. salen del horario en texto de cada estación (limpio, una fila por carta) y Tokio del horario de la propia JMA; las demás, del PDF mundial de la NOAA, más propenso a errores, y varias con datos antiguos (Seúl y Bangkok de 2009, Chile de 2010, Sídney de 2014, Pevek de 1997). Compruebe una hora antes de fiarse de ella.
@@ -77,7 +78,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 ## Qué hace falta
 
 - Un equipo con Linux (hecho en Debian 13).
-- Un receptor que llegue a onda corta (2 a 23 MHz): **SDRplay** con su API 3.15 o posterior, o **RTL-SDR** con muestreo directo (Nooelec NESDR SMArt v5, RTL-SDR Blog V3), conversor integrado (RTL-SDR Blog V4) o conversor externo.
+- Un receptor que llegue a onda corta (2 a 23 MHz): **SDRplay** con su API 3.15 o posterior, o **RTL-SDR** con muestreo directo (Nooelec NESDR SMArt v5, RTL-SDR Blog V3), conversor integrado (RTL-SDR Blog V4) o conversor externo; o un **HackRF One** (recibe desde 1 MHz, sin conversor).
 - Una antena de onda corta.
 
 ### Dependencias y librerías
@@ -90,6 +91,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 | `libsqlite3-dev` | SQLite: ajustes y lista de cartas | Sí |
 | `libmicrohttpd-dev` | GNU libmicrohttpd: el servidor de la interfaz web | Sí |
 | `librtlsdr-dev` | Receptores RTL-SDR | Solo con RTL-SDR |
+| `libhackrf-dev` | Receptor HackRF One | Solo con HackRF |
 | API de SDRplay 3.15 o posterior | Receptores SDRplay; se baja de [sdrplay.com/api](https://www.sdrplay.com/api/) | Solo con SDRplay |
 
 ## Instalación
@@ -97,7 +99,7 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 **1. Dependencias.** Si va a usar un SDRplay, instale antes su API.
 
 ```bash
-sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev libmicrohttpd-dev librtlsdr-dev curl
+sudo apt install git build-essential autoconf automake zlib1g-dev libcjson-dev libsqlite3-dev libmicrohttpd-dev librtlsdr-dev libhackrf-dev curl
 ```
 
 **2. Descargar el código.** En su carpeta personal, no en `/opt/Wefax`: ahí van la interfaz instalada, las cartas y la base de datos.
@@ -116,7 +118,7 @@ autoreconf -i && automake --add-missing; autoreconf
 make
 ```
 
-`./configure` acaba con una línea como `receivers: SDRplay yes, RTL-SDR yes`: compruebe que el suyo dice `yes`.
+`./configure` acaba con una línea como `receivers: SDRplay yes, RTL-SDR yes, HackRF yes`: compruebe que el suyo dice `yes`.
 
 **4. Comprobar (opcional).** Pasa las pruebas del descodificador, la cadena hasta la imagen, la base de datos y el horario; no toca la instalación.
 
@@ -206,7 +208,7 @@ El servicio lo arranca con `-q -n`. A mano sirve para probar un equipo, escuchar
 | `-h` | Ayuda |
 | `-n` | Servicio: sigue el horario y los ajustes de la base de datos |
 | `-k <kHz>` | Se queda en esa frecuencia (la asignada: el centro del canal) |
-| `-s sdrplay` \| `rtlsdr` \| `kiwi` \| `file` | Tipo de equipo |
+| `-s sdrplay` \| `rtlsdr` \| `hackrf` \| `kiwi` \| `file` | Tipo de equipo |
 | `-K <equipo[:puerto]>` | Un KiwiSDR de la red como receptor (puerto 8073) |
 | `-W <contraseña>` | Su contraseña, si la pide |
 | `-l <lpm>` | Líneas por minuto esperadas: 60, 90, 120 (de serie) o 240 |
@@ -216,6 +218,7 @@ El servicio lo arranca con `-q -n`. A mano sirve para probar un equipo, escuchar
 | `-p A` \| `B` \| `C` | SDRplay: toma de antena |
 | `-S <serie>` | Elige el equipo por su número de serie |
 | `-i`, `-D`, `-u`, `-g`, `-P` | RTL-SDR: número de equipo, muestreo directo, conversor externo, ganancia y corrección en ppm |
+| `-L`, `-V`, `-A` | HackRF One: ganancia de FI (0 a 40 dB, de 8 en 8), ganancia de banda base (0 a 62 dB, de 2 en 2) y amplificador de RF |
 | `-f <archivo>` | Descodifica una grabación: I/Q a 252000 muestras/s (`.wav` de 16 bits o 8 bits sin signo) |
 | `-O <Hz>` | Dónde está el canal en la grabación respecto a su centro (de serie, 20000) |
 | `-t` | Reproduce la grabación a velocidad real |
@@ -292,6 +295,19 @@ Un [KiwiSDR](http://kiwisdr.com) es un receptor de onda corta (0 a 30 MHz) que s
 ![El KiwiSDR en la pestaña Receptor](docs/img/web_kiwi.png)
 
 El protocolo es el del cliente de referencia, [kiwiclient](https://github.com/jks-prv/kiwiclient), leído de su código; no se copia nada de él. **Sin probar con un KiwiSDR de verdad.**
+
+### HackRF One
+
+Un [HackRF One](https://github.com/greatscottgadgets/hackrf) recibe desde 1 MHz, así que llega a las cartas de onda corta sin conversor. En **Receptor > Equipo** elija *HackRF One*.
+
+- **Qué hace falta.** `sudo apt install libhackrf-dev hackrf` **antes** de compilar (`./configure` debe decir `HackRF yes`), y que el usuario de los servicios pueda abrir el USB: el paquete `hackrf` instala la regla de udev, que da acceso al grupo `plugdev` (`sudo usermod -aG plugdev <usuario>` y reinicie el servicio). `hackrf_info` debe ver el equipo.
+- **Ganancias, a mano.** No tiene ganancia automática. La de FI va de 0 a 40 dB de 8 en 8 y la de banda base de 0 a 62 dB de 2 en 2: empiece con 16 y 20 y suba la de banda base si las cartas salen con nieve. El amplificador de RF, mejor apagado en onda corta con una antena grande.
+- **Ocho bits.** Sus muestras son de 8 bits y su entrada es ancha: con emisoras fuertes cerca se satura antes que un SDRplay. Un filtro de paso de banda de HF ayuda.
+- **Onda larga, no.** Las frecuencias por debajo de 1 MHz (Pevek, 148 kHz) quedan fuera de su margen: Wefax lo dice y no lo intenta.
+- **Solo recibe.** El HackRF puede emitir, pero Wefax no tiene nada que lo ponga a emitir.
+- **Cómo se usa.** Se le piden 2 016 000 muestras por segundo, 20 kHz por debajo del canal, y un filtro se queda con una de cada ocho: las 252 000 del resto del programa. Lo que caería sobre el canal al reducir queda más de 70 dB por debajo.
+
+**Sin probar con un HackRF de verdad**: compila contra libhackrf 2023.01.1 y la cadena (filtro, canal y descodificador) pasa `make check` con una emisión generada.
 
 ### Lista de estaciones
 

@@ -457,7 +457,7 @@
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Equipo')));
     t.appendChild(casilla('rx.enabled', tr('Encendido')));
     r = el('div', 'rejilla');
-    r.appendChild(campo(tr('Equipo'), selector('rx.source', 'sdrplay', [['sdrplay', 'SDRplay'], ['rtlsdr', 'RTL-SDR'], ['kiwi', 'KiwiSDR']])));
+    r.appendChild(campo(tr('Equipo'), selector('rx.source', 'sdrplay', [['sdrplay', 'SDRplay'], ['rtlsdr', 'RTL-SDR'], ['hackrf', 'HackRF One'], ['kiwi', 'KiwiSDR']])));
     if (fuente === 'kiwi') {
       var clave = texto('rx.kiwi_pass', '', tr('ninguna')); clave.type = 'password';
       r.appendChild(campo(tr('Nombre o dirección del KiwiSDR'), texto('rx.kiwi_host', '', 'kiwisdr.local')));
@@ -466,7 +466,11 @@
     } else r.appendChild(campo(tr('Número de serie (si hay varios)'), texto('rx.serial', '', tr('cualquiera'))));
     if (fuente === 'kiwi') { /* nada más que elegir: la antena y la ganancia son cosa del KiwiSDR */ }
     else if (fuente === 'sdrplay') r.appendChild(campo(tr('Toma de antena (RSPdx)'), selector('rx.port', 'A', [['A', 'A'], ['B', 'B'], ['C', 'C']])));
-    else {
+    else if (fuente === 'hackrf') {
+      r.appendChild(campo(tr('Ganancia de FI (dB)'), selector('rx.hackrf_lna', '16', [['0', '0'], ['8', '8'], ['16', '16'], ['24', '24'], ['32', '32'], ['40', '40']])));
+      r.appendChild(campo(tr('Ganancia de banda base (dB, de 0 a 62)'), texto('rx.hackrf_vga', '20')));
+      r.appendChild(campo(tr('Amplificador de RF'), selector('rx.hackrf_amp', '0', [['0', tr('Apagado')], ['1', tr('Encendido')]])));
+    } else {
       r.appendChild(campo(tr('Muestreo directo'), selector('rx.direct', 'a', [['a', tr('Automático, según el modelo')], ['2', tr('Rama Q')], ['1', tr('Rama I')], ['0', tr('Apagado (conversor)')]])));
       r.appendChild(campo(tr('Conversor externo (Hz; 0 = ninguno)'), texto('rx.upconv', '0')));
       r.appendChild(campo(tr('Ganancia (dB, o auto)'), texto('rx.gain', 'auto')));
@@ -486,6 +490,7 @@
         fila.appendChild(usar); t.appendChild(fila);
       }
     } else t.appendChild(casilla('rx.bias', tr('Alimentar la antena por el coaxial')));
+    if (fuente === 'hackrf') t.appendChild(el('p', 'nota', tr('Un HackRF One sintoniza desde 1 MHz: llega a las cartas de onda corta sin conversor, pero no a las de onda larga. No tiene ganancia automática: empiece con 16 y 20 dB y suba la de banda base si las cartas salen con nieve. Sus muestras son de 8 bits: con emisoras fuertes cerca, deje el amplificador apagado y ponga un filtro de paso de banda de HF. Solo recibe: Wefax nunca lo pone a emitir.')));
     c.appendChild(t);
 
     t = el('div', 'tarjeta'); t.appendChild(el('h2', '', tr('Qué se recibe')));

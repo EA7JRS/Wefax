@@ -91,7 +91,11 @@ int store_setting_valid(const char *name, const char *value)
 {
     if (strcmp(name, "rx.enabled") == 0 || strcmp(name, "rx.bias") == 0 || strcmp(name, "share.on") == 0 || strcmp(name, "rx.listen") == 0)
         return strcmp(value, "0") == 0 || strcmp(value, "1") == 0;
-    if (strcmp(name, "rx.source") == 0) return strcmp(value, "sdrplay") == 0 || strcmp(value, "rtlsdr") == 0 || strcmp(value, "kiwi") == 0;
+    if (strcmp(name, "rx.source") == 0) return strcmp(value, "sdrplay") == 0 || strcmp(value, "rtlsdr") == 0 || strcmp(value, "kiwi") == 0 || strcmp(value, "hackrf") == 0;
+    /* a HackRF One: its two gains (it has no automatic one) and its RF amplifier */
+    if (strcmp(name, "rx.hackrf_lna") == 0) return is_number(value, 0, 40) && strchr(value, '.') == NULL && value[0] != '-';
+    if (strcmp(name, "rx.hackrf_vga") == 0) return is_number(value, 0, 62) && strchr(value, '.') == NULL && value[0] != '-';
+    if (strcmp(name, "rx.hackrf_amp") == 0) return strcmp(value, "0") == 0 || strcmp(value, "1") == 0;
     /* a KiwiSDR on the network: its name or address, port and password (no spaces: it goes in a command as it is) */
     if (strcmp(name, "rx.kiwi_host") == 0) return all_of(value, LETTERS DIGITS "abcdefghijklmnopqrstuvwxyz.-:", 80);
     if (strcmp(name, "rx.kiwi_port") == 0) return is_number(value, 1, 65535) && strchr(value, '.') == NULL && value[0] != '-';

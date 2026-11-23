@@ -1,7 +1,7 @@
 /*
  * Wefax receiver: where the I/Q samples come from.
  *
- * Every source delivers complex samples at 252 kS/s (a KiwiSDR sends 12 kS/s: its source brings them up). The receiver is tuned 20 kHz below the
+ * Every source delivers complex samples at 252 kS/s (a KiwiSDR sends 12 kS/s and a HackRF 2.016 MS/s: their sources bring them to that). The receiver is tuned 20 kHz below the
  * facsimile channel, so the channel is clear of the receiver's own carrier at zero.
  * The same layout as the Navtex receiver (EA7JRS/Navtex), whose RTL-SDR and recording sources
  * these are.
@@ -40,6 +40,10 @@ struct iq_options {
     const char *kiwi_host;    /* -K  KiwiSDR: its name or address */
     int kiwi_port;            /*     and its port (8073) */
     const char *kiwi_password; /* -W  its password, when it has one */
+    const char *hackrf_serial; /* -S with -s hackrf: pick the HackRF by its serial number (or its end) */
+    int hackrf_lna_db;        /* -L  HackRF IF gain, 0 to 40 dB in steps of 8 */
+    int hackrf_vga_db;        /* -V  HackRF baseband gain, 0 to 62 dB in steps of 2 */
+    int hackrf_amp;           /* -A  HackRF RF amplifier on */
 };
 extern struct iq_options iq_opt;
 
@@ -71,6 +75,7 @@ int sdrplay_source_run(void);
 int rtlsdr_source_run(void);
 int file_source_run(void);
 int kiwi_source_run(void);
+int hackrf_source_run(void);
 
 /* What the KiwiSDR told: where it is (when kiwi_has_position) and the signal level it measures */
 extern double kiwi_lat, kiwi_lon, kiwi_rssi_dbm;
