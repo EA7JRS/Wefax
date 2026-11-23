@@ -1,6 +1,6 @@
 # Normas y reglamentos que contempla Wefax
 
-© 2026 Manuel - EA7JRS · versión 0.4.0 · comprobado el 22 de noviembre de 2026
+© 2026 Manuel - EA7JRS · versión 0.5.0 · comprobado el 22 de noviembre de 2026
 
 Este documento dice qué normas describen el radiofacsímil meteorológico por onda corta, qué parte de ellas aplica el programa y cuáles **no** tienen que ver, aunque a veces se citen. Wefax es una ayuda: no está homologado ni ensayado contra ninguna norma.
 

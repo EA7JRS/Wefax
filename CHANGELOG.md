@@ -2,7 +2,7 @@
 
 Las entradas dicen también qué se probó y qué no.
 
-## [Sin publicar]
+## [0.5.0] - 2026-11-23
 
 - **HackRF One como receptor.** Cuarto tipo de equipo (Receptor > Equipo, o `-s hackrf` con `-L`, `-V`, `-A` y `-S`). Recibe desde 1 MHz: las cartas de onda corta sin conversor; las de onda larga no. Se le piden 2 016 000 muestras por segundo y un filtro (64 coeficientes, ventana de Kaiser) deja una de cada ocho; lo que caería sobre el canal queda a más de 80 dB. Ganancias de FI y de banda base a mano, amplificador de RF y alimentación de antena. Ajustes `rx.hackrf_lna`, `rx.hackrf_vga`, `rx.hackrf_amp`. Es opcional: sin `libhackrf-dev` el programa compila igual. Solo recibe.
 - **Probado:** `make check`, 191 comprobaciones (el filtro, y una emisión entera de 8 bits con ruido y una emisora fuerte donde se plegaría sobre el canal); compila contra libhackrf 2023.01.1 y sin HackRF conectado lo dice y reintenta. **Sin probar con un HackRF de verdad.**
