@@ -10,7 +10,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 > **Estado: versión 0.5.0, en construcción.** Están hechos el descodificador, el programa receptor, la interfaz web, los servicios y una lista de 21 estaciones con sus horarios. **Falta** lo más importante: la prueba con una señal real del aire. El detalle está en [Estado](#estado).
 
-📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.4.0](docs/releases/v0.4.0.md)
+📘 [Normas que contempla](docs/NORMAS.md) · 📝 [Historial de cambios](CHANGELOG.md) · 🏷️ [Notas de la 0.5.0](docs/releases/v0.5.0.md)
 
 ## Vista previa
 
@@ -39,7 +39,7 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 | Sigue el horario | En modo servicio sintoniza cada emisión de las estaciones elegidas un minuto antes. También puede quedarse en una frecuencia fija |
 | Comparte el receptor con Navtex | Puede usar un equipo propio o turnarse con [Navtex](https://github.com/EA7JRS/Navtex): le pide que suelte el receptor antes de cada emisión y se lo devuelve al acabar |
 | Guarda las cartas | Imágenes PNG con su fecha, estación, frecuencia y título; lista en una base de datos SQLite |
-| Interfaz web | Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
+| Interfaz web | Con la cabecera de la WebUI de APRS LoRa+ (logotipo, versión bajo el nombre y raya de color). Cartas recibidas con visor, carta en curso, horario de las próximas 24 horas con casilla por emisión, estaciones y ajustes del receptor. Claro, oscuro y noche; español e inglés. Sin contraseña: solo en una red de confianza |
 | Solo onda corta | No recibe imágenes de satélite: el WEFAX de los geoestacionarios ya no se emite y lo que hay hoy (LRPT, HRIT) es digital, otro sistema |
 | Posición propia | La del GPS (gpsd, como Navtex) o la que se escriba. Con ella las estaciones salen por distancia, con su rumbo, y la frecuencia «automática» se elige según sea de día o de noche en el camino |
 | Ayuda para leer la carta | Isobaras, viento, frentes, tipos de carta y escala Beaufort, en la pestaña Cartas |
@@ -48,16 +48,17 @@ Wefax · © 2026 Manuel - EA7JRS · GPL-3.0-or-later · parte del ecosistema APR
 
 ## Estado
 
-Hecho y comprobado en el PC (`make check`, 183 comprobaciones):
+Hecho y comprobado en el PC (`make check`, 191 comprobaciones):
 
 - el descodificador, con señales generadas por las propias pruebas: las cuatro velocidades, los dos índices, ruido, error de reloj de ±60 ppm, receptor 700 Hz fuera de frecuencia, tono de inicio corto, señal que se pierde;
 - la cadena entera, de las muestras del receptor a la imagen PNG;
 - la base de datos, el horario (con una lista de estaciones inventada para la prueba) y los ajustes;
 - el programa `wefaxreceiver` descodificando una grabación generada;
 - el receptor KiwiSDR contra un KiwiSDR de pega hecho para la prueba (conexión, sintonía, muestras, carta, «ocupado», contraseña mala, corte);
+- el receptor HackRF sin HackRF: el filtro que reduce sus muestras y una emisión entera de 8 bits, con ruido y una emisora fuerte donde se plegaría sobre el canal;
 - la interfaz web en un navegador, con una base de datos de muestra (las capturas de arriba).
 
-Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): compila, pasa `make check`, se instala, los servicios arrancan y la interfaz se abre desde la red local.
+Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): compila, pasa `make check`, se instala, los servicios arrancan y la interfaz se abre desde la red local. El 23-11-2026, con la versión 0.4.0 en ese equipo y VOACAP instalado, la predicción de propagación contesta. La 0.5.0 (HackRF) solo se ha compilado en el PC de desarrollo, contra libhackrf 2023.01.1.
 
 **Sin probar:**
 
@@ -78,8 +79,8 @@ Comprobado en un equipo real (Debian 13, con la API de SDRplay y librtlsdr): com
 ## Qué hace falta
 
 - Un equipo con Linux (hecho en Debian 13).
-- Un receptor que llegue a onda corta (2 a 23 MHz): **SDRplay** con su API 3.15 o posterior, o **RTL-SDR** con muestreo directo (Nooelec NESDR SMArt v5, RTL-SDR Blog V3), conversor integrado (RTL-SDR Blog V4) o conversor externo; o un **HackRF One** (recibe desde 1 MHz, sin conversor).
-- Una antena de onda corta.
+- Un receptor que llegue a onda corta (2 a 23 MHz): **SDRplay** con su API 3.15 o posterior, o **RTL-SDR** con muestreo directo (Nooelec NESDR SMArt v5, RTL-SDR Blog V3), conversor integrado (RTL-SDR Blog V4) o conversor externo; o un **HackRF One** (recibe desde 1 MHz, sin conversor); o un **KiwiSDR** de la red, el suyo o uno con permiso de su dueño, sin ningún equipo enchufado ni librería (véase [KiwiSDR](#kiwisdr)).
+- Una antena de onda corta (con un KiwiSDR, la antena es la suya).
 
 ### Dependencias y librerías
 
@@ -159,6 +160,10 @@ sudo systemctl restart wefax-web wefax-receiver
 ```
 
 Las cartas y los ajustes se conservan; `sudo make install` solo sustituye los programas, la interfaz y la lista de estaciones. Después, recargue la página con Ctrl+F5. Si las notas de la versión dicen que cambian los servicios, repita además el paso 6.
+
+La versión instalada se lee bajo el nombre, en la cabecera, y con `curl -s http://127.0.0.1:8081/api/about`. Si sigue saliendo la anterior, no se compiló o no se reiniciaron los servicios: `make clean && make`, `sudo make install` y reinicie los dos.
+
+**Si el código está en la propia `/opt/Wefax`** (también funciona), `git status` enseña como archivos sin seguir `Wefax.db`, `build/`, `charts/`, `itshfbc/` y `propagacion.json`: son sus datos, la interfaz instalada y VOACAP. No los borre ni use `git clean`.
 
 ### Desinstalar
 
@@ -253,7 +258,7 @@ Como servicio toma el puerto, la dirección y el gpsd de `/etc/default/wefax` (`
 | `autoreconf -i && automake --add-missing; autoreconf` | Genera `configure` (tras clonar o actualizar) |
 | `./configure` | Comprueba las librerías y prepara la compilación |
 | `make` | Compila `wefaxreceiver` y `wefaxwebserver` |
-| `make check` | Pasa las pruebas (183 comprobaciones) |
+| `make check` | Pasa las pruebas (191 comprobaciones) |
 | `sudo make install` | Instala los programas, la interfaz y la lista de estaciones; conserva cartas y ajustes |
 | `sudo make uninstall` | Quita los programas |
 | `make clean` | Borra lo compilado |
@@ -307,6 +312,10 @@ Un [HackRF One](https://github.com/greatscottgadgets/hackrf) recibe desde 1 MHz,
 - **Solo recibe.** El HackRF puede emitir, pero Wefax no tiene nada que lo ponga a emitir.
 - **Cómo se usa.** Se le piden 2 016 000 muestras por segundo, 20 kHz por debajo del canal, y un filtro se queda con una de cada ocho: las 252 000 del resto del programa. Lo que caería sobre el canal al reducir queda más de 70 dB por debajo.
 
+![El HackRF One en la pestaña Receptor](docs/img/web_hackrf.png)
+
+*Captura de un equipo de pruebas sin HackRF enchufado, con una estación de muestra; se tomó antes de numerar la versión, por eso la cabecera dice v0.4.0.*
+
 **Sin probar con un HackRF de verdad**: compila contra libhackrf 2023.01.1 y la cadena (filtro, canal y descodificador) pasa `make check` con una emisión generada.
 
 ### Lista de estaciones
@@ -341,6 +350,8 @@ Sin contraseña. Los cambios piden `POST` y la cabecera `X-Wefax` (así una pág
 | `GET /estaciones.json` | Estaciones, frecuencias y horarios |
 | `POST /api/settings/<nombre>/<valor>` | Cambia un ajuste (`-` como valor lo deja vacío) |
 | `POST /api/charts/keep/<id>/<0\|1>` | Marca una carta para conservarla, o le quita la marca |
+
+La usan [Navtex](https://github.com/EA7JRS/Navtex) (la predicción para 4209,5 kHz), [S.A.T.-APRS+](https://github.com/EA7JRS/sat-aprs) (el circuito de onda corta y el aviso de tiempo espacial) y, en preparación, la app APRS LoRa+ para Android (cartas, horario y circuito).
 
 ## Posición por GPS
 
@@ -386,6 +397,10 @@ La interfaz no tiene contraseña: está pensada para la red local o la de a bord
 | El instalador dice «Indique el usuario…» | Se ejecutó como `root` sin `sudo` | `sh tools/instalar-servicios.sh --usuario <nombre>` |
 | `git pull` dice «dubious ownership» | El código está en una carpeta de otro usuario | `git config --global --add safe.directory <carpeta>` |
 | Receptor «Sin equipo» | Desconectado, o en uso por otro programa | `lsusb`; pare el otro programa o use el turno con Navtex |
+| El HackRF no se abre | Falta permiso sobre el USB, o lo tiene otro programa | `hackrf_info` con el usuario de los servicios; añádalo al grupo `plugdev` y reinicie el servicio |
+| Con HackRF One elegido, el registro dice «This build has no HackRF support» | Se compiló sin `libhackrf-dev` | Instálela, y `./configure` (debe decir `HackRF yes`), `make clean && make`, `sudo make install` |
+| La página enseña la versión anterior tras actualizar | No se compiló o no se reiniciaron los servicios, o el navegador guarda la página vieja | Véase [Actualizar](#actualizar); después, Ctrl+F5 |
+| Con un KiwiSDR no conecta o se corta | Está lleno, limita el tiempo o pide contraseña | Lo dice el registro del receptor y lo reintenta al minuto; use uno propio o con permiso |
 | «No sigue ninguna estación» | No hay ninguna marcada | Pestaña Estaciones |
 | «Sintonizado» pero no llega ninguna carta | Propagación, frecuencia poco adecuada a esa hora, antena | Pruebe otra frecuencia de la estación; de día las altas, de noche las bajas |
 | Carta inclinada | Error de reloj del receptor que el enfasado no midió bien | Guarde la carta y avise: es un fallo a corregir |
