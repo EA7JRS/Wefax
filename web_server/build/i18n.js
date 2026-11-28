@@ -148,6 +148,7 @@ window.WEFAX_I18N = (function () {
  "Estaciones": "Stations",
  "Receptor": "Receiver",
  "Acerca de": "About",
+ "Configuración": "Settings",
  "Aspecto": "Theme",
  "Idioma": "Language",
  "Sistema": "System",
